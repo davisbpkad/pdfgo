@@ -7,7 +7,8 @@
     "build:full": "node build.mjs --variant=full",
     "build:lite": "node build.mjs --variant=lite",
     "serve": "node scripts/serve.mjs",
-    "test": "node --test tests/unit/*.test.mjs"
+    "test": "node --test tests/unit/*.test.mjs",
+    "release": "node release.mjs"
   },
   "keywords": [],
   "author": "",
