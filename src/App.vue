@@ -11,6 +11,7 @@ import OrganizeTool from './features/organize/components/OrganizeTool.vue';
 import WatermarkTool from './features/watermark/components/WatermarkTool.vue';
 import PageNumbersTool from './features/page-numbers/components/PageNumbersTool.vue';
 import CompressTool from './features/compress/components/CompressTool.vue';
+import ImageToPdfTool from './features/image-to-pdf/components/ImageToPdfTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -43,6 +44,7 @@ function closeSidebar() {
         <WatermarkTool v-else-if="activeToolId === 'watermark'" />
         <PageNumbersTool v-else-if="activeToolId === 'page-numbers'" />
         <CompressTool v-else-if="activeToolId === 'compress'" />
+        <ImageToPdfTool v-else-if="activeToolId === 'image-to-pdf'" />
 
         <!-- Other Tools (via Coexistence Wrapper until ported) -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />
