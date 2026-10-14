@@ -78,7 +78,7 @@ function renderShell() {
         </div>
         <div>
           <span class="brand-title" id="txt-app-name">${t('app.name')}</span>
-          <span class="brand-badge" id="txt-app-badge">${t('app.badge')}</span>
+          <span class="brand-badge" id="txt-app-badge">${(!window.__OCR_FULL_ENG_GZ_BASE64__) ? (getLang() === 'id' ? 'OFFLINE LITE' : 'LITE OFFLINE') : t('app.badge')}</span>
         </div>
       </div>
 
