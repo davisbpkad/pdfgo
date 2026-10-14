@@ -34,7 +34,10 @@ export async function mergePdfFiles(entries, onProgress = null) {
     const entry = entries[i];
     let srcDoc;
     try {
-      srcDoc = await PDFDocument.load(entry.buffer, {
+      const buf = entry.buffer instanceof Uint8Array
+        ? entry.buffer.slice()
+        : (entry.buffer instanceof ArrayBuffer ? entry.buffer.slice(0) : entry.buffer);
+      srcDoc = await PDFDocument.load(buf, {
         password: entry.password || undefined,
         ignoreEncryption: false
       });
@@ -132,7 +135,7 @@ async function processIncomingFiles(files) {
       try {
         const docProxy = await loadPdfJsDocument(buffer);
         item.pageCount = docProxy.numPages;
-        item.thumbnail = await generateThumbnail(buffer, 120);
+        item.thumbnail = await generateThumbnail(docProxy, 120);
       } catch (err) {
         if (err.name === 'PasswordException' || (err.message && err.message.includes('password'))) {
           item.isEncrypted = true;
@@ -159,7 +162,7 @@ async function unlockFile(index) {
   try {
     const docProxy = await loadPdfJsDocument(item.buffer, pass);
     item.pageCount = docProxy.numPages;
-    item.thumbnail = await generateThumbnail(item.buffer, 120);
+    item.thumbnail = await generateThumbnail(docProxy, 120);
     item.password = pass;
     item.isEncrypted = false;
     item.error = null;

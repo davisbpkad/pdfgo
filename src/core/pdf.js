@@ -19,8 +19,22 @@ initPdfJsWorker();
 export async function loadPdfJsDocument(data, password = '') {
   initPdfJsWorker();
   const getDocument = pdfjsLib.getDocument || pdfjsLib.default?.getDocument;
+
+  // Defensive clone: PDF.js transfers buffers to worker, detaching the caller's ArrayBuffer.
+  // Slicing here ensures caller's buffer stays intact and reusable.
+  let safeData;
+  if (data instanceof Uint8Array) {
+    safeData = new Uint8Array(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+  } else if (data instanceof ArrayBuffer) {
+    safeData = new Uint8Array(data.slice(0));
+  } else if (ArrayBuffer.isView(data)) {
+    safeData = new Uint8Array(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+  } else {
+    safeData = data;
+  }
+
   const loadingTask = getDocument({
-    data,
+    data: safeData,
     password,
     cMapUrl: undefined,
     cMapPacked: true,
@@ -74,13 +88,15 @@ export async function renderPageToCanvas(pdfDoc, pageNum = 1, scale = 1.5) {
 
 /**
  * Generate a thumbnail Data URL for page 1
- * @param {ArrayBuffer | Uint8Array} data
+ * @param {pdfjsLib.PDFDocumentProxy | ArrayBuffer | Uint8Array} docOrData
  * @param {number} [targetWidth=180]
  * @returns {Promise<string>} Data URL
  */
-export async function generateThumbnail(data, targetWidth = 180) {
+export async function generateThumbnail(docOrData, targetWidth = 180) {
   try {
-    const doc = await loadPdfJsDocument(data);
+    const doc = (docOrData && typeof docOrData.getPage === 'function')
+      ? docOrData
+      : await loadPdfJsDocument(docOrData);
     const page = await doc.getPage(1);
     const unscaledViewport = page.getViewport({ scale: 1.0 });
     const scale = targetWidth / unscaledViewport.width;

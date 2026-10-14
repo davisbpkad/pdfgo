@@ -184,7 +184,7 @@ async function loadDocument(file) {
     activeBuffer = buffer;
     const docProxy = await loadPdfJsDocument(buffer);
     totalPages = docProxy.numPages;
-    activeThumbnail = await generateThumbnail(buffer, 140);
+    activeThumbnail = await generateThumbnail(docProxy, 140);
     rangeString = totalPages > 1 ? `1-${Math.min(3, totalPages)}` : '1';
   } catch (err) {
     if (activeCtx) activeCtx.showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');

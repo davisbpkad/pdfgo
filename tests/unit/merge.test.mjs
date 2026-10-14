@@ -6,6 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PDFDocument } from 'pdf-lib';
 import { mergePdfFiles } from '../../src/modules/merge.js';
+import { loadPdfJsDocument } from '../../src/core/pdf.js';
 
 test('merge: successfully merges multiple PDF documents', async () => {
   // Create 1-page PDF
@@ -58,3 +59,39 @@ test('merge: throws error when less than 2 files are provided', async () => {
     /Minimal 2 file PDF dibutuhkan/
   );
 });
+
+test('merge: preserves input ArrayBuffer without detachment for subsequent operations', async () => {
+  const docA = await PDFDocument.create();
+  docA.addPage([500, 700]);
+  const uintA = await docA.save();
+  const bufferA = uintA.buffer.slice(uintA.byteOffset, uintA.byteOffset + uintA.byteLength);
+
+  const docB = await PDFDocument.create();
+  docB.addPage([500, 700]);
+  const uintB = await docB.save();
+  const bufferB = uintB.buffer.slice(uintB.byteOffset, uintB.byteOffset + uintB.byteLength);
+
+  const originalLenA = bufferA.byteLength;
+  const originalLenB = bufferB.byteLength;
+
+  // Simulate PDF.js load
+  const proxyA = await loadPdfJsDocument(bufferA);
+  const proxyB = await loadPdfJsDocument(bufferB);
+  assert.equal(proxyA.numPages, 1);
+  assert.equal(proxyB.numPages, 1);
+
+  // Assert buffers remain attached and have full length
+  assert.equal(bufferA.byteLength, originalLenA);
+  assert.equal(bufferB.byteLength, originalLenB);
+
+  // Merge using the same buffers
+  const mergedBytes = await mergePdfFiles([
+    { name: 'a.pdf', buffer: bufferA },
+    { name: 'b.pdf', buffer: bufferB }
+  ]);
+
+  assert.ok(mergedBytes instanceof Uint8Array);
+  const verifyDoc = await PDFDocument.load(mergedBytes);
+  assert.equal(verifyDoc.getPageCount(), 2);
+});
+
