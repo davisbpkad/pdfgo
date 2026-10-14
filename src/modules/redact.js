@@ -14,86 +14,8 @@ export const titleKey = 'tools.redact.title';
 export const descKey = 'tools.redact.desc';
 export const icon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 3 18 18"/><path d="M9 3v18"/></svg>`;
 
-// ============================================================================
-// Pure Logic Engine
-// ============================================================================
-/**
- * Execute True Redaction: rasterizes redacted pages, preserves untouched pages, clears metadata
- * @param {ArrayBuffer|Uint8Array} srcBuffer
- * @param {object} pdfDocProxy
- * @param {Record<number, Array<{ x: number, y: number, width: number, height: number }>>} boxesByPage
- * @param {number} previewScale
- * @param {boolean} [sanitizeMeta=true]
- * @param {Function} [onProgress]
- * @returns {Promise<Uint8Array>}
- */
-export async function executeTrueRedaction(srcBuffer, pdfDocProxy, boxesByPage, previewScale, sanitizeMeta = true, onProgress = null) {
-  const srcDoc = await PDFDocument.load(srcBuffer);
-  const newDoc = await PDFDocument.create();
-  const totalPages = srcDoc.getPageCount();
-
-  for (let i = 0; i < totalPages; i++) {
-    const pageBoxes = boxesByPage[i] || [];
-    const origPage = srcDoc.getPage(i);
-    const { width: origWidth, height: origHeight } = origPage.getSize();
-
-    if (pageBoxes.length === 0) {
-      // Untouched page: copy original vector page directly
-      const [copied] = await newDoc.copyPages(srcDoc, [i]);
-      newDoc.addPage(copied);
-    } else {
-      // Redacted page: render at high resolution (scale 2.5 ~ 180-200 DPI)
-      const highResScale = 2.5;
-      const { canvas } = await renderPageToCanvas(pdfDocProxy, i + 1, highResScale);
-      const ctx = canvas.getContext('2d');
-
-      const scaleFactor = highResScale / previewScale;
-
-      // Draw permanent solid black rectangles directly over the raster pixels
-      ctx.fillStyle = '#000000';
-      for (const box of pageBoxes) {
-        ctx.fillRect(
-          box.x * scaleFactor,
-          box.y * scaleFactor,
-          box.width * scaleFactor,
-          box.height * scaleFactor
-        );
-      }
-
-      // Convert canvas to PNG bytes (destroys all underlying text vectors completely)
-      const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      const pngBuffer = await pngBlob.arrayBuffer();
-
-      // Cleanup canvas memory
-      canvas.width = 0;
-      canvas.height = 0;
-
-      const embeddedImg = await newDoc.embedPng(pngBuffer);
-      const newPage = newDoc.addPage([origWidth, origHeight]);
-      newPage.drawImage(embeddedImg, {
-        x: 0,
-        y: 0,
-        width: origWidth,
-        height: origHeight
-      });
-    }
-
-    if (onProgress) {
-      onProgress(Math.round(((i + 1) / totalPages) * 100));
-    }
-  }
-
-  if (sanitizeMeta) {
-    newDoc.setTitle('');
-    newDoc.setAuthor('');
-    newDoc.setSubject('');
-    newDoc.setKeywords([]);
-    newDoc.setProducer('');
-    newDoc.setCreator('');
-  }
-
-  return await newDoc.save();
-}
+// Re-export pure logic from atomic feature files
+export { executeTrueRedaction } from '../features/redact/logic/executeTrueRedaction.js';
 
 // ============================================================================
 // UI Controller

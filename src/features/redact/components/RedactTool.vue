@@ -1,0 +1,245 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { loadPdfJsDocument } from '../../../core/pdf.js';
+import { downloadFile } from '../../../core/download.js';
+import { showToast } from '../../../app/providers/toast.js';
+import { queueState } from '../../../app/providers/queue.js';
+import { executeTrueRedaction } from '../logic/executeTrueRedaction.js';
+import { findTextRedactionBoxes } from '../logic/findTextRedactionBoxes.js';
+import DropZone from '../../../ui/DropZone.vue';
+import BaseCard from '../../../ui/BaseCard.vue';
+import BaseProgressBar from '../../../ui/BaseProgressBar.vue';
+import RedactWarningBanner from './RedactWarningBanner.vue';
+import RedactControls from './RedactControls.vue';
+import RedactCanvas from './RedactCanvas.vue';
+
+const activeFile = ref(null);
+let activeBuffer = null;
+const pdfDocProxy = ref(null);
+const totalPages = ref(0);
+const currentPage = ref(1);
+
+const boxesByPage = ref({});
+const searchTerm = ref('');
+const sanitizeMetadata = ref(true);
+const isProcessing = ref(false);
+const progressValue = ref(0);
+const previewScale = 0.8;
+
+const currentBoxes = computed(() => boxesByPage.value[currentPage.value - 1] || []);
+const totalBoxCount = computed(() => {
+  return Object.values(boxesByPage.value).reduce((acc, list) => acc + list.length, 0);
+});
+
+onMounted(() => {
+  if (queueState.value?.items?.length) {
+    const candidate = queueState.value.items.find(i => i.name?.toLowerCase().endsWith('.pdf'));
+    if (candidate?.file) loadDocument(candidate.file);
+  }
+});
+
+async function handleIncomingFiles(files) {
+  const pdf = Array.from(files).find(f => f.name.toLowerCase().endsWith('.pdf'));
+  if (pdf) await loadDocument(pdf);
+}
+
+async function loadDocument(file) {
+  activeFile.value = file;
+  boxesByPage.value = {};
+  currentPage.value = 1;
+
+  try {
+    const buffer = await file.arrayBuffer();
+    activeBuffer = buffer;
+    const doc = await loadPdfJsDocument(buffer);
+    pdfDocProxy.value = doc;
+    totalPages.value = doc.numPages;
+  } catch (err) {
+    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    resetFile();
+  }
+}
+
+function resetFile() {
+  activeFile.value = null;
+  activeBuffer = null;
+  pdfDocProxy.value = null;
+  totalPages.value = 0;
+  currentPage.value = 1;
+  boxesByPage.value = {};
+}
+
+function onAddBox(box) {
+  const pageIdx = currentPage.value - 1;
+  const list = boxesByPage.value[pageIdx] || [];
+  const newBox = {
+    ...box,
+    id: 'rbox_' + Math.random().toString(36).substring(2, 9)
+  };
+  boxesByPage.value = {
+    ...boxesByPage.value,
+    [pageIdx]: [...list, newBox]
+  };
+}
+
+function onRemoveBox(id) {
+  const pageIdx = currentPage.value - 1;
+  const list = boxesByPage.value[pageIdx] || [];
+  boxesByPage.value = {
+    ...boxesByPage.value,
+    [pageIdx]: list.filter(b => b.id !== id)
+  };
+}
+
+function clearCurrentPage() {
+  const pageIdx = currentPage.value - 1;
+  boxesByPage.value = {
+    ...boxesByPage.value,
+    [pageIdx]: []
+  };
+  showToast('Kotak sensor di halaman ini dihapus.', 'info');
+}
+
+async function handleSearch() {
+  if (!searchTerm.value.trim() || !pdfDocProxy.value) return;
+  try {
+    const foundBoxes = await findTextRedactionBoxes(
+      pdfDocProxy.value,
+      currentPage.value,
+      searchTerm.value,
+      previewScale
+    );
+
+    if (foundBoxes.length === 0) {
+      showToast(`Kata "${searchTerm.value}" tidak ditemukan pada halaman ini.`, 'info');
+      return;
+    }
+
+    const pageIdx = currentPage.value - 1;
+    const list = boxesByPage.value[pageIdx] || [];
+    boxesByPage.value = {
+      ...boxesByPage.value,
+      [pageIdx]: [...list, ...foundBoxes]
+    };
+    showToast(`${foundBoxes.length} kata cocok ditemukan dan ditandai!`, 'success');
+  } catch (err) {
+    showToast('Gagal mencari teks: ' + (err.message || ''), 'error');
+  }
+}
+
+async function handleApply() {
+  if (totalBoxCount.value === 0 || !activeBuffer || !activeFile.value) return;
+
+  isProcessing.value = true;
+  progressValue.value = 5;
+
+  try {
+    const safeBuffer = new Uint8Array(activeBuffer.slice(0));
+    const resultBytes = await executeTrueRedaction(
+      safeBuffer,
+      pdfDocProxy.value,
+      boxesByPage.value,
+      previewScale,
+      sanitizeMetadata.value,
+      (pct) => { progressValue.value = pct; }
+    );
+
+    const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
+    downloadFile(resultBytes, `${safeName}_redacted.pdf`);
+    showToast('Dokumen berhasil disensor permanen!', 'success');
+  } catch (err) {
+    showToast('Gagal menyensor dokumen: ' + (err.message || ''), 'error');
+  } finally {
+    isProcessing.value = false;
+  }
+}
+</script>
+
+<template>
+  <div class="space-y-6">
+    <div class="space-y-1">
+      <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
+        Sensor Dokumen
+      </h1>
+      <p class="text-sm text-ink/80 max-w-2xl font-medium">
+        Sensor permanen teks dan objek rahasia melalui rasterisasi piksel serta bersihkan metadata dokumen.
+      </p>
+    </div>
+
+    <DropZone v-if="!activeFile" @files="handleIncomingFiles" />
+
+    <div v-else class="space-y-4">
+      <BaseCard class="p-3 flex items-center justify-between">
+        <div class="min-w-0">
+          <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
+          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+        </div>
+        <button
+          type="button"
+          class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
+          @click="resetFile"
+        >
+          Ganti File
+        </button>
+      </BaseCard>
+
+      <RedactWarningBanner />
+
+      <BaseProgressBar v-if="isProcessing" :progress="progressValue" label="Menghancurkan piksel sensor..." />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Left Panel: Controls -->
+        <div class="lg:col-span-5">
+          <RedactControls
+            v-model:search-term="searchTerm"
+            v-model:sanitize-metadata="sanitizeMetadata"
+            :page-box-count="currentBoxes.length"
+            :total-box-count="totalBoxCount"
+            :is-processing="isProcessing"
+            @search="handleSearch"
+            @clear-page="clearCurrentPage"
+            @apply="handleApply"
+          />
+        </div>
+
+        <!-- Right Panel: Canvas Viewport -->
+        <div class="lg:col-span-7 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-ink">
+              Halaman {{ currentPage }} dari {{ totalPages }}
+            </span>
+            <div class="flex items-center gap-1">
+              <button
+                type="button"
+                :disabled="currentPage <= 1"
+                class="px-2 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+                @click="currentPage--"
+              >
+                ◀
+              </button>
+              <button
+                type="button"
+                :disabled="currentPage >= totalPages"
+                class="px-2 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+                @click="currentPage++"
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto max-h-[640px]">
+            <RedactCanvas
+              :pdf-doc-proxy="pdfDocProxy"
+              :current-page="currentPage"
+              :boxes="currentBoxes"
+              :scale="previewScale"
+              @add-box="onAddBox"
+              @remove-box="onRemoveBox"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

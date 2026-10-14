@@ -16,6 +16,7 @@ import PdfToImageTool from './features/pdf-to-image/components/PdfToImageTool.vu
 import ExtractTextTool from './features/extract-text/components/ExtractTextTool.vue';
 import SignTool from './features/sign/components/SignTool.vue';
 import FormTool from './features/form/components/FormTool.vue';
+import RedactTool from './features/redact/components/RedactTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -53,6 +54,7 @@ function closeSidebar() {
         <ExtractTextTool v-else-if="activeToolId === 'extract-text'" />
         <SignTool v-else-if="activeToolId === 'sign'" />
         <FormTool v-else-if="activeToolId === 'form'" />
+        <RedactTool v-else-if="activeToolId === 'redact'" />
 
         <!-- Other Tools (via Coexistence Wrapper until ported) -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />
