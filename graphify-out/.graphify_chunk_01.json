@@ -1,0 +1,182 @@
+{
+  "nodes": [
+    {
+      "id": "planpdf_zero_network_rule",
+      "label": "Zero Network Non-Negotiable Rule",
+      "file_type": "rationale",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_file_protocol_compat",
+      "label": "file:// Protocol Compatibility",
+      "file_type": "rationale",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_standalone_bundle_architecture",
+      "label": "Single-File Standalone HTML Bundle Architecture",
+      "file_type": "concept",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_build_pipeline",
+      "label": "Multi-Variant Build Pipeline",
+      "file_type": "concept",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_true_redaction",
+      "label": "True Permanent Redaction Architecture",
+      "file_type": "rationale",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_ocr_engine_spec",
+      "label": "Local WASM OCR Engine Specification",
+      "file_type": "concept",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "planpdf_batch_processing_spec",
+      "label": "Multi-File Batch Processing Queue Specification",
+      "file_type": "concept",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_pdfgo_overview",
+      "label": "PDFGO Client-Side Toolkit Overview",
+      "file_type": "document",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_security_privacy",
+      "label": "Security & Privacy Guarantee",
+      "file_type": "document",
+      "source_file": "/Users/davistanjung/Documents/PDFGO/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "readme_pdfgo_overview",
+      "target": "planpdf_standalone_bundle_architecture",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_security_privacy",
+      "target": "planpdf_zero_network_rule",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "planpdf_ocr_engine_spec",
+      "target": "src_modules_ocr_js",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "planpdf_true_redaction",
+      "target": "src_modules_redact_js",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "planpdf_build_pipeline",
+      "target": "build_mjs",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "planpdf_file_protocol_compat",
+      "target": "src_core_workers_js",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "privacy_offline_guarantee",
+      "label": "Offline Privacy Guarantee Architecture",
+      "nodes": [
+        "planpdf_zero_network_rule",
+        "planpdf_file_protocol_compat",
+        "readme_security_privacy"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/davistanjung/Documents/PDFGO/PlanPDF.md"
+    }
+  ],
+  "input_tokens": 1200,
+  "output_tokens": 850
+}
