@@ -7,6 +7,7 @@ import QueueDrawer from './ui/QueueDrawer.vue';
 import ToastHost from './ui/ToastHost.vue';
 import MergeTool from './features/merge/components/MergeTool.vue';
 import SplitTool from './features/split/components/SplitTool.vue';
+import OrganizeTool from './features/organize/components/OrganizeTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -35,6 +36,7 @@ function closeSidebar() {
         <!-- Native Vue 3 Tools -->
         <MergeTool v-if="activeToolId === 'merge'" />
         <SplitTool v-else-if="activeToolId === 'split'" />
+        <OrganizeTool v-else-if="activeToolId === 'organize'" />
 
         <!-- Other Tools (via Coexistence Wrapper until ported) -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />
