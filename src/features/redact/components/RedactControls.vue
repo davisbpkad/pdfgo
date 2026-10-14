@@ -24,7 +24,7 @@ defineEmits([
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 select-none">
     <!-- Keyword Auto-Redact Search -->
     <div class="space-y-1.5">
       <label class="text-xs font-bold text-ink uppercase tracking-wider block">
@@ -35,13 +35,13 @@ defineEmits([
           :value="searchTerm"
           type="text"
           placeholder="Ketik kata kunci sensor..."
-          class="flex-1 text-xs font-medium p-2 border-2 border-ink bg-paper shadow-hard-sm focus:outline-none"
+          class="flex-1 text-xs font-medium p-2.5 border-2 border-ink bg-paper text-ink rounded-sm shadow-hard-sm focus:outline-none focus:shadow-hard focus:-translate-y-0.5 transition-all duration-150"
           @input="$emit('update:searchTerm', $event.target.value)"
           @keyup.enter="$emit('search')"
         />
         <button
           type="button"
-          class="px-3 py-2 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer whitespace-nowrap"
+          class="px-3.5 py-2.5 text-xs font-bold border-2 border-ink bg-accent hover:bg-accent-strong text-black rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer whitespace-nowrap transition-all duration-150"
           @click="$emit('search')"
         >
           🔍 Tandai
@@ -54,7 +54,7 @@ defineEmits([
       <button
         type="button"
         :disabled="!canUndo || isProcessing"
-        class="flex-1 py-1.5 px-2 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1"
+        class="flex-1 py-2 px-2 text-xs font-bold border-2 border-ink bg-paper hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer flex items-center justify-center gap-1 transition-all duration-150"
         title="Urungkan perubahan (Ctrl+Z)"
         @click="$emit('undo')"
       >
@@ -63,7 +63,7 @@ defineEmits([
       <button
         type="button"
         :disabled="!canRedo || isProcessing"
-        class="flex-1 py-1.5 px-2 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1"
+        class="flex-1 py-2 px-2 text-xs font-bold border-2 border-ink bg-paper hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer flex items-center justify-center gap-1 transition-all duration-150"
         title="Ulangi perubahan (Ctrl+Shift+Z)"
         @click="$emit('redo')"
       >
@@ -75,7 +75,7 @@ defineEmits([
     <button
       type="button"
       :disabled="totalBoxCount === 0 || isProcessing"
-      class="w-full py-2 px-3 text-xs font-bold border-2 border-ink bg-amber-100 hover:bg-amber-200 text-ink shadow-hard-sm disabled:opacity-40 cursor-pointer flex items-center justify-center gap-2"
+      class="w-full py-2.5 px-3 text-xs font-bold border-2 border-ink bg-warning text-black rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer flex items-center justify-center gap-2 transition-all duration-150"
       @click="$emit('inspect-preview')"
     >
       <span>👁️</span>
@@ -87,7 +87,7 @@ defineEmits([
       <input
         type="checkbox"
         :checked="sanitizeMetadata"
-        class="w-4 h-4 border-2 border-ink rounded accent-accent cursor-pointer"
+        class="w-4 h-4 border-2 border-ink rounded-xs accent-accent cursor-pointer"
         @change="$emit('update:sanitizeMetadata', $event.target.checked)"
       />
       <span>Bersihkan Metadata Dokumen (Judul, Penulis, Pembuat)</span>

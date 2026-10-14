@@ -31,7 +31,7 @@ function closeSidebar() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-paper text-ink flex flex-col font-ui antialiased">
+  <div class="min-h-screen bg-paper-dark text-ink flex flex-col font-ui antialiased selection:bg-accent selection:text-black">
     <!-- Header -->
     <AppHeader @toggle-sidebar="toggleSidebar" />
 
@@ -58,7 +58,7 @@ function closeSidebar() {
         <OcrTool v-else-if="activeToolId === 'ocr'" />
 
         <!-- Fallback if route invalid -->
-        <div v-else class="border-3 border-ink bg-paper p-8 text-center shadow-hard space-y-2">
+        <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">
           <h2 class="font-display font-black text-xl text-ink uppercase">Alat Tidak Ditemukan</h2>
           <p class="text-xs text-ink/70">Silakan pilih salah satu alat dari menu bilah samping.</p>
         </div>

@@ -90,7 +90,7 @@ function resetOriginalSize() {
 </script>
 
 <template>
-  <div class="border-2 border-ink bg-paper p-3 shadow-hard-sm space-y-3">
+  <div class="border-2 border-ink bg-paper rounded-sm p-3 shadow-hard-sm space-y-3 select-none">
     <div class="flex items-center justify-between">
       <span class="text-xs font-bold text-ink uppercase tracking-wider">
         Presisi Posisi & Ukuran (mm)
@@ -98,7 +98,7 @@ function resetOriginalSize() {
       <div class="flex items-center gap-1.5">
         <button
           type="button"
-          class="px-2 py-1 text-[11px] font-bold border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer"
+          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           title="Pusatkan posisi tanda tangan"
           @click="centerPlacement"
         >
@@ -106,7 +106,7 @@ function resetOriginalSize() {
         </button>
         <button
           type="button"
-          class="px-2 py-1 text-[11px] font-bold border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer"
+          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           title="Set ukuran standar paraf (50×22 mm)"
           @click="resetOriginalSize"
         >
@@ -125,7 +125,7 @@ function resetOriginalSize() {
           step="0.5"
           min="0"
           :max="pageDimensionsMm.width"
-          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white shadow-hard-sm focus:outline-none"
+          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none focus:shadow-hard focus:-translate-y-0.5 transition-all duration-150"
           @change="onXChange($event.target.value)"
         />
       </div>
@@ -139,7 +139,7 @@ function resetOriginalSize() {
           step="0.5"
           min="0"
           :max="pageDimensionsMm.height"
-          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white shadow-hard-sm focus:outline-none"
+          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none focus:shadow-hard focus:-translate-y-0.5 transition-all duration-150"
           @change="onYChange($event.target.value)"
         />
       </div>
@@ -153,7 +153,7 @@ function resetOriginalSize() {
           step="0.5"
           min="10"
           :max="pageDimensionsMm.width"
-          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white shadow-hard-sm focus:outline-none"
+          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none focus:shadow-hard focus:-translate-y-0.5 transition-all duration-150"
           @change="onWidthChange($event.target.value)"
         />
       </div>
@@ -167,7 +167,7 @@ function resetOriginalSize() {
           step="0.5"
           min="5"
           :max="pageDimensionsMm.height"
-          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white shadow-hard-sm focus:outline-none"
+          class="w-full text-xs font-mono font-bold p-1.5 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none focus:shadow-hard focus:-translate-y-0.5 transition-all duration-150"
           @change="onHeightChange($event.target.value)"
         />
       </div>

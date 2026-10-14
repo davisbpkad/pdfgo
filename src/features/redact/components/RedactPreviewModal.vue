@@ -67,11 +67,11 @@ async function renderHighResPreview() {
     class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
     @click.self="$emit('close')"
   >
-    <div class="border-3 border-ink bg-paper shadow-hard max-w-4xl w-full p-4 space-y-4 max-h-[90vh] flex flex-col">
+    <div class="border-2 border-ink bg-paper rounded-sm shadow-hard-lg max-w-4xl w-full p-4 space-y-4 max-h-[90vh] flex flex-col select-none">
       <!-- Modal Header -->
       <div class="flex items-center justify-between border-b-2 border-ink pb-3">
         <div>
-          <h2 class="font-display font-black text-lg md:text-xl uppercase tracking-tight text-ink flex items-center gap-2">
+          <h2 class="font-display font-extrabold text-lg md:text-xl uppercase tracking-tight text-ink flex items-center gap-2">
             <span>🛡️</span>
             <span>Periksa Hasil Sensor (Resolusi Tinggi)</span>
           </h2>
@@ -81,7 +81,7 @@ async function renderHighResPreview() {
         </div>
         <button
           type="button"
-          class="px-3 py-1.5 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
+          class="px-3.5 py-1.5 text-xs font-bold border-2 border-ink bg-paper hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           @click="$emit('close')"
         >
           ✕ Tutup
@@ -89,13 +89,13 @@ async function renderHighResPreview() {
       </div>
 
       <!-- Navigation & Page Status -->
-      <div class="flex items-center justify-between text-xs font-bold bg-white p-2 border border-ink">
+      <div class="flex items-center justify-between text-xs font-bold bg-paper-dark p-2 border border-ink rounded-sm shadow-[1px_1px_0_0_#000000]">
         <span>Halaman {{ currentPage }} dari {{ totalPages }}</span>
         <div class="flex items-center gap-2">
           <button
             type="button"
             :disabled="currentPage <= 1 || isLoading"
-            class="px-2 py-1 border border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+            class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
             @click="$emit('update:currentPage', currentPage - 1)"
           >
             ◀ Sebelumnya
@@ -103,7 +103,7 @@ async function renderHighResPreview() {
           <button
             type="button"
             :disabled="currentPage >= totalPages || isLoading"
-            class="px-2 py-1 border border-ink bg-paper hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+            class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
             @click="$emit('update:currentPage', currentPage + 1)"
           >
             Berikutnya ▶
@@ -112,14 +112,14 @@ async function renderHighResPreview() {
       </div>
 
       <!-- High-res Canvas Area -->
-      <div class="flex-1 overflow-auto border-2 border-ink bg-paper-dark p-4 flex items-center justify-center min-h-[300px]">
+      <div class="flex-1 overflow-auto border-2 border-ink bg-paper-dark rounded-sm p-4 flex items-center justify-center min-h-[300px]">
         <div v-if="isLoading" class="text-sm font-bold text-ink">
           Mempertajam pratinjau resolusi tinggi...
         </div>
         <canvas
           v-show="!isLoading"
           ref="previewCanvasRef"
-          class="border border-ink shadow-hard max-w-full h-auto bg-white"
+          class="border border-ink shadow-hard rounded-xs max-w-full h-auto bg-white"
         />
       </div>
 
@@ -127,7 +127,7 @@ async function renderHighResPreview() {
       <div class="flex justify-end gap-2 pt-2 border-t border-ink">
         <button
           type="button"
-          class="px-4 py-2 text-xs font-bold border-2 border-ink bg-accent text-ink hover:bg-accent-dark shadow-hard-sm cursor-pointer"
+          class="px-4 py-2 text-xs font-bold border-2 border-ink bg-accent text-black hover:bg-accent-strong rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           @click="$emit('close')"
         >
           ✓ Selesai Memeriksa

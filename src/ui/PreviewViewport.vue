@@ -167,13 +167,13 @@ function onTouchEnd() {
 
 <template>
   <div class="space-y-2 select-none">
-    <!-- Viewport Toolbar (Neo-Brutalist) -->
-    <div class="flex flex-wrap items-center justify-between gap-2 p-2 border-2 border-ink bg-paper shadow-hard-sm text-xs font-bold text-ink">
+    <!-- Viewport Toolbar (Brutalism Style) -->
+    <div class="flex flex-wrap items-center justify-between gap-2 p-2 border-2 border-ink bg-paper rounded-sm shadow-hard-sm text-xs font-bold text-ink">
       <!-- Left: Zoom Preset Buttons -->
-      <div class="flex items-center gap-1">
+      <div class="flex items-center gap-1.5">
         <button
           type="button"
-          class="px-2.5 py-1 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer disabled:opacity-40"
+          class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none transition-all duration-150"
           :disabled="zoom <= MIN_ZOOM"
           title="Perkecil Zoom (-)"
           aria-label="Perkecil zoom"
@@ -186,7 +186,7 @@ function onTouchEnd() {
         <div class="relative">
           <button
             type="button"
-            class="px-2 py-1 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer min-w-[58px] text-center"
+            class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer min-w-[58px] text-center transition-all duration-150"
             title="Pilih preset zoom"
             aria-label="Pilih persentase zoom"
             @click="showPresetDropdown = !showPresetDropdown"
@@ -197,14 +197,14 @@ function onTouchEnd() {
           <!-- Preset Menu -->
           <div
             v-if="showPresetDropdown"
-            class="absolute top-full left-0 mt-1 z-50 bg-paper border-2 border-ink shadow-hard py-1 w-24 flex flex-col"
+            class="absolute top-full left-0 mt-1 z-50 bg-paper border-2 border-ink rounded-sm shadow-hard py-1 w-24 flex flex-col"
           >
             <button
               v-for="p in ZOOM_PRESETS"
               :key="p"
               type="button"
-              class="px-3 py-1 text-left text-xs hover:bg-accent font-bold cursor-pointer"
-              :class="zoom === p ? 'bg-accent-dark text-white' : ''"
+              class="px-3 py-1 text-left text-xs hover:bg-accent font-bold cursor-pointer transition-colors"
+              :class="zoom === p ? 'bg-accent text-black' : ''"
               @click="setZoomPreset(p)"
             >
               {{ Math.round(p * 100) }}%
@@ -214,7 +214,7 @@ function onTouchEnd() {
 
         <button
           type="button"
-          class="px-2.5 py-1 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer disabled:opacity-40"
+          class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none transition-all duration-150"
           :disabled="zoom >= MAX_ZOOM"
           title="Perbesar Zoom (+)"
           aria-label="Perbesar zoom"
@@ -225,8 +225,8 @@ function onTouchEnd() {
 
         <button
           type="button"
-          class="px-2 py-1 border border-ink shadow-hard-sm cursor-pointer ml-1"
-          :class="isFitWidth ? 'bg-accent text-ink font-black' : 'bg-white hover:bg-paper-dark text-ink'"
+          class="px-2.5 py-1 border border-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150 ml-1"
+          :class="isFitWidth ? 'bg-accent text-black font-black' : 'bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink'"
           title="Sesuaikan lebar halaman dengan jendela"
           @click="applyFitWidth"
         >
@@ -235,8 +235,8 @@ function onTouchEnd() {
 
         <button
           type="button"
-          class="px-2 py-1 border border-ink shadow-hard-sm cursor-pointer"
-          :class="zoom === 1.0 && !isFitWidth ? 'bg-accent text-ink font-black' : 'bg-white hover:bg-paper-dark text-ink'"
+          class="px-2.5 py-1 border border-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
+          :class="zoom === 1.0 && !isFitWidth ? 'bg-accent text-black font-black' : 'bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink'"
           title="Skala 100%"
           @click="setZoomPreset(1.0)"
         >
@@ -246,14 +246,14 @@ function onTouchEnd() {
 
       <!-- Right: Extra Status & Reset Pan -->
       <div class="flex items-center gap-2">
-        <span v-if="isRendering" class="text-[11px] text-accent-dark animate-pulse font-bold">
+        <span v-if="isRendering" class="text-[11px] text-accent-strong animate-pulse font-bold">
           Mempertajam…
         </span>
 
         <button
           v-if="zoom > 1.0"
           type="button"
-          class="px-2 py-1 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm cursor-pointer text-[11px]"
+          class="px-2 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer text-[11px] transition-all duration-150"
           title="Kembalikan posisi pratinjau ke tengah"
           @click="resetPan"
         >

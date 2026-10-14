@@ -121,12 +121,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="border-3 border-ink bg-paper p-4 space-y-3">
+  <div class="border-2 border-ink bg-paper rounded-sm p-4 space-y-3 shadow-hard">
     <!-- Header with Page Navigation -->
     <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-ink pb-2">
       <div class="text-xs font-black uppercase tracking-tight text-ink flex items-center gap-1.5">
         <span>Pratinjau Nomor Halaman</span>
-        <span v-if="skipFirstPage && previewPage === 1" class="text-[10px] font-bold px-1.5 py-0.5 bg-amber-200 border border-ink">
+        <span v-if="skipFirstPage && previewPage === 1" class="text-[10px] font-bold px-2 py-0.5 bg-warning text-black border border-ink rounded-sm shadow-[1px_1px_0_0_#000000]">
           Cover Dilewati
         </span>
       </div>
@@ -136,7 +136,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="previewPage <= 1"
-          class="px-2 py-0.5 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+          class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
           @click="previewPage--"
         >
           ◀
@@ -148,14 +148,14 @@ onMounted(() => {
             type="number"
             min="1"
             :max="totalPagesCount"
-            class="w-12 p-0.5 text-center font-mono border border-ink bg-white shadow-hard-sm focus:outline-none"
+            class="w-12 p-1 text-center font-mono border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none"
           />
           <span>dari {{ totalPagesCount }}</span>
         </span>
         <button
           type="button"
           :disabled="previewPage >= totalPagesCount"
-          class="px-2 py-0.5 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+          class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
           @click="previewPage++"
         >
           ▶
