@@ -18,7 +18,6 @@ import SignTool from './features/sign/components/SignTool.vue';
 import FormTool from './features/form/components/FormTool.vue';
 import RedactTool from './features/redact/components/RedactTool.vue';
 import OcrTool from './features/ocr/components/OcrTool.vue';
-import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -58,8 +57,11 @@ function closeSidebar() {
         <RedactTool v-else-if="activeToolId === 'redact'" />
         <OcrTool v-else-if="activeToolId === 'ocr'" />
 
-        <!-- Fallback Wrapper -->
-        <LegacyToolWrapper v-else :tool-id="activeToolId" />
+        <!-- Fallback if route invalid -->
+        <div v-else class="border-3 border-ink bg-paper p-8 text-center shadow-hard space-y-2">
+          <h2 class="font-display font-black text-xl text-ink uppercase">Alat Tidak Ditemukan</h2>
+          <p class="text-xs text-ink/70">Silakan pilih salah satu alat dari menu bilah samping.</p>
+        </div>
       </main>
     </div>
 
