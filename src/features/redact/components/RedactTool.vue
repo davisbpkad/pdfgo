@@ -1,5 +1,5 @@
 <script setup>
-import { ref, shallowRef, computed, onMounted, onUnmounted } from 'vue';
+import { ref, shallowRef, computed, watch, onMounted, onUnmounted } from 'vue';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
