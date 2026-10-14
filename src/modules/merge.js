@@ -34,9 +34,26 @@ export async function mergePdfFiles(entries, onProgress = null) {
     const entry = entries[i];
     let srcDoc;
     try {
-      const buf = entry.buffer instanceof Uint8Array
-        ? entry.buffer.slice()
-        : (entry.buffer instanceof ArrayBuffer ? entry.buffer.slice(0) : entry.buffer);
+      let rawBuf = entry.buffer;
+
+      // If buffer is missing or detached (byteLength === 0), recover fresh buffer from file
+      if ((!rawBuf || rawBuf.byteLength === 0) && entry.file && typeof entry.file.arrayBuffer === 'function') {
+        rawBuf = await entry.file.arrayBuffer();
+      }
+
+      if (!rawBuf || rawBuf.byteLength === 0) {
+        throw new Error(`Buffer berkas "${entry.name || 'PDF'}" kosong atau telah terlepas (detached ArrayBuffer).`);
+      }
+
+      let buf;
+      if (rawBuf instanceof Uint8Array) {
+        buf = new Uint8Array(rawBuf.buffer.slice(rawBuf.byteOffset, rawBuf.byteOffset + rawBuf.byteLength));
+      } else if (rawBuf instanceof ArrayBuffer) {
+        buf = new Uint8Array(rawBuf.slice(0));
+      } else {
+        buf = rawBuf;
+      }
+
       srcDoc = await PDFDocument.load(buf, {
         password: entry.password || undefined,
         ignoreEncryption: false
@@ -154,13 +171,17 @@ async function processIncomingFiles(files) {
 
 async function unlockFile(index) {
   const item = fileList[index];
-  if (!item || !item.isEncrypted || !item.buffer) return;
+  if (!item || !item.isEncrypted) return;
 
   const passInput = document.getElementById(`pass-${item.id}`);
   const pass = passInput ? passInput.value : '';
 
   try {
-    const docProxy = await loadPdfJsDocument(item.buffer, pass);
+    const buf = (item.file && typeof item.file.arrayBuffer === 'function')
+      ? await item.file.arrayBuffer()
+      : item.buffer;
+    const docProxy = await loadPdfJsDocument(buf, pass);
+    item.buffer = buf;
     item.pageCount = docProxy.numPages;
     item.thumbnail = await generateThumbnail(docProxy, 120);
     item.password = pass;
@@ -208,10 +229,24 @@ async function handleMerge() {
   render();
 
   try {
-    const entries = fileList.map(item => ({
-      buffer: item.buffer,
-      name: item.name,
-      password: item.password
+    const entries = await Promise.all(fileList.map(async (item) => {
+      let buf = null;
+      try {
+        if (item.file && typeof item.file.arrayBuffer === 'function') {
+          buf = await item.file.arrayBuffer();
+        } else if (item.buffer && item.buffer.byteLength > 0) {
+          buf = item.buffer.slice(0);
+        }
+      } catch (e) {
+        buf = item.buffer;
+      }
+
+      return {
+        buffer: buf,
+        file: item.file,
+        name: item.name,
+        password: item.password
+      };
     }));
 
     const mergedBytes = await mergePdfFiles(entries, (pct) => {

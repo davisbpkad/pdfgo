@@ -95,3 +95,34 @@ test('merge: preserves input ArrayBuffer without detachment for subsequent opera
   assert.equal(verifyDoc.getPageCount(), 2);
 });
 
+test('merge: automatically recovers if buffer is detached or empty by reading from entry.file', async () => {
+  const docA = await PDFDocument.create();
+  docA.addPage([500, 700]);
+  const uintA = await docA.save();
+
+  const docB = await PDFDocument.create();
+  docB.addPage([500, 700]);
+  const uintB = await docB.save();
+
+  // Mock File objects that provide arrayBuffer()
+  const mockFileA = {
+    arrayBuffer: async () => uintA.buffer.slice(uintA.byteOffset, uintA.byteOffset + uintA.byteLength)
+  };
+  const mockFileB = {
+    arrayBuffer: async () => uintB.buffer.slice(uintB.byteOffset, uintB.byteOffset + uintB.byteLength)
+  };
+
+  // Simulate detached buffer (0 byteLength)
+  const emptyOrDetachedBuffer = new ArrayBuffer(0);
+
+  const mergedBytes = await mergePdfFiles([
+    { name: 'DB.pdf', buffer: emptyOrDetachedBuffer, file: mockFileA },
+    { name: 'docB.pdf', buffer: emptyOrDetachedBuffer, file: mockFileB }
+  ]);
+
+  assert.ok(mergedBytes instanceof Uint8Array);
+  const verifyDoc = await PDFDocument.load(mergedBytes);
+  assert.equal(verifyDoc.getPageCount(), 2);
+});
+
+

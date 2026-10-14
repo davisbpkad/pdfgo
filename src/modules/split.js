@@ -64,7 +64,16 @@ export async function extractPages(pdfBuffer, pageNumbers, password = '') {
     throw new Error('Tidak ada halaman yang dipilih untuk diekstrak.');
   }
 
-  const srcDoc = await PDFDocument.load(pdfBuffer, {
+  let safeBuf;
+  if (pdfBuffer instanceof Uint8Array) {
+    safeBuf = new Uint8Array(pdfBuffer.buffer.slice(pdfBuffer.byteOffset, pdfBuffer.byteOffset + pdfBuffer.byteLength));
+  } else if (pdfBuffer instanceof ArrayBuffer) {
+    safeBuf = new Uint8Array(pdfBuffer.slice(0));
+  } else {
+    safeBuf = pdfBuffer;
+  }
+
+  const srcDoc = await PDFDocument.load(safeBuf, {
     password: password || undefined,
     ignoreEncryption: false
   });
@@ -98,7 +107,16 @@ export async function extractPages(pdfBuffer, pageNumbers, password = '') {
 export async function splitEveryN(pdfBuffer, nPages = 1, password = '', onProgress = null) {
   if (nPages < 1) throw new Error('N harus minimal 1');
 
-  const srcDoc = await PDFDocument.load(pdfBuffer, {
+  let safeBuf;
+  if (pdfBuffer instanceof Uint8Array) {
+    safeBuf = new Uint8Array(pdfBuffer.buffer.slice(pdfBuffer.byteOffset, pdfBuffer.byteOffset + pdfBuffer.byteLength));
+  } else if (pdfBuffer instanceof ArrayBuffer) {
+    safeBuf = new Uint8Array(pdfBuffer.slice(0));
+  } else {
+    safeBuf = pdfBuffer;
+  }
+
+  const srcDoc = await PDFDocument.load(safeBuf, {
     password: password || undefined,
     ignoreEncryption: false
   });
@@ -201,6 +219,10 @@ async function handleProcess() {
   render();
 
   try {
+    const bufferToProcess = (activeFile && typeof activeFile.arrayBuffer === 'function')
+      ? await activeFile.arrayBuffer()
+      : activeBuffer;
+
     if (splitMode === 'range') {
       const pageNumbers = parsePageRange(rangeString, totalPages);
       if (pageNumbers.length === 0) {
@@ -210,7 +232,7 @@ async function handleProcess() {
       progressPct = 40;
       updateProgressBar(progressPct);
 
-      const resultBytes = await extractPages(activeBuffer, pageNumbers);
+      const resultBytes = await extractPages(bufferToProcess, pageNumbers);
       progressPct = 100;
       updateProgressBar(progressPct);
 
@@ -221,7 +243,7 @@ async function handleProcess() {
     } else {
       // Split every N
       const n = Math.max(1, parseInt(nPagesValue, 10) || 1);
-      const chunks = await splitEveryN(activeBuffer, n, '', (pct) => {
+      const chunks = await splitEveryN(bufferToProcess, n, '', (pct) => {
         progressPct = pct;
         updateProgressBar(pct);
       });
