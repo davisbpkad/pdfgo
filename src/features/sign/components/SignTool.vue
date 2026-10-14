@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
+import { toPdfRect } from '../../../core/coordinates.js';
 import { applySignatures } from '../logic/applySignatures.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseButton from '../../../ui/BaseButton.vue';
@@ -12,6 +13,7 @@ import SignDrawPad from './SignDrawPad.vue';
 import SignTypePad from './SignTypePad.vue';
 import SignUploadPad from './SignUploadPad.vue';
 import SignPlacementCanvas from './SignPlacementCanvas.vue';
+import SignPrecisionBar from './SignPrecisionBar.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
@@ -24,13 +26,23 @@ const signatureUrl = ref(null);
 const applyTarget = ref('current');
 const isSaving = ref(false);
 
-const placement = ref({ x: 50, y: 50, width: 140, height: 70 });
-const canvasDims = ref({ width: 600, height: 800 });
+const placement = ref({ x: 0.1, y: 0.1, width: 0.25, height: 0.12 });
+const pageDimensionsPt = ref({ width: 595.28, height: 841.89 });
 
 onMounted(() => {
   if (queueState.value?.items?.length) {
     const candidate = queueState.value.items.find(i => i.name?.toLowerCase().endsWith('.pdf'));
     if (candidate?.file) loadDocument(candidate.file);
+  }
+});
+
+watch(() => [pdfDocProxy.value, currentPage.value], async () => {
+  if (pdfDocProxy.value) {
+    try {
+      const page = await pdfDocProxy.value.getPage(currentPage.value);
+      const vp = page.getViewport({ scale: 1.0 });
+      pageDimensionsPt.value = { width: vp.width, height: vp.height };
+    } catch (_) {}
   }
 });
 
@@ -48,6 +60,9 @@ async function loadDocument(file) {
     pdfDocProxy.value = doc;
     totalPages.value = doc.numPages;
     currentPage.value = 1;
+    const page = await doc.getPage(1);
+    const vp = page.getViewport({ scale: 1.0 });
+    pageDimensionsPt.value = { width: vp.width, height: vp.height };
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();
@@ -68,10 +83,6 @@ function onSignatureSelected(dataUrl) {
   showToast('Tanda tangan siap ditempatkan pada dokumen.', 'info');
 }
 
-function onCanvasRendered(dims) {
-  canvasDims.value = dims;
-}
-
 async function handleSave() {
   if (!activeBuffer || !signatureUrl.value) {
     showToast('Pilih tanda tangan terlebih dahulu.', 'error');
@@ -83,26 +94,19 @@ async function handleSave() {
     const resp = await fetch(signatureUrl.value);
     const signBuffer = await resp.arrayBuffer();
 
-    const pageProxy = await pdfDocProxy.value.getPage(currentPage.value);
-    const unscaledViewport = pageProxy.getViewport({ scale: 1.0 });
-    const pdfW = unscaledViewport.width;
-    const pdfH = unscaledViewport.height;
-
-    const scaleX = pdfW / (canvasDims.value.width || pdfW);
-    const scaleY = pdfH / (canvasDims.value.height || pdfH);
-
-    const pdfX = placement.value.x * scaleX;
-    const pdfY = pdfH - (placement.value.y + placement.value.height) * scaleY;
-    const boxW = placement.value.width * scaleX;
-    const boxH = placement.value.height * scaleY;
-
     const placements = [];
     if (applyTarget.value === 'all') {
       for (let i = 0; i < totalPages.value; i++) {
-        placements.push({ pageIndex: i, x: pdfX, y: pdfY, width: boxW, height: boxH });
+        const pProxy = await pdfDocProxy.value.getPage(i + 1);
+        const vp = pProxy.getViewport({ scale: 1.0 });
+        const pRect = toPdfRect(placement.value, vp.width, vp.height);
+        placements.push({ pageIndex: i, x: pRect.x, y: pRect.y, width: pRect.width, height: pRect.height });
       }
     } else {
-      placements.push({ pageIndex: currentPage.value - 1, x: pdfX, y: pdfY, width: boxW, height: boxH });
+      const pageProxy = await pdfDocProxy.value.getPage(currentPage.value);
+      const vp = pageProxy.getViewport({ scale: 1.0 });
+      const pRect = toPdfRect(placement.value, vp.width, vp.height);
+      placements.push({ pageIndex: currentPage.value - 1, x: pRect.x, y: pRect.y, width: pRect.width, height: pRect.height });
     }
 
     const safeBytes = new Uint8Array(activeBuffer.slice(0));
@@ -229,19 +233,26 @@ async function handleSave() {
             </div>
           </div>
 
-          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto max-h-[640px]">
+          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto min-h-[480px]">
             <SignPlacementCanvas
               :pdf-doc-proxy="pdfDocProxy"
               :current-page="currentPage"
               :signature-url="signatureUrl"
               :placement="placement"
               @update:placement="val => placement = val"
-              @rendered="onCanvasRendered"
             />
           </div>
 
+          <!-- Precision Placement & Dimensions Bar -->
+          <SignPrecisionBar
+            :placement="placement"
+            :page-dimensions-pt="pageDimensionsPt"
+            :signature-url="signatureUrl"
+            @update:placement="val => placement = val"
+          />
+
           <p class="text-xs text-ink/70 text-center font-medium">
-            💡 Seret kotak tanda tangan untuk memindahkan posisinya, dan gunakan kotak sudut kanan bawah untuk mengubah ukuran.
+            💡 Seret tanda tangan atau gunakan tombol panah (Shift untuk 10x). Nilai mm dapat diketik langsung untuk akurasi maksimal.
           </p>
         </div>
       </div>
