@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* Tema diset lewat data-theme, bukan class */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --color-ink: #0A0A0A;
+  --color-paper: #FFFDF5;
+  --color-accent: #FFD500;      /* Kuning utama Brutalist */
+  --color-accent-2: #B8FF3C;    /* Lime */
+  --color-accent-3: #7DF9FF;    /* Cyan */
+  --color-danger: #FF5C5C;
+  --shadow-hard: 6px 6px 0 #0A0A0A;
+  --shadow-hard-sm: 3px 3px 0 #0A0A0A;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-ui: "Atkinson Hyperlegible", ui-monospace, monospace;
+}
+
+[data-theme="dark"] {
+  --color-ink: #F5F5F5;
+  --color-paper: #18181B;
+  --color-accent: #FFD500;
+  --color-accent-2: #B8FF3C;
+  --color-accent-3: #7DF9FF;
+  --color-danger: #FF5C5C;
+  --shadow-hard: 6px 6px 0 #000000;
+  --shadow-hard-sm: 3px 3px 0 #000000;
+}
+
+@theme {
+  --color-ink: var(--color-ink);
+  --color-paper: var(--color-paper);
+  --color-accent: var(--color-accent);
+  --color-accent-2: var(--color-accent-2);
+  --color-accent-3: var(--color-accent-3);
+  --color-danger: var(--color-danger);
+  --shadow-hard: var(--shadow-hard);
+  --shadow-hard-sm: var(--shadow-hard-sm);
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-ui);
+  }
+}
+
+@layer components {
+  .brutal-card {
+    background-color: var(--color-paper);
+    border: 3px solid var(--color-ink);
+    box-shadow: var(--shadow-hard);
+    border-radius: 0;
+  }
+  .brutal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 1.25rem;
+    border: 3px solid var(--color-ink);
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-hard-sm);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    cursor: pointer;
+  }
+  .brutal-btn:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--color-ink);
+  }
+  .brutal-btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+  .brutal-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}

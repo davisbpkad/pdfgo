@@ -6,6 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { build as viteBuild } from 'vite';
 import * as esbuild from 'esbuild';
 import * as fflate from 'fflate';
 
@@ -193,7 +194,9 @@ function verifyZeroNetwork(htmlContent, filePath) {
     /https?:\/\/zlib\.net\/[^\s"'`<>)]*/gi,
     /https?:\/\/www\.adobe\.com\/[^\s"'`<>)]*/gi,
     /http:\/\/localhost:\d+\/[^\s"'`<>)]*/gi,
-    /https?:\/\/cdn\.jsdelivr\.net\/npm\/tesseract\.js@[^\s"'`<>)]*/gi
+    /https?:\/\/cdn\.jsdelivr\.net\/npm\/tesseract\.js@[^\s"'`<>)]*/gi,
+    /https?:\/\/tailwindcss\.com[^\s"'`<>)]*/gi,
+    /https?:\/\/vuejs\.org\/[^\s"'`<>)]*/gi
   ];
 
   let sanitized = htmlContent;
@@ -228,28 +231,23 @@ async function buildVariant(variantType) {
   console.log(`Building Variant: ${variantType.toUpperCase()}`);
   console.log(`========================================`);
 
-  // Build CSS
-  const cssResult = await esbuild.build({
-    entryPoints: ['src/styles/main.css'],
-    bundle: true,
-    write: false,
-    legalComments: 'none',
-    minify: true
+  // Build JS & CSS with Vite (Vue 3 SFC + Tailwind CSS v4)
+  const viteResult = await viteBuild({
+    configFile: path.resolve('vite.config.mjs'),
+    logLevel: 'warn'
   });
-  const minifiedCss = cssResult.outputFiles[0].text;
+  const outputs = Array.isArray(viteResult) ? viteResult[0].output : viteResult.output;
+  const jsChunk = outputs.find(o => o.fileName.endsWith('.js'));
+  const cssChunk = outputs.find(o => o.fileName.endsWith('.css'));
 
-  // Build JS
-  const jsResult = await esbuild.build({
-    entryPoints: ['src/main.js'],
-    bundle: true,
-    write: false,
-    format: 'iife',
-    globalName: 'PDFGoApp',
-    target: 'es2022',
-    legalComments: 'none',
-    minify: true
-  });
-  const minifiedJs = jsResult.outputFiles[0].text;
+  // Minify JS & CSS with esbuild transform (safe from direct eval minification bugs)
+  const rawJs = jsChunk ? jsChunk.code : '';
+  const minifiedJsResult = await esbuild.transform(rawJs, { minify: true, legalComments: 'none', target: 'es2022' });
+  const minifiedJs = minifiedJsResult.code;
+
+  const rawCss = cssChunk ? cssChunk.source.toString() : '';
+  const minifiedCssResult = await esbuild.transform(rawCss, { loader: 'css', minify: true, legalComments: 'none' });
+  const minifiedCss = minifiedCssResult.code;
 
   // Process Assets
   const { css: fontCss, totalFontSize } = getEmbeddedFontsCss();

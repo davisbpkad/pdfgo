@@ -1,0 +1,46 @@
+<script setup>
+import { ref } from 'vue';
+import { activeToolId } from './app/router.js';
+import AppHeader from './ui/AppHeader.vue';
+import AppSidebar from './ui/AppSidebar.vue';
+import QueueDrawer from './ui/QueueDrawer.vue';
+import ToastHost from './ui/ToastHost.vue';
+import MergeTool from './features/merge/components/MergeTool.vue';
+import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
+
+const isSidebarOpen = ref(false);
+
+function toggleSidebar() {
+  isSidebarOpen.value = !isSidebarOpen.value;
+}
+
+function closeSidebar() {
+  isSidebarOpen.value = false;
+}
+</script>
+
+<template>
+  <div class="min-h-screen bg-paper text-ink flex flex-col font-ui antialiased">
+    <!-- Header -->
+    <AppHeader @toggle-sidebar="toggleSidebar" />
+
+    <!-- Main Workspace (Sidebar + Outlet) -->
+    <div class="flex-1 flex overflow-hidden">
+      <!-- Sidebar Navigation -->
+      <AppSidebar :is-open="isSidebarOpen" @close="closeSidebar" />
+
+      <!-- Tool Workspace Outlet -->
+      <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-5xl mx-auto w-full">
+        <!-- Merged Tool (Vue 3 Native Brutalist) -->
+        <MergeTool v-if="activeToolId === 'merge'" />
+
+        <!-- Other Tools (via Coexistence Wrapper until ported in Phase 3) -->
+        <LegacyToolWrapper v-else :tool-id="activeToolId" />
+      </main>
+    </div>
+
+    <!-- Drawers & Overlays -->
+    <QueueDrawer />
+    <ToastHost />
+  </div>
+</template>
