@@ -59,3 +59,38 @@ export function initPdfJsWorker() {
 
   return pdfWorkerBlobUrl;
 }
+
+let tesseractWorkerBlobUrl = null;
+
+/**
+ * Initialize or get Tesseract.js Worker Blob URL from embedded Base64 data
+ * @returns {string | null}
+ */
+export function getTesseractWorkerBlobUrl() {
+  if (tesseractWorkerBlobUrl) {
+    return tesseractWorkerBlobUrl;
+  }
+
+  if (typeof window !== 'undefined' && window.__TESSERACT_WORKER_BASE64__) {
+    try {
+      const decompressedBytes = decompressBase64(window.__TESSERACT_WORKER_BASE64__);
+      const blob = new Blob([decompressedBytes], { type: 'application/javascript' });
+      tesseractWorkerBlobUrl = URL.createObjectURL(blob);
+    } catch (e) {
+      console.error('Failed to initialize embedded Tesseract worker:', e);
+    }
+  }
+
+  return tesseractWorkerBlobUrl;
+}
+
+/**
+ * Revoke and clean up Tesseract worker blob URL
+ */
+export function revokeTesseractWorkerBlobUrl() {
+  if (tesseractWorkerBlobUrl) {
+    URL.revokeObjectURL(tesseractWorkerBlobUrl);
+    tesseractWorkerBlobUrl = null;
+  }
+}
+
