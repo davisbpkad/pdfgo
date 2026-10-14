@@ -294,10 +294,25 @@ function bindEvents() {
     }
   });
 
+  // Mobile sidebar navigation
+  const sidebar = document.getElementById('app-sidebar');
+  const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  const toggleMobileSidebar = (forceClose = false) => {
+    if (!sidebar) return;
+    const shouldOpen = forceClose ? false : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', shouldOpen);
+    sidebarBackdrop?.classList.toggle('active', shouldOpen);
+  };
+
+  document.getElementById('btn-toggle-menu')?.addEventListener('click', () => toggleMobileSidebar());
+  document.getElementById('btn-close-sidebar')?.addEventListener('click', () => toggleMobileSidebar(true));
+  sidebarBackdrop?.addEventListener('click', () => toggleMobileSidebar(true));
+
   // Global Escape key accessibility listener
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && queueDrawerOpen) {
-      toggleQueueDrawer();
+    if (e.key === 'Escape') {
+      if (queueDrawerOpen) toggleQueueDrawer();
+      toggleMobileSidebar(true);
     }
   });
 
@@ -306,7 +321,10 @@ function bindEvents() {
   navButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const toolId = btn.getAttribute('data-tool');
-      if (toolId) switchModule(toolId);
+      if (toolId) {
+        switchModule(toolId);
+        toggleMobileSidebar(true);
+      }
     });
   });
 
