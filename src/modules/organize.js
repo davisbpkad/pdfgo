@@ -185,7 +185,7 @@ function rotateAll(delta = 90) {
 
 function deletePage(index) {
   if (pages.length <= 1) {
-    if (activeCtx) activeCtx.showToast('Dokumen harus memiliki minimal 1 halaman tersisa.', 'error');
+    if (activeCtx) activeCtx.showToast(t('tools.organize.minPagesError'), 'error');
     return;
   }
   pages.splice(index, 1);
@@ -195,7 +195,7 @@ function deletePage(index) {
 function deleteSelected() {
   const remaining = pages.filter(p => !p.isSelected);
   if (remaining.length === 0) {
-    if (activeCtx) activeCtx.showToast('Dokumen harus memiliki minimal 1 halaman tersisa.', 'error');
+    if (activeCtx) activeCtx.showToast(t('tools.organize.minPagesError'), 'error');
     return;
   }
   pages = remaining;
@@ -288,15 +288,23 @@ function render() {
             ${selectedCount === pages.length ? t('tools.organize.deselectAll') : t('tools.organize.selectAll')}
           </button>
           ${selectedCount > 0 ? `
-            <button class="btn-control" id="btn-org-delete-selected" style="color: var(--accent-danger);">
+            <button class="btn-control" id="btn-org-delete-selected"
+              onclick="window.__orgDeleteSelected()"
+              style="color: var(--accent-danger); ${selectedCount === pages.length ? 'opacity: 0.7;' : ''}"
+              title="${selectedCount === pages.length ? t('tools.organize.minPagesError') : t('tools.organize.deleteSelected')}">
               🗑 ${t('tools.organize.deleteSelected')} (${selectedCount})
             </button>
           ` : ''}
         </div>
 
-        <button class="btn-upload" id="btn-org-save" ${isSaving ? 'disabled' : ''}>
-          ${isSaving ? 'Menyimpan...' : t('tools.organize.saveOrganized', { count: pages.length })}
-        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn-control" id="btn-org-change-file" title="${t('tools.organize.changeFile')}">
+            📁 ${t('tools.organize.changeFile')}
+          </button>
+          <button class="btn-upload" id="btn-org-save" ${isSaving ? 'disabled' : ''}>
+            ${isSaving ? 'Menyimpan...' : t('tools.organize.saveOrganized', { count: pages.length })}
+          </button>
+        </div>
       </div>
 
       <!-- Grid of Pages -->
@@ -335,6 +343,15 @@ function bindEvents() {
   document.getElementById('btn-org-rotate-all')?.addEventListener('click', () => rotateAll(90));
   document.getElementById('btn-org-delete-selected')?.addEventListener('click', deleteSelected);
   document.getElementById('btn-org-save')?.addEventListener('click', handleSave);
+  document.getElementById('btn-org-change-file')?.addEventListener('click', () => {
+    activeFile = null;
+    activeBuffer = null;
+    pdfDocProxy = null;
+    pages = [];
+    historyStack = [];
+    historyIndex = -1;
+    render();
+  });
 
   document.getElementById('btn-org-select-all')?.addEventListener('click', () => {
     const allSelected = pages.every(p => p.isSelected);
@@ -375,4 +392,5 @@ if (typeof window !== 'undefined') {
   window.__orgRotate = (idx) => rotatePage(idx);
   window.__orgDelete = (idx) => deletePage(idx);
   window.__orgToggleSelect = (idx) => toggleSelect(idx);
+  window.__orgDeleteSelected = () => deleteSelected();
 }

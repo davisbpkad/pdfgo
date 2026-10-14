@@ -62,7 +62,12 @@ const translations = {
         saveOrganized: 'Simpan Dokumen PDF ({count} Hal)',
         pageCardLabel: 'Hal {num}',
         successSaved: 'Perubahan halaman berhasil disimpan.',
-        emptyPrompt: 'Pilih file PDF untuk melihat grid visual dan mengatur urutan halamannya.'
+        emptyPrompt: 'Pilih file PDF untuk melihat grid visual dan mengatur urutan halamannya.',
+        selectAll: 'Pilih Semua',
+        deselectAll: 'Batalkan Pilihan',
+        deleteSelected: 'Hapus Terpilih',
+        changeFile: 'Ganti File',
+        minPagesError: 'Dokumen harus memiliki minimal 1 halaman tersisa. Tidak bisa menghapus semua halaman.'
       },
       sign: {
         title: 'Tanda Tangan Digital',
@@ -334,7 +339,12 @@ const translations = {
         saveOrganized: 'Save Organized PDF ({count} Pages)',
         pageCardLabel: 'Page {num}',
         successSaved: 'Page changes saved successfully.',
-        emptyPrompt: 'Select a PDF file to view the visual thumbnail grid and organize its pages.'
+        emptyPrompt: 'Select a PDF file to view the visual thumbnail grid and organize its pages.',
+        selectAll: 'Select All',
+        deselectAll: 'Deselect All',
+        deleteSelected: 'Delete Selected',
+        changeFile: 'Change File',
+        minPagesError: 'Document must have at least 1 page remaining. Cannot delete all pages.'
       },
       sign: {
         title: 'Digital Signature',
