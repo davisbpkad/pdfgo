@@ -169,6 +169,16 @@ function getEmbeddedOcrModels(isFull) {
   };
 }
 
+// 3.5 Prepare Embedded Favicon
+function getEmbeddedFavicon() {
+  const faviconPath = path.resolve('favicon.png');
+  if (fs.existsSync(faviconPath)) {
+    const bytes = fs.readFileSync(faviconPath);
+    return `data:image/png;base64,${bytes.toString('base64')}`;
+  }
+  return '';
+}
+
 // 5. Anti-Network Leak Verification
 function verifyZeroNetwork(htmlContent, filePath) {
   // Allow safe non-network XML / SVG namespaces, URL parser template tokens, and upstream library doc references
@@ -217,6 +227,9 @@ function verifyZeroNetwork(htmlContent, filePath) {
     throw new Error(`SECURITY LEAK DETECTED: External <script src="..."> found in ${filePath}`);
   }
 
+  // Allow safe inline data: URIs in <link> (such as embedded favicon)
+  sanitized = sanitized.replace(/<link\s+[^>]*href=["']data:[^"']*["'][^>]*>/gi, '');
+
   if (/<link\s+[^>]*href=/i.test(sanitized)) {
     throw new Error(`SECURITY LEAK DETECTED: External <link href="..."> found in ${filePath}`);
   }
@@ -254,6 +267,7 @@ async function buildVariant(variantType) {
   const workerData = getEmbeddedPdfWorker();
   const tesseractWorkerData = getEmbeddedTesseractWorker();
   const ocrModelsData = getEmbeddedOcrModels(isFull);
+  const faviconDataUri = getEmbeddedFavicon();
 
   // Single File HTML Assembly
   const html = `<!DOCTYPE html>
@@ -263,6 +277,7 @@ async function buildVariant(variantType) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;">
   <title>PDF To Go</title>
+  ${faviconDataUri ? `<link rel="icon" type="image/png" href="${faviconDataUri}">` : ''}
   <style>
 ${fontCss}
 ${minifiedCss}
@@ -321,6 +336,13 @@ async function run() {
   }
   if (targetVariant === 'all' || targetVariant === 'full') {
     reports.push(await buildVariant('full'));
+  }
+
+  // Copy favicon assets to DIST_DIR for preview server and distribution
+  const faviconPath = path.resolve('favicon.png');
+  if (fs.existsSync(faviconPath)) {
+    fs.copyFileSync(faviconPath, path.join(DIST_DIR, 'favicon.png'));
+    fs.copyFileSync(faviconPath, path.join(DIST_DIR, 'favicon.ico'));
   }
 
   // Print Summary Table
