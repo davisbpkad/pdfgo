@@ -9,6 +9,7 @@ import MergeTool from './features/merge/components/MergeTool.vue';
 import SplitTool from './features/split/components/SplitTool.vue';
 import OrganizeTool from './features/organize/components/OrganizeTool.vue';
 import WatermarkTool from './features/watermark/components/WatermarkTool.vue';
+import PageNumbersTool from './features/page-numbers/components/PageNumbersTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -39,6 +40,7 @@ function closeSidebar() {
         <SplitTool v-else-if="activeToolId === 'split'" />
         <OrganizeTool v-else-if="activeToolId === 'organize'" />
         <WatermarkTool v-else-if="activeToolId === 'watermark'" />
+        <PageNumbersTool v-else-if="activeToolId === 'page-numbers'" />
 
         <!-- Other Tools (via Coexistence Wrapper until ported) -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />
