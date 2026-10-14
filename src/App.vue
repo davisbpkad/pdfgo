@@ -14,6 +14,7 @@ import CompressTool from './features/compress/components/CompressTool.vue';
 import ImageToPdfTool from './features/image-to-pdf/components/ImageToPdfTool.vue';
 import PdfToImageTool from './features/pdf-to-image/components/PdfToImageTool.vue';
 import ExtractTextTool from './features/extract-text/components/ExtractTextTool.vue';
+import SignTool from './features/sign/components/SignTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -49,6 +50,7 @@ function closeSidebar() {
         <ImageToPdfTool v-else-if="activeToolId === 'image-to-pdf'" />
         <PdfToImageTool v-else-if="activeToolId === 'pdf-to-image'" />
         <ExtractTextTool v-else-if="activeToolId === 'extract-text'" />
+        <SignTool v-else-if="activeToolId === 'sign'" />
 
         <!-- Other Tools (via Coexistence Wrapper until ported) -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />

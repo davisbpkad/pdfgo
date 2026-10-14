@@ -14,68 +14,9 @@ export const titleKey = 'tools.sign.title';
 export const descKey = 'tools.sign.desc';
 export const icon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>`;
 
-// ============================================================================
-// Pure Logic Engine
-// ============================================================================
-/**
- * Embed and stamp a signature PNG onto a PDF document
- * @param {ArrayBuffer|Uint8Array} srcBuffer
- * @param {ArrayBuffer|Uint8Array} signaturePngBuffer
- * @param {Array<{ pageIndex: number, x: number, y: number, width: number, height: number }>} placements
- * @returns {Promise<Uint8Array>}
- */
-export async function applySignatures(srcBuffer, signaturePngBuffer, placements) {
-  if (!placements || placements.length === 0) {
-    throw new Error('Tentukan posisi penempatan tanda tangan terlebih dahulu.');
-  }
-
-  const pdfDoc = await PDFDocument.load(srcBuffer);
-  const signatureImg = await pdfDoc.embedPng(signaturePngBuffer);
-
-  for (const p of placements) {
-    const page = pdfDoc.getPage(p.pageIndex);
-    page.drawImage(signatureImg, {
-      x: p.x,
-      y: p.y,
-      width: p.width,
-      height: p.height
-    });
-  }
-
-  return await pdfDoc.save();
-}
-
-/**
- * Remove near-white pixels from an image to make it transparent
- * @param {HTMLImageElement} img
- * @returns {string} transparent PNG data URL
- */
-export function removeWhiteBackground(img) {
-  const canvas = document.createElement('canvas');
-  canvas.width = img.naturalWidth || img.width;
-  canvas.height = img.naturalHeight || img.height;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0);
-
-  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imgData.data;
-
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    // If pixel is near-white (threshold > 230)
-    if (r > 230 && g > 230 && b > 230) {
-      data[i + 3] = 0; // Alpha 0
-    }
-  }
-
-  ctx.putImageData(imgData, 0, 0);
-  const dataUrl = canvas.toDataURL('image/png');
-  canvas.width = 0;
-  canvas.height = 0;
-  return dataUrl;
-}
+// Re-export pure logic from atomic feature files
+export { applySignatures } from '../features/sign/logic/applySignatures.js';
+export { removeWhiteBackground } from '../features/sign/logic/removeWhiteBackground.js';
 
 // ============================================================================
 // UI Controller
