@@ -116,16 +116,6 @@ test('Tahap 6: buildSearchablePdf embeds invisible text layer verifiable by PDF.
   assert.ok(extractedWords.includes('2026'));
 });
 
-  const loadedPage = await loadedDoc.getPage(1);
-  const textContent = await loadedPage.getTextContent();
-  const extractedWords = textContent.items.map((item) => item.str).join(' ');
-
-  assert.ok(extractedWords.includes('DOKUMEN'));
-  assert.ok(extractedWords.includes('RAHASIA'));
-  assert.ok(extractedWords.includes('NEGARA'));
-  assert.ok(extractedWords.includes('2026'));
-});
-
 test('Tahap 6: Indonesian and English model identifiers are properly structured', () => {
   const supportedLanguages = ['ind', 'eng', 'ind+eng'];
   assert.ok(supportedLanguages.includes('ind'));

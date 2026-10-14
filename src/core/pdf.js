@@ -18,7 +18,8 @@ initPdfJsWorker();
  */
 export async function loadPdfJsDocument(data, password = '') {
   initPdfJsWorker();
-  const loadingTask = pdfjsLib.getDocument({
+  const getDocument = pdfjsLib.getDocument || pdfjsLib.default?.getDocument;
+  const loadingTask = getDocument({
     data,
     password,
     cMapUrl: undefined,
