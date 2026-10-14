@@ -3,7 +3,7 @@
     <span class="text-lg">⚠️</span>
     <div class="text-xs font-bold leading-relaxed">
       <span class="uppercase tracking-wider">Peringatan Sensor Permanen:</span>
-      Teks dan objek di bawah kotak sensor akan dimusnahkan secara piksel murni (rasterization). Data sensitif tidak dapat disalin atau dipulihkan kembali oleh pihak mana pun.
+      Teks dan objek di bawah kotak sensor akan dimusnahkan secara piksel murni (rasterization). Data sensitif tidak dapat disalin atau dipulihkan kembali oleh pihak mana pun. Pastikan Anda sudah memeriksa pratinjau sebelum menyensor permanen.
     </div>
   </div>
 </template>

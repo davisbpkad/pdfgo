@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
@@ -11,7 +11,9 @@ import BaseCard from '../../../ui/BaseCard.vue';
 import BaseProgressBar from '../../../ui/BaseProgressBar.vue';
 import RedactWarningBanner from './RedactWarningBanner.vue';
 import RedactControls from './RedactControls.vue';
+import RedactBoxList from './RedactBoxList.vue';
 import RedactCanvas from './RedactCanvas.vue';
+import RedactPreviewModal from './RedactPreviewModal.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
@@ -20,12 +22,19 @@ const totalPages = ref(0);
 const currentPage = ref(1);
 
 const boxesByPage = ref({});
+const selectedBoxId = ref(null);
 const searchTerm = ref('');
 const sanitizeMetadata = ref(true);
 const isProcessing = ref(false);
 const progressValue = ref(0);
-const previewScale = 0.8;
+const showPreviewModal = ref(false);
+const previewScale = ref(1.0);
 
+const historyStack = ref([]);
+const redoStack = ref([]);
+
+const canUndo = computed(() => historyStack.value.length > 0);
+const canRedo = computed(() => redoStack.value.length > 0);
 const currentBoxes = computed(() => boxesByPage.value[currentPage.value - 1] || []);
 const totalBoxCount = computed(() => {
   return Object.values(boxesByPage.value).reduce((acc, list) => acc + list.length, 0);
@@ -36,7 +45,41 @@ onMounted(() => {
     const candidate = queueState.value.items.find(i => i.name?.toLowerCase().endsWith('.pdf'));
     if (candidate?.file) loadDocument(candidate.file);
   }
+  window.addEventListener('keydown', onGlobalKeyDown);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onGlobalKeyDown);
+});
+
+function onGlobalKeyDown(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+    e.preventDefault();
+    if (e.shiftKey) {
+      redo();
+    } else {
+      undo();
+    }
+  }
+}
+
+function pushHistory() {
+  historyStack.value.push(JSON.parse(JSON.stringify(boxesByPage.value)));
+  if (historyStack.value.length > 30) historyStack.value.shift();
+  redoStack.value = [];
+}
+
+function undo() {
+  if (!canUndo.value) return;
+  redoStack.value.push(JSON.parse(JSON.stringify(boxesByPage.value)));
+  boxesByPage.value = historyStack.value.pop();
+}
+
+function redo() {
+  if (!canRedo.value) return;
+  historyStack.value.push(JSON.parse(JSON.stringify(boxesByPage.value)));
+  boxesByPage.value = redoStack.value.pop();
+}
 
 async function handleIncomingFiles(files) {
   const pdf = Array.from(files).find(f => f.name.toLowerCase().endsWith('.pdf'));
@@ -46,6 +89,9 @@ async function handleIncomingFiles(files) {
 async function loadDocument(file) {
   activeFile.value = file;
   boxesByPage.value = {};
+  historyStack.value = [];
+  redoStack.value = [];
+  selectedBoxId.value = null;
   currentPage.value = 1;
 
   try {
@@ -67,9 +113,13 @@ function resetFile() {
   totalPages.value = 0;
   currentPage.value = 1;
   boxesByPage.value = {};
+  historyStack.value = [];
+  redoStack.value = [];
+  selectedBoxId.value = null;
 }
 
 function onAddBox(box) {
+  pushHistory();
   const pageIdx = currentPage.value - 1;
   const list = boxesByPage.value[pageIdx] || [];
   const newBox = {
@@ -80,23 +130,45 @@ function onAddBox(box) {
     ...boxesByPage.value,
     [pageIdx]: [...list, newBox]
   };
+  selectedBoxId.value = newBox.id;
+}
+
+function onUpdateBox(box) {
+  const pageIdx = currentPage.value - 1;
+  const list = boxesByPage.value[pageIdx] || [];
+  const idx = list.findIndex(b => b.id === box.id);
+  if (idx !== -1) {
+    const updated = [...list];
+    updated[idx] = { ...box };
+    boxesByPage.value = {
+      ...boxesByPage.value,
+      [pageIdx]: updated
+    };
+  }
 }
 
 function onRemoveBox(id) {
+  pushHistory();
   const pageIdx = currentPage.value - 1;
   const list = boxesByPage.value[pageIdx] || [];
   boxesByPage.value = {
     ...boxesByPage.value,
     [pageIdx]: list.filter(b => b.id !== id)
   };
+  if (selectedBoxId.value === id) {
+    selectedBoxId.value = null;
+  }
 }
 
 function clearCurrentPage() {
+  if (currentBoxes.value.length === 0) return;
+  pushHistory();
   const pageIdx = currentPage.value - 1;
   boxesByPage.value = {
     ...boxesByPage.value,
     [pageIdx]: []
   };
+  selectedBoxId.value = null;
   showToast('Kotak sensor di halaman ini dihapus.', 'info');
 }
 
@@ -107,7 +179,7 @@ async function handleSearch() {
       pdfDocProxy.value,
       currentPage.value,
       searchTerm.value,
-      previewScale
+      previewScale.value
     );
 
     if (foundBoxes.length === 0) {
@@ -115,6 +187,7 @@ async function handleSearch() {
       return;
     }
 
+    pushHistory();
     const pageIdx = currentPage.value - 1;
     const list = boxesByPage.value[pageIdx] || [];
     boxesByPage.value = {
@@ -139,7 +212,7 @@ async function handleApply() {
       safeBuffer,
       pdfDocProxy.value,
       boxesByPage.value,
-      previewScale,
+      previewScale.value,
       sanitizeMetadata.value,
       (pct) => { progressValue.value = pct; }
     );
@@ -188,17 +261,30 @@ async function handleApply() {
       <BaseProgressBar v-if="isProcessing" :progress="progressValue" label="Menghancurkan piksel sensor..." />
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Left Panel: Controls -->
-        <div class="lg:col-span-5">
+        <!-- Left Panel: Controls & Box List -->
+        <div class="lg:col-span-5 space-y-4">
           <RedactControls
             v-model:search-term="searchTerm"
             v-model:sanitize-metadata="sanitizeMetadata"
             :page-box-count="currentBoxes.length"
             :total-box-count="totalBoxCount"
             :is-processing="isProcessing"
+            :can-undo="canUndo"
+            :can-redo="canRedo"
             @search="handleSearch"
+            @undo="undo"
+            @redo="redo"
+            @inspect-preview="showPreviewModal = true"
             @clear-page="clearCurrentPage"
             @apply="handleApply"
+          />
+
+          <RedactBoxList
+            :boxes="currentBoxes"
+            :selected-box-id="selectedBoxId"
+            :current-page="currentPage"
+            @select-box="id => selectedBoxId = id"
+            @remove-box="onRemoveBox"
           />
         </div>
 
@@ -228,18 +314,32 @@ async function handleApply() {
             </div>
           </div>
 
-          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto max-h-[640px]">
+          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto min-h-[480px]">
             <RedactCanvas
               :pdf-doc-proxy="pdfDocProxy"
               :current-page="currentPage"
               :boxes="currentBoxes"
+              :selected-box-id="selectedBoxId"
               :scale="previewScale"
               @add-box="onAddBox"
+              @update-box="onUpdateBox"
               @remove-box="onRemoveBox"
+              @select-box="id => selectedBoxId = id"
             />
           </div>
         </div>
       </div>
     </div>
+
+    <!-- High-Resolution Inspection Preview Modal -->
+    <RedactPreviewModal
+      :show="showPreviewModal"
+      :pdf-doc-proxy="pdfDocProxy"
+      :boxes-by-page="boxesByPage"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      @close="showPreviewModal = false"
+      @update:current-page="p => currentPage = p"
+    />
   </div>
 </template>

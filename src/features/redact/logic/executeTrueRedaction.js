@@ -1,5 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import { renderPageToCanvas } from '../../../core/pdf.js';
+import { renderRedactionBoxes } from './renderRedactionBoxes.js';
 
 /**
  * Execute True Redaction: rasterizes redacted pages, preserves untouched pages, clears metadata
@@ -37,17 +38,7 @@ export async function executeTrueRedaction(srcBuffer, pdfDocProxy, boxesByPage, 
       const highResScale = 2.5;
       const { canvas } = await renderPageToCanvas(pdfDocProxy, i + 1, highResScale);
       const ctx = canvas.getContext('2d');
-      const scaleFactor = highResScale / previewScale;
-
-      ctx.fillStyle = '#000000';
-      for (const box of pageBoxes) {
-        ctx.fillRect(
-          box.x * scaleFactor,
-          box.y * scaleFactor,
-          box.width * scaleFactor,
-          box.height * scaleFactor
-        );
-      }
+      renderRedactionBoxes(ctx, pageBoxes, canvas.width, canvas.height, highResScale, previewScale);
 
       const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
       const pngBuffer = await pngBlob.arrayBuffer();
