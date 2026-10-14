@@ -93,7 +93,15 @@ const screenshotsToCapture = [
     name: 'screenshot-lite-id.png',
     file: 'dist/PDF Toolkit Lite.html',
     params: '?theme=light&lang=id',
+    windowSize: '1280,800',
     label: 'Lite Edition - Mode Terang (ID)'
+  },
+  {
+    name: 'screenshot-mobile-id.png',
+    file: 'dist/PDF Toolkit.html',
+    params: '?theme=light&lang=id',
+    windowSize: '500,800',
+    label: 'Mobile Edition - Mode Terang (ID)'
   }
 ];
 
@@ -101,9 +109,10 @@ if (chromeBinary) {
   for (const s of screenshotsToCapture) {
     const outPath = path.join(SCREENSHOTS_DIR, s.name);
     const targetUrl = `file://${path.resolve(s.file)}${s.params}`;
+    const winSize = s.windowSize || '1280,800';
     console.log(`  📸 Capturing: ${s.label} -> dist/screenshots/${s.name}`);
     try {
-      execSync(`"${chromeBinary}" --headless=new --screenshot="${outPath}" --window-size=1280,800 "${targetUrl}"`, {
+      execSync(`"${chromeBinary}" --headless=new --screenshot="${outPath}" --window-size=${winSize} --hide-scrollbars "${targetUrl}"`, {
         stdio: ['ignore', 'ignore', 'ignore']
       });
       const stat = fs.statSync(outPath);
