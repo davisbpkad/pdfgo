@@ -8,9 +8,15 @@ let currentTheme = 'auto'; // 'auto' | 'light' | 'dark'
 const listeners = new Set();
 
 try {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved && (saved === 'auto' || saved === 'light' || saved === 'dark')) {
-    currentTheme = saved;
+  const params = new URLSearchParams(window.location.search || (window.location.hash ? window.location.hash.substring(1) : ''));
+  const urlTheme = params.get('theme');
+  if (urlTheme && ['auto', 'light', 'dark'].includes(urlTheme)) {
+    currentTheme = urlTheme;
+  } else {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && (saved === 'auto' || saved === 'light' || saved === 'dark')) {
+      currentTheme = saved;
+    }
   }
 } catch (e) {}
 

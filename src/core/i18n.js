@@ -251,10 +251,15 @@ const translations = {
       totalFiles: '{count} file',
       clearAll: 'Kosongkan',
       downloadAll: 'Unduh Semua (ZIP)',
+      downloadSingle: 'Unduh',
       statusIdle: 'Menunggu',
       statusProcessing: 'Memproses...',
       statusDone: 'Selesai',
-      statusError: 'Gagal'
+      statusError: 'Gagal',
+      processBatch: 'Proses Antrean dengan {tool}',
+      batchCompleted: 'Proses batch selesai: {success} berhasil, {failed} gagal.',
+      notPerDoc: 'Alat aktif ({tool}) adalah alat agregator. Masukkan file langsung ke alat tersebut.',
+      processingBatch: 'Memproses berkas {current} dari {total}...'
     },
     common: {
       themeAuto: 'Tema: Otomatis',
@@ -518,10 +523,15 @@ const translations = {
       totalFiles: '{count} files',
       clearAll: 'Clear All',
       downloadAll: 'Download All (ZIP)',
+      downloadSingle: 'Download',
       statusIdle: 'Queued',
       statusProcessing: 'Processing...',
       statusDone: 'Completed',
-      statusError: 'Failed'
+      statusError: 'Failed',
+      processBatch: 'Process Queue with {tool}',
+      batchCompleted: 'Batch processing complete: {success} succeeded, {failed} failed.',
+      notPerDoc: 'Active tool ({tool}) is an aggregator. Please load files directly into the module.',
+      processingBatch: 'Processing file {current} of {total}...'
     },
     common: {
       themeAuto: 'Theme: Auto',
@@ -546,11 +556,17 @@ const translations = {
 let currentLang = 'id';
 const listeners = new Set();
 
-// Safely initialize language from localStorage
+// Safely initialize language from URL search/hash or localStorage
 try {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved && (saved === 'id' || saved === 'en')) {
-    currentLang = saved;
+  const params = new URLSearchParams(window.location.search || (window.location.hash ? window.location.hash.substring(1) : ''));
+  const urlLang = params.get('lang');
+  if (urlLang && (urlLang === 'id' || urlLang === 'en')) {
+    currentLang = urlLang;
+  } else {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && (saved === 'id' || saved === 'en')) {
+      currentLang = saved;
+    }
   }
 } catch (e) {
   // LocalStorage not available, default to 'id'

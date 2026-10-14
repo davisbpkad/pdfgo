@@ -8,8 +8,13 @@ import { t, getLang, setLang, subscribeLang } from './core/i18n.js';
 import { initTheme, getTheme, cycleTheme, subscribeTheme } from './core/theme.js';
 import { queue } from './core/queue.js';
 import { initPdfJsWorker } from './core/workers.js';
+import { loadPdfJsDocument } from './core/pdf.js';
 import { createZipArchive } from './core/zip.js';
 import { downloadFile } from './core/download.js';
+import { compressPdfDocument } from './modules/compress.js';
+import { applyWatermark } from './modules/watermark.js';
+import { applyPageNumbers } from './modules/page-numbers.js';
+import { extractTextContent } from './modules/extract-text.js';
 
 // Global application state
 let currentModuleId = 'merge';
@@ -199,13 +204,18 @@ function renderShell() {
         <!-- Rendered reactively from queue state -->
       </div>
 
-      <div class="queue-footer">
-        <button class="btn-control" id="btn-queue-clear" style="flex: 1;">
-          ${t('queue.clearAll')}
+      <div class="queue-footer" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <button class="btn-upload" id="btn-queue-process-batch" style="width: 100%; justify-content: center;">
+          ${t('queue.processBatch', { tool: t(activeModule?.titleKey || 'nav.categoryAll') })}
         </button>
-        <button class="btn-upload" id="btn-queue-download-all" style="flex: 2; justify-content: center;">
-          ${t('queue.downloadAll')}
-        </button>
+        <div style="display: flex; gap: 0.75rem; width: 100%;">
+          <button class="btn-control" id="btn-queue-clear" style="flex: 1;">
+            ${t('queue.clearAll')}
+          </button>
+          <button class="btn-control" id="btn-queue-download-all" style="flex: 2; justify-content: center; font-weight: 600;">
+            ${t('queue.downloadAll')}
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -242,6 +252,9 @@ function bindEvents() {
     showToast(getLang() === 'id' ? 'Antrean dikosongkan.' : 'Queue cleared.', 'info');
   });
 
+  // Batch process queue with active tool
+  document.getElementById('btn-queue-process-batch')?.addEventListener('click', executeBatchProcessing);
+
   // Download all as ZIP
   document.getElementById('btn-queue-download-all')?.addEventListener('click', async () => {
     const items = queue.getItems().filter(i => i.result);
@@ -255,6 +268,13 @@ function bindEvents() {
       downloadFile(zipBlob, `PDFToolkit_Batch_${Date.now()}.zip`, 'application/zip');
     } catch (err) {
       showToast(err.message || 'Gagal membuat ZIP', 'error');
+    }
+  });
+
+  // Global Escape key accessibility listener
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && queueDrawerOpen) {
+      toggleQueueDrawer();
     }
   });
 
@@ -381,6 +401,89 @@ function toggleQueueDrawer() {
   }
 }
 
+async function executeBatchProcessing() {
+  const items = queue.getItems();
+  if (items.length === 0) {
+    showToast(t('queue.empty'), 'warning');
+    return;
+  }
+
+  // Aggregator tools (Merge, Image to PDF, Organize): pass all files directly
+  if (['merge', 'image-to-pdf', 'organize'].includes(currentModuleId)) {
+    if (activeModule && typeof activeModule.onFiles === 'function') {
+      activeModule.onFiles(items.map(i => i.file));
+      showToast(t('queue.notPerDoc', { tool: t(activeModule.titleKey) }), 'info');
+      toggleQueueDrawer();
+    }
+    return;
+  }
+
+  // Per-document tool: sequential execution with isolated error boundaries
+  queue.isProcessing = true;
+  queue._notify();
+
+  let successCount = 0;
+  let failCount = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    if (queue.cancelRequested) break;
+    const item = items[i];
+    if (item.status === 'done' && item.result) {
+      successCount++;
+      continue;
+    }
+
+    queue.updateItem(item.id, { status: 'processing', progress: 15 });
+
+    try {
+      const buffer = await item.file.arrayBuffer();
+      let outputBlob = null;
+
+      if (currentModuleId === 'compress') {
+        const proxy = await loadPdfJsDocument(buffer);
+        const res = await compressPdfDocument(buffer, proxy, { dpiScale: 1.5, quality: 0.70 });
+        outputBlob = new Blob([res.bytes], { type: 'application/pdf' });
+      } else if (currentModuleId === 'watermark') {
+        const resBytes = await applyWatermark(buffer, { text: 'CONFIDENTIAL', position: 'diagonal', opacity: 0.25 });
+        outputBlob = new Blob([resBytes], { type: 'application/pdf' });
+      } else if (currentModuleId === 'page-numbers') {
+        const resBytes = await applyPageNumbers(buffer, { format: 'Halaman {n} dari {total}' });
+        outputBlob = new Blob([resBytes], { type: 'application/pdf' });
+      } else if (currentModuleId === 'extract-text' || currentModuleId === 'ocr') {
+        const proxy = await loadPdfJsDocument(buffer);
+        const res = await extractTextContent(proxy, true);
+        outputBlob = new Blob([res.fullText], { type: 'text/plain;charset=utf-8' });
+      } else {
+        outputBlob = item.file;
+      }
+
+      queue.updateItem(item.id, {
+        status: 'done',
+        progress: 100,
+        result: outputBlob
+      });
+      successCount++;
+    } catch (err) {
+      console.error(`Batch processing failed for ${item.name}:`, err);
+      queue.updateItem(item.id, {
+        status: 'error',
+        progress: 0,
+        error: err.message || 'Error processing file'
+      });
+      failCount++;
+    }
+  }
+
+  queue.isProcessing = false;
+  queue.cancelRequested = false;
+  queue._notify();
+
+  showToast(
+    t('queue.batchCompleted', { success: successCount, failed: failCount }),
+    successCount > 0 ? 'success' : 'error'
+  );
+}
+
 function updateQueueUi(state) {
   const countBadge = document.getElementById('header-queue-count');
   if (countBadge) {
@@ -403,12 +506,20 @@ function updateQueueUi(state) {
     <div class="queue-item" data-id="${item.id}">
       <div class="queue-item-header">
         <span class="queue-item-name" title="${item.name}">${item.name}</span>
-        <button class="btn-control" style="padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="window.__removeQueueItem('${item.id}')">
-          &times;
-        </button>
+        <div style="display: flex; align-items: center; gap: 0.35rem;">
+          ${item.status === 'done' && item.result ? `
+            <button class="btn-control" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; color: var(--accent-success);" onclick="window.__downloadQueueItem('${item.id}')" title="${t('queue.downloadSingle')}">
+              ↓
+            </button>
+          ` : ''}
+          <button class="btn-control" style="padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="window.__removeQueueItem('${item.id}')">
+            &times;
+          </button>
+        </div>
       </div>
       <div class="queue-item-meta">
-        ${(item.size / 1024 / 1024).toFixed(2)} MB • <span style="font-weight: 600; color: ${item.status === 'done' ? 'var(--accent-success)' : 'var(--text-secondary)'};">${t('queue.status' + item.status.charAt(0).toUpperCase() + item.status.slice(1))}</span>
+        ${(item.size / 1024 / 1024).toFixed(2)} MB • <span style="font-weight: 600; color: ${item.status === 'done' ? 'var(--accent-success)' : (item.status === 'error' ? 'var(--accent-danger)' : 'var(--text-secondary)')};">${t('queue.status' + item.status.charAt(0).toUpperCase() + item.status.slice(1))}</span>
+        ${item.error ? `<div style="color: var(--accent-danger); font-size: 0.7rem; margin-top: 0.2rem;">${item.error}</div>` : ''}
       </div>
     </div>
   `).join('');
@@ -417,6 +528,16 @@ function updateQueueUi(state) {
 // Global removal bridge
 window.__removeQueueItem = (id) => {
   queue.removeItem(id);
+};
+
+// Global individual download bridge
+window.__downloadQueueItem = (id) => {
+  const item = queue.getItems().find(i => i.id === id);
+  if (item && item.result) {
+    const ext = item.result.type === 'text/plain' ? '.txt' : '.pdf';
+    const base = item.name.replace(/\.[^/.]+$/, '');
+    downloadFile(item.result, `${base}-processed${ext}`, item.result.type);
+  }
 };
 
 // Listeners
