@@ -1,3 +1,5 @@
+import { unwrapPdfProxy } from '../../../core/pdf.js';
+
 /**
  * Extract clean text preserving layout and natural reading order
  * @param {object} pdfDocProxy PDF.js DocumentProxy
@@ -6,12 +8,13 @@
  * @returns {Promise<{ fullText: string, pageTexts: string[], wordCount: number, charCount: number, isScanned: boolean }>}
  */
 export async function extractTextContent(pdfDocProxy, includeSeparators = true, onProgress = null) {
-  const numPages = pdfDocProxy.numPages;
+  const rawDoc = unwrapPdfProxy(pdfDocProxy);
+  const numPages = rawDoc.numPages;
   const pageTexts = [];
   let totalChars = 0;
 
   for (let i = 1; i <= numPages; i++) {
-    const page = await pdfDocProxy.getPage(i);
+    const page = await rawDoc.getPage(i);
     const content = await page.getTextContent();
     const items = content.items || [];
 

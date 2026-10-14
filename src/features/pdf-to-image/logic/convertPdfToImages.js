@@ -1,3 +1,5 @@
+import { unwrapPdfProxy } from '../../../core/pdf.js';
+
 /**
  * Render selected PDF pages to image blobs
  * @param {object} pdfDocProxy
@@ -6,6 +8,7 @@
  * @returns {Promise<Array<{ name: string, data: Blob }>>}
  */
 export async function convertPdfToImages(pdfDocProxy, options, onProgress = null) {
+  const rawDoc = unwrapPdfProxy(pdfDocProxy);
   const {
     format = 'png',
     scale = 2.0,
@@ -14,7 +17,7 @@ export async function convertPdfToImages(pdfDocProxy, options, onProgress = null
     baseName = 'halaman'
   } = options || {};
 
-  const numPages = pdfDocProxy.numPages;
+  const numPages = rawDoc.numPages;
   const targets = (pageNumbers.length > 0 ? pageNumbers : Array.from({ length: numPages }, (_, i) => i + 1))
     .filter(p => p >= 1 && p <= numPages);
 
@@ -24,7 +27,7 @@ export async function convertPdfToImages(pdfDocProxy, options, onProgress = null
 
   for (let idx = 0; idx < targets.length; idx++) {
     const pageNum = targets[idx];
-    const page = await pdfDocProxy.getPage(pageNum);
+    const page = await rawDoc.getPage(pageNum);
 
     let currentScale = scale;
     let viewport = page.getViewport({ scale: currentScale });
