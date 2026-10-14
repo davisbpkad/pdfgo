@@ -5,33 +5,88 @@ defineProps({
   isScanned: {
     type: Boolean,
     default: false
+  },
+  isExtracting: {
+    type: Boolean,
+    default: false
+  },
+  selectedLang: {
+    type: String,
+    default: 'ind'
+  },
+  availableLangs: {
+    type: Array,
+    default: () => ['ind']
   }
 });
 
-const emit = defineEmits(['open-ocr']);
+const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
 </script>
 
 <template>
   <div
     v-if="isScanned"
-    class="border-3 border-ink bg-accent/30 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-hard-sm"
+    class="border-3 border-ink bg-accent/20 p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-hard-sm"
   >
-    <div class="space-y-0.5">
-      <div class="flex items-center gap-2 font-display font-black text-sm text-ink uppercase">
-        <span>⚠️</span>
-        <span>Dokumen Terdeteksi Sebagai Hasil Scan / Gambar</span>
+    <div class="space-y-1.5 flex-1">
+      <div class="flex items-center gap-2 font-display font-black text-sm text-ink uppercase tracking-tight">
+        <span class="text-base">⚠️</span>
+        <span>Dokumen Terdeteksi Sebagai Gambar / Hasil Scan</span>
       </div>
-      <p class="text-xs font-medium text-ink/80">
-        Teks yang diekstrak sangat sedikit. Gunakan alat Pengenalan Teks (OCR) untuk membaca teks dari gambar.
+      <p class="text-xs font-medium text-ink/80 leading-relaxed max-w-xl">
+        Halaman dokumen ini tidak memiliki teks digital langsung (berupa gambar/hasil pemindaian). Ekstrak teks secara langsung menggunakan modul OCR lokal di bawah ini.
       </p>
+
+      <!-- Language selector pill bar -->
+      <div class="flex items-center gap-2 pt-1">
+        <span class="text-[11px] font-bold text-ink uppercase">Bahasa OCR:</span>
+        <div class="inline-flex border-2 border-ink bg-paper divide-x-2 divide-ink shadow-[1px_1px_0_0_#000000]">
+          <button
+            type="button"
+            class="px-2.5 py-0.5 text-xs font-bold transition-colors cursor-pointer"
+            :class="selectedLang === 'ind' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
+            @click="emit('update:selectedLang', 'ind')"
+          >
+            🇮🇩 Indonesia
+          </button>
+          <button
+            type="button"
+            class="px-2.5 py-0.5 text-xs font-bold transition-colors cursor-pointer"
+            :class="selectedLang === 'eng' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
+            @click="emit('update:selectedLang', 'eng')"
+          >
+            🇬🇧 Inggris
+          </button>
+          <button
+            v-if="availableLangs.includes('ind') && availableLangs.includes('eng')"
+            type="button"
+            class="px-2.5 py-0.5 text-xs font-bold transition-colors cursor-pointer"
+            :class="selectedLang === 'ind+eng' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
+            @click="emit('update:selectedLang', 'ind+eng')"
+          >
+            🇮🇩+🇬🇧 Keduanya
+          </button>
+        </div>
+      </div>
     </div>
 
-    <BaseButton
-      variant="secondary"
-      class="text-xs py-1.5 px-3 whitespace-nowrap"
-      @click="emit('open-ocr')"
-    >
-      Buka OCR Scanner ➔
-    </BaseButton>
+    <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0 w-full md:w-auto">
+      <BaseButton
+        variant="primary"
+        class="text-xs py-2 px-4 whitespace-nowrap w-full sm:w-auto shadow-hard-sm"
+        :disabled="isExtracting"
+        @click="emit('start-ocr')"
+      >
+        ⚡ Ekstrak Teks Gambar (OCR)
+      </BaseButton>
+
+      <BaseButton
+        variant="secondary"
+        class="text-xs py-2 px-3 whitespace-nowrap w-full sm:w-auto"
+        @click="emit('open-ocr')"
+      >
+        Buka di Alat OCR ➔
+      </BaseButton>
+    </div>
   </div>
 </template>

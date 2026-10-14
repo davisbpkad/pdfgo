@@ -8,6 +8,8 @@ import { ensureBuiltinModelsLoaded, getAvailableOcrLangs } from '../../../core/a
 import { parsePageRange } from '../logic/parsePageRange.js';
 import { runOcrPipeline } from '../logic/runOcrPipeline.js';
 import { terminateOcrWorker } from '../logic/ocrWorkerManager.js';
+import { convertImageToPngBuffer } from '../../image-to-pdf/logic/convertImageToPngBuffer.js';
+import { buildPdfFromImages } from '../../image-to-pdf/logic/buildPdfFromImages.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
 import BaseProgressBar from '../../../ui/BaseProgressBar.vue';
@@ -40,7 +42,10 @@ onMounted(async () => {
   await refreshLangs();
 
   if (queueState.value?.items?.length) {
-    const candidate = queueState.value.items.find(i => i.name?.toLowerCase().endsWith('.pdf'));
+    const candidate = queueState.value.items.find(i => {
+      const name = i.name?.toLowerCase() || '';
+      return name.endsWith('.pdf') || /\.(png|jpe?g|webp|bmp)$/i.test(name) || i.file?.type?.startsWith('image/');
+    });
     if (candidate?.file) loadDocument(candidate.file);
   }
 });
@@ -53,8 +58,11 @@ async function refreshLangs() {
 }
 
 async function handleIncomingFiles(files) {
-  const pdf = Array.from(files).find(f => f.name.toLowerCase().endsWith('.pdf'));
-  if (pdf) await loadDocument(pdf);
+  const candidate = Array.from(files).find(f => {
+    const name = f.name.toLowerCase();
+    return name.endsWith('.pdf') || /\.(png|jpe?g|webp|bmp)$/i.test(name) || f.type.startsWith('image/');
+  });
+  if (candidate) await loadDocument(candidate);
 }
 
 async function loadDocument(file) {
@@ -63,7 +71,19 @@ async function loadDocument(file) {
   lastSearchablePdfBytes = null;
 
   try {
-    const buffer = await file.arrayBuffer();
+    const isImg = file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(file.name);
+    let buffer;
+    if (isImg) {
+      const pngBuf = await convertImageToPngBuffer(file);
+      const pdfBytes = await buildPdfFromImages(
+        [{ buffer: pngBuf, type: 'image/png' }],
+        { pageSize: 'FIT', orientation: 'auto', margin: 0, fitMode: 'contain' }
+      );
+      buffer = pdfBytes.buffer || pdfBytes;
+    } else {
+      buffer = await file.arrayBuffer();
+    }
+
     activeBuffer = buffer;
     const doc = await loadPdfJsDocument(buffer);
     pdfDocProxy.value = doc;
@@ -174,7 +194,18 @@ function handleCopyText() {
       @model-imported="refreshLangs"
     />
 
-    <DropZone v-if="!activeFile" @files="handleIncomingFiles" />
+    <DropZone
+      v-if="!activeFile"
+      accept=".pdf,image/png,image/jpeg,image/webp,image/bmp,.jpg,.jpeg,.png,.webp,.bmp"
+      @files="handleIncomingFiles"
+    >
+      <div class="space-y-1">
+        <span class="font-bold text-base md:text-lg text-ink">
+          Tarik file PDF atau Gambar (PNG, JPG, WebP) ke sini
+        </span>
+        <p class="text-xs text-ink/70 font-medium">atau klik untuk memilih berkas dari komputer Anda</p>
+      </div>
+    </DropZone>
 
     <div v-else class="space-y-4">
       <BaseCard class="p-3 flex items-center justify-between">

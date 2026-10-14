@@ -69,9 +69,10 @@ export async function extractTextContent(pdfDocProxy, includeSeparators = true, 
     fullText = pageTexts.join('\n\n');
   }
 
-  const cleanWords = fullText.trim().split(/\s+/).filter(Boolean);
+  const rawCombinedText = pageTexts.join(' ').trim();
+  const cleanWords = rawCombinedText ? rawCombinedText.split(/\s+/).filter(Boolean) : [];
   const wordCount = cleanWords.length;
-  const charCount = fullText.length;
+  const charCount = totalChars;
   const isScanned = totalChars < 30 && numPages >= 1;
 
   return {

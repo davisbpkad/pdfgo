@@ -15,6 +15,7 @@ export const icon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"
 
 // Re-export pure logic from atomic feature file
 export { extractTextContent } from '../features/extract-text/logic/extractTextContent.js';
+export { extractTextFromImage, extractTextFromScannedPdf } from '../features/extract-text/logic/extractTextFromImage.js';
 
 // ============================================================================
 // UI Controller
