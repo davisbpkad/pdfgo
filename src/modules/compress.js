@@ -14,65 +14,8 @@ export const titleKey = 'tools.compress.title';
 export const descKey = 'tools.compress.desc';
 export const icon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 14 8-8 8 8"/><path d="M12 6v12"/><path d="M4 20h16"/></svg>`;
 
-// ============================================================================
-// Pure Logic Engine
-// ============================================================================
-/**
- * Compress PDF via raster canvas re-encoding
- * @param {ArrayBuffer|Uint8Array} srcBuffer
- * @param {object} pdfDocProxy
- * @param {{ dpiScale: number, quality: number }} options
- * @param {Function} [onProgress]
- * @returns {Promise<{ bytes: Uint8Array, originalSize: number, compressedSize: number, reductionRate: number }>}
- */
-export async function compressPdfDocument(srcBuffer, pdfDocProxy, options, onProgress = null) {
-  const { dpiScale = 1.5, quality = 0.70 } = options;
-  const numPages = pdfDocProxy.numPages;
-
-  const srcDoc = await PDFDocument.load(srcBuffer);
-  const newDoc = await PDFDocument.create();
-
-  for (let i = 1; i <= numPages; i++) {
-    const origPage = srcDoc.getPage(i - 1);
-    const { width: origWidth, height: origHeight } = origPage.getSize();
-
-    // Render page to canvas at target scale
-    const { canvas } = await renderPageToCanvas(pdfDocProxy, i, dpiScale);
-
-    // Convert to JPEG blob
-    const jpegBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
-    const jpegBuffer = await jpegBlob.arrayBuffer();
-
-    // Release canvas memory
-    canvas.width = 0;
-    canvas.height = 0;
-
-    const embeddedJpg = await newDoc.embedJpg(jpegBuffer);
-    const newPage = newDoc.addPage([origWidth, origHeight]);
-    newPage.drawImage(embeddedJpg, {
-      x: 0,
-      y: 0,
-      width: origWidth,
-      height: origHeight
-    });
-
-    if (onProgress) {
-      onProgress(Math.round((i / numPages) * 100), i, numPages);
-    }
-  }
-
-  const resultBytes = await newDoc.save();
-  const originalSize = srcBuffer.byteLength;
-  const compressedSize = resultBytes.byteLength;
-  const reductionRate = Math.round(((originalSize - compressedSize) / originalSize) * 100);
-
-  return {
-    bytes: resultBytes,
-    originalSize,
-    compressedSize,
-    reductionRate
-  };
-}
+// Re-export pure logic from atomic feature file
+export { compressPdfDocument } from '../features/compress/logic/compressPdfDocument.js';
 
 // ============================================================================
 // UI Controller
