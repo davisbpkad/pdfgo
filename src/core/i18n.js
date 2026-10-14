@@ -88,7 +88,14 @@ const translations = {
         applyCurrent: 'Halaman Saat Ini',
         applyAll: 'Semua Halaman',
         saveSigned: 'Simpan Dokumen Bertanda Tangan',
-        emptyPrompt: 'Pilih file PDF yang ingin Anda bubuhi tanda tangan digital.'
+        emptyPrompt: 'Pilih file PDF yang ingin Anda bubuhi tanda tangan digital.',
+        precisionTitle: 'Presisi Posisi & Ukuran (mm)',
+        center: 'Pusatkan',
+        resetOriginalSize: 'Set Ukuran Asli',
+        posX: 'Posisi X (mm)',
+        posY: 'Posisi Y (mm)',
+        widthMm: 'Lebar (mm)',
+        heightMm: 'Tinggi (mm)'
       },
       form: {
         title: 'Isi Formulir',
@@ -113,7 +120,21 @@ const translations = {
         sanitizeMetadata: 'Bersihkan juga seluruh metadata dokumen (Title, Author, Producer)',
         actionApply: 'Terapkan Sensor Permanen',
         warningPermanent: '⚠️ PERHATIAN: Sensor ini bersifat permanen. Halaman yang disensor akan diganti dengan raster gambar beresolusi tinggi (teks dan vektor di baliknya hilang total).',
-        emptyPrompt: 'Pilih file PDF yang memiliki data sensitif untuk disensor secara permanen.'
+        emptyPrompt: 'Pilih file PDF yang memiliki data sensitif untuk disensor secara permanen.',
+        inspectPreview: 'Periksa Hasil Sensor (Resolusi Tinggi)',
+        inspectDesc: 'Pratinjau raster murni. Pastikan seluruh teks dan data sensitif tertutup sempurna sebelum menerapkan sensor permanen.',
+        undo: 'Urungkan',
+        redo: 'Ulangi',
+        boxListTitle: 'Kotak Sensor (Halaman {page})',
+        boxListEmpty: 'Belum ada kotak sensor pada halaman ini.',
+        warningExtra: 'Pastikan Anda sudah memeriksa pratinjau sebelum menyensor permanen.'
+      },
+      viewport: {
+        zoomIn: 'Perbesar',
+        zoomOut: 'Perkecil',
+        fitWidth: 'Sesuaikan Lebar',
+        resetPan: 'Tengah',
+        sharpening: 'Mempertajam…'
       },
       compress: {
         title: 'Kompres PDF',
@@ -365,7 +386,14 @@ const translations = {
         applyCurrent: 'Current Page',
         applyAll: 'All Pages',
         saveSigned: 'Save Signed PDF',
-        emptyPrompt: 'Select a PDF file that you would like to sign digitally.'
+        emptyPrompt: 'Select a PDF file that you would like to sign digitally.',
+        precisionTitle: 'Position & Dimension Precision (mm)',
+        center: 'Center',
+        resetOriginalSize: 'Reset Original Size',
+        posX: 'Position X (mm)',
+        posY: 'Position Y (mm)',
+        widthMm: 'Width (mm)',
+        heightMm: 'Height (mm)'
       },
       form: {
         title: 'Fill Form',
@@ -390,7 +418,21 @@ const translations = {
         sanitizeMetadata: 'Sanitize document metadata (Title, Author, Producer)',
         actionApply: 'Apply Permanent Redaction',
         warningPermanent: '⚠️ ATTENTION: Redaction is permanent. Redacted pages will be rasterized to high-res images (underlying text is completely removed).',
-        emptyPrompt: 'Select a PDF document containing sensitive information to redact permanently.'
+        emptyPrompt: 'Select a PDF document containing sensitive information to redact permanently.',
+        inspectPreview: 'Inspect Redaction Result (High-Res)',
+        inspectDesc: 'Pure raster preview. Ensure all sensitive text and data are completely covered before applying permanent redaction.',
+        undo: 'Undo',
+        redo: 'Redo',
+        boxListTitle: 'Redaction Boxes (Page {page})',
+        boxListEmpty: 'No redaction boxes on this page yet.',
+        warningExtra: 'Make sure you have inspected the preview before permanently redacting.'
+      },
+      viewport: {
+        zoomIn: 'Zoom In',
+        zoomOut: 'Zoom Out',
+        fitWidth: 'Fit Width',
+        resetPan: 'Center',
+        sharpening: 'Sharpening…'
       },
       compress: {
         title: 'Compress PDF',
