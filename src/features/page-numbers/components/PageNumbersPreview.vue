@@ -1,96 +1,101 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { renderPageToCanvas } from '../../../core/pdf.js';
+import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const props = defineProps({
-  pdfDocProxy: {
-    type: Object,
-    default: null
-  },
-  format: {
-    type: String,
-    default: 'Halaman {n} dari {total}'
-  },
-  position: {
-    type: String,
-    default: 'bottom-center'
-  },
-  startNumber: {
-    type: Number,
-    default: 1
-  },
-  margin: {
-    type: Number,
-    default: 25
-  },
-  fontSize: {
-    type: Number,
-    default: 10
-  },
-  colorHex: {
-    type: String,
-    default: '#475569'
-  },
-  skipFirstPage: {
-    type: Boolean,
-    default: false
-  },
-  totalPages: {
-    type: Number,
-    default: 1
+  pdfDocProxy: { type: Object, default: null },
+  format: { type: String, default: 'Halaman {n} dari {total}' },
+  position: { type: String, default: 'bottom-center' },
+  startNumber: { type: Number, default: 1 },
+  margin: { type: Number, default: 25 },
+  fontSize: { type: Number, default: 10 },
+  colorHex: { type: String, default: '#475569' },
+  skipFirstPage: { type: Boolean, default: false },
+  totalPages: { type: Number, default: 1 }
+});
+
+const previewPage = ref(1);
+const pageDimensionsPt = ref({ width: 595.28, height: 841.89 });
+const canvasRef = ref(null);
+const isRendering = ref(false);
+const currentScale = ref(1.0);
+
+const totalPagesCount = computed(() => props.totalPages || props.pdfDocProxy?.numPages || 1);
+
+watch(() => [props.pdfDocProxy, previewPage.value], async () => {
+  if (props.pdfDocProxy) {
+    try {
+      const page = await props.pdfDocProxy.getPage(previewPage.value);
+      const vp = page.getViewport({ scale: 1.0 });
+      pageDimensionsPt.value = { width: vp.width, height: vp.height };
+    } catch (_) {}
   }
 });
 
-const canvasContainer = ref(null);
-
-async function renderPreview() {
-  if (!props.pdfDocProxy || !canvasContainer.value) return;
+async function renderPreview(scale = currentScale.value) {
+  if (!props.pdfDocProxy || !canvasRef.value) return;
+  currentScale.value = scale;
+  isRendering.value = true;
 
   try {
-    const pageNum = (props.skipFirstPage && props.totalPages > 1) ? 2 : 1;
-    const { canvas } = await renderPageToCanvas(props.pdfDocProxy, pageNum, 0.65);
-    const ctx = canvas.getContext('2d');
+    const pageNum = Math.max(1, Math.min(totalPagesCount.value, previewPage.value));
+    const { canvas: renderedPage } = await renderPageToCanvas(props.pdfDocProxy, pageNum, scale);
+    const targetCanvas = canvasRef.value;
+    targetCanvas.width = renderedPage.width;
+    targetCanvas.height = renderedPage.height;
 
-    const effectiveTotal = (props.skipFirstPage && props.totalPages > 1)
-      ? props.totalPages - 1
-      : props.totalPages;
+    const ctx = targetCanvas.getContext('2d');
+    ctx.drawImage(renderedPage, 0, 0);
 
-    const currentNumber = props.startNumber;
-    const text = props.format
-      .replace(/\{n\}/g, String(currentNumber))
-      .replace(/\{total\}/g, String(effectiveTotal));
+    // If skipFirstPage is enabled and this is page 1, don't stamp page number
+    const isSkipped = props.skipFirstPage && pageNum === 1;
 
-    ctx.save();
-    ctx.font = `${props.fontSize * 0.65}px Atkinson Hyperlegible, sans-serif`;
-    ctx.fillStyle = props.colorHex;
+    if (!isSkipped) {
+      const effectiveTotal = (props.skipFirstPage && totalPagesCount.value > 1)
+        ? totalPagesCount.value - 1
+        : totalPagesCount.value;
 
-    const metrics = ctx.measureText(text);
-    const textW = metrics.width;
-    const textH = props.fontSize * 0.65;
-    const scaledMargin = props.margin * 0.65;
+      const pageOffset = (props.skipFirstPage && pageNum > 1) ? pageNum - 2 : pageNum - 1;
+      const currentNumber = props.startNumber + pageOffset;
 
-    let x = scaledMargin;
-    if (props.position.includes('center')) {
-      x = (canvas.width - textW) / 2;
-    } else if (props.position.includes('right')) {
-      x = canvas.width - scaledMargin - textW;
+      const text = props.format
+        .replace(/\{n\}/g, String(currentNumber))
+        .replace(/\{total\}/g, String(effectiveTotal));
+
+      ctx.save();
+      ctx.font = `${props.fontSize * scale}px Atkinson Hyperlegible, sans-serif`;
+      ctx.fillStyle = props.colorHex;
+
+      const metrics = ctx.measureText(text);
+      const textW = metrics.width;
+      const textH = props.fontSize * scale;
+      const scaledMargin = props.margin * scale;
+
+      let x = scaledMargin;
+      if (props.position.includes('center')) {
+        x = (targetCanvas.width - textW) / 2;
+      } else if (props.position.includes('right')) {
+        x = targetCanvas.width - scaledMargin - textW;
+      }
+
+      let y = targetCanvas.height - scaledMargin;
+      if (props.position.startsWith('top')) {
+        y = scaledMargin + textH;
+      } else if (props.position.startsWith('middle')) {
+        y = (targetCanvas.height + textH) / 2;
+      }
+
+      ctx.fillText(text, x, y);
+      ctx.restore();
     }
 
-    let y = canvas.height - scaledMargin;
-    if (props.position.startsWith('top')) {
-      y = scaledMargin + textH;
-    } else if (props.position.startsWith('middle')) {
-      y = (canvas.height + textH) / 2;
-    }
-
-    ctx.fillText(text, x, y);
-    ctx.restore();
-
-    canvasContainer.value.innerHTML = '';
-    canvas.className = 'max-w-full h-auto border-2 border-ink shadow-hard-sm mx-auto';
-    canvasContainer.value.appendChild(canvas);
+    renderedPage.width = 0;
+    renderedPage.height = 0;
   } catch (e) {
-    // Canvas preview render error ignored
+    console.warn('Gagal merender pratinjau nomor halaman:', e);
+  } finally {
+    isRendering.value = false;
   }
 }
 
@@ -102,26 +107,72 @@ watch(() => [
   props.margin,
   props.fontSize,
   props.colorHex,
-  props.skipFirstPage
+  props.skipFirstPage,
+  props.totalPages,
+  previewPage.value
 ], () => {
-  renderPreview();
+  renderPreview(currentScale.value);
 }, { deep: true });
 
 onMounted(() => {
-  renderPreview();
+  renderPreview(1.0);
 });
 </script>
 
 <template>
-  <div class="border-3 border-ink bg-paper p-4 space-y-2">
-    <div class="text-xs font-black uppercase tracking-wider text-ink flex items-center justify-between">
-      <span>Pratinjau Langsung</span>
-      <span class="text-ink/60 font-medium">
-        {{ skipFirstPage && totalPages > 1 ? 'Halaman 2 (Cover Dilewati)' : 'Halaman 1' }}
-      </span>
+  <div class="border-3 border-ink bg-paper p-4 space-y-3">
+    <!-- Header with Page Navigation -->
+    <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-ink pb-2">
+      <div class="text-xs font-black uppercase tracking-tight text-ink flex items-center gap-1.5">
+        <span>Pratinjau Nomor Halaman</span>
+        <span v-if="skipFirstPage && previewPage === 1" class="text-[10px] font-bold px-1.5 py-0.5 bg-amber-200 border border-ink">
+          Cover Dilewati
+        </span>
+      </div>
+
+      <!-- Page Selector -->
+      <div class="flex items-center gap-1.5 text-xs font-bold">
+        <button
+          type="button"
+          :disabled="previewPage <= 1"
+          class="px-2 py-0.5 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+          @click="previewPage--"
+        >
+          ◀
+        </button>
+        <span class="flex items-center gap-1">
+          <span>Hal</span>
+          <input
+            v-model.number="previewPage"
+            type="number"
+            min="1"
+            :max="totalPagesCount"
+            class="w-12 p-0.5 text-center font-mono border border-ink bg-white shadow-hard-sm focus:outline-none"
+          />
+          <span>dari {{ totalPagesCount }}</span>
+        </span>
+        <button
+          type="button"
+          :disabled="previewPage >= totalPagesCount"
+          class="px-2 py-0.5 border border-ink bg-white hover:bg-paper-dark shadow-hard-sm disabled:opacity-40 cursor-pointer"
+          @click="previewPage++"
+        >
+          ▶
+        </button>
+      </div>
     </div>
-    <div ref="canvasContainer" class="min-h-[280px] flex items-center justify-center bg-paper-dark p-2 border-2 border-ink/20 overflow-hidden">
-      <span class="text-xs font-bold text-ink/40">Memuat pratinjau...</span>
-    </div>
+
+    <!-- Viewport Container with Zoom & Pan -->
+    <PreviewViewport
+      :page-width-pt="pageDimensionsPt.width"
+      :page-height-pt="pageDimensionsPt.height"
+      :is-rendering="isRendering"
+      v-slot="{ effectiveScale }"
+      @update:effective-scale="renderPreview"
+    >
+      <div class="inline-block border-2 border-ink bg-white shadow-hard-sm">
+        <canvas ref="canvasRef" class="block max-w-full h-auto" />
+      </div>
+    </PreviewViewport>
   </div>
 </template>

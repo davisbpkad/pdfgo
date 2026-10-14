@@ -14,6 +14,7 @@ import SignTypePad from './SignTypePad.vue';
 import SignUploadPad from './SignUploadPad.vue';
 import SignPlacementCanvas from './SignPlacementCanvas.vue';
 import SignPrecisionBar from './SignPrecisionBar.vue';
+import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
@@ -233,15 +234,20 @@ async function handleSave() {
             </div>
           </div>
 
-          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto min-h-[480px]">
+          <PreviewViewport
+            :page-width-pt="pageDimensionsPt.width"
+            :page-height-pt="pageDimensionsPt.height"
+            v-slot="{ effectiveScale }"
+          >
             <SignPlacementCanvas
               :pdf-doc-proxy="pdfDocProxy"
               :current-page="currentPage"
               :signature-url="signatureUrl"
               :placement="placement"
+              :scale="effectiveScale"
               @update:placement="val => placement = val"
             />
-          </div>
+          </PreviewViewport>
 
           <!-- Precision Placement & Dimensions Bar -->
           <SignPrecisionBar

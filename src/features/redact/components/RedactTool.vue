@@ -14,12 +14,14 @@ import RedactControls from './RedactControls.vue';
 import RedactBoxList from './RedactBoxList.vue';
 import RedactCanvas from './RedactCanvas.vue';
 import RedactPreviewModal from './RedactPreviewModal.vue';
+import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
 const pdfDocProxy = ref(null);
 const totalPages = ref(0);
 const currentPage = ref(1);
+const pageDimensionsPt = ref({ width: 595.28, height: 841.89 });
 
 const boxesByPage = ref({});
 const selectedBoxId = ref(null);
@@ -46,6 +48,16 @@ onMounted(() => {
     if (candidate?.file) loadDocument(candidate.file);
   }
   window.addEventListener('keydown', onGlobalKeyDown);
+});
+
+watch(() => [pdfDocProxy.value, currentPage.value], async () => {
+  if (pdfDocProxy.value) {
+    try {
+      const p = await pdfDocProxy.value.getPage(currentPage.value);
+      const vp = p.getViewport({ scale: 1.0 });
+      pageDimensionsPt.value = { width: vp.width, height: vp.height };
+    } catch (_) {}
+  }
 });
 
 onUnmounted(() => {
@@ -100,6 +112,9 @@ async function loadDocument(file) {
     const doc = await loadPdfJsDocument(buffer);
     pdfDocProxy.value = doc;
     totalPages.value = doc.numPages;
+    const page = await doc.getPage(1);
+    const vp = page.getViewport({ scale: 1.0 });
+    pageDimensionsPt.value = { width: vp.width, height: vp.height };
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();
@@ -314,19 +329,23 @@ async function handleApply() {
             </div>
           </div>
 
-          <div class="flex justify-center p-4 border-2 border-ink bg-paper-dark overflow-auto min-h-[480px]">
+          <PreviewViewport
+            :page-width-pt="pageDimensionsPt.width"
+            :page-height-pt="pageDimensionsPt.height"
+            v-slot="{ effectiveScale }"
+          >
             <RedactCanvas
               :pdf-doc-proxy="pdfDocProxy"
               :current-page="currentPage"
               :boxes="currentBoxes"
               :selected-box-id="selectedBoxId"
-              :scale="previewScale"
+              :scale="effectiveScale"
               @add-box="onAddBox"
               @update-box="onUpdateBox"
               @remove-box="onRemoveBox"
               @select-box="id => selectedBoxId = id"
             />
-          </div>
+          </PreviewViewport>
         </div>
       </div>
     </div>
