@@ -17,6 +17,7 @@ import ExtractTextTool from './features/extract-text/components/ExtractTextTool.
 import SignTool from './features/sign/components/SignTool.vue';
 import FormTool from './features/form/components/FormTool.vue';
 import RedactTool from './features/redact/components/RedactTool.vue';
+import OcrTool from './features/ocr/components/OcrTool.vue';
 import LegacyToolWrapper from './ui/LegacyToolWrapper.vue';
 
 const isSidebarOpen = ref(false);
@@ -42,7 +43,7 @@ function closeSidebar() {
 
       <!-- Tool Workspace Outlet -->
       <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-5xl mx-auto w-full">
-        <!-- Native Vue 3 Tools -->
+        <!-- Native Vue 3 Tools (All 13 Tools Native) -->
         <MergeTool v-if="activeToolId === 'merge'" />
         <SplitTool v-else-if="activeToolId === 'split'" />
         <OrganizeTool v-else-if="activeToolId === 'organize'" />
@@ -55,8 +56,9 @@ function closeSidebar() {
         <SignTool v-else-if="activeToolId === 'sign'" />
         <FormTool v-else-if="activeToolId === 'form'" />
         <RedactTool v-else-if="activeToolId === 'redact'" />
+        <OcrTool v-else-if="activeToolId === 'ocr'" />
 
-        <!-- Other Tools (via Coexistence Wrapper until ported) -->
+        <!-- Fallback Wrapper -->
         <LegacyToolWrapper v-else :tool-id="activeToolId" />
       </main>
     </div>
