@@ -126,12 +126,35 @@ function renderShell() {
           </svg>
           <span class="queue-badge-count" id="header-queue-count">0</span>
         </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="btn-control btn-mobile-menu" id="btn-toggle-menu" aria-label="Menu Alat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
       </div>
     </header>
 
     <div class="app-container">
+      <!-- Mobile Sidebar Backdrop -->
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
       <!-- Sidebar Navigation -->
-      <nav class="app-sidebar" aria-label="Navigasi Alat">
+      <nav class="app-sidebar" id="app-sidebar" aria-label="Navigasi Alat">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-mobile-brand">
+            <span class="brand-title">${t('app.name')}</span>
+          </div>
+          <button class="btn-control" id="btn-close-sidebar" aria-label="Tutup Menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
         <div class="sidebar-section-title" id="txt-nav-title">${t('nav.categoryAll')}</div>
         <ul class="sidebar-nav-list" id="sidebar-nav-list">
           ${allModules.map(m => `

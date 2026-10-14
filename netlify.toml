@@ -1,0 +1,28 @@
+# netlify.toml - Static Production Deployment Configuration for PDF Toolkit (PDFGO)
+# 100% Client-Side, Zero Network Leaks, Zero Serverless Functions
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Strict Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Enforce strict offline Content Security Policy
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    # Cache HTML with validation
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Single-Page Application Fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
