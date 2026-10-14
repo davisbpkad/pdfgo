@@ -1,4 +1,5 @@
 import { toNormalized } from '../../../core/coordinates.js';
+import { unwrapPdfProxy } from '../../../core/pdf.js';
 
 /**
  * Find text bounding boxes for redaction on a given page, returning normalized (0..1) boxes.
@@ -11,7 +12,8 @@ import { toNormalized } from '../../../core/coordinates.js';
 export async function findTextRedactionBoxes(pdfDocProxy, pageNum, searchTerm, previewScale = 1.0) {
   if (!pdfDocProxy || !searchTerm?.trim()) return [];
 
-  const page = await pdfDocProxy.getPage(pageNum);
+  const rawDoc = unwrapPdfProxy(pdfDocProxy);
+  const page = await rawDoc.getPage(pageNum);
   const content = await page.getTextContent();
   const viewport = page.getViewport({ scale: 1.0 });
   const containerPx = { width: viewport.width, height: viewport.height };

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { renderPageToCanvas } from '../../../core/pdf.js';
+import { renderPageToCanvas, unwrapPdfProxy } from '../../../core/pdf.js';
 import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const props = defineProps({
@@ -26,7 +26,8 @@ const totalPagesCount = computed(() => props.totalPages || props.pdfDocProxy?.nu
 watch(() => [props.pdfDocProxy, previewPage.value], async () => {
   if (props.pdfDocProxy) {
     try {
-      const page = await props.pdfDocProxy.getPage(previewPage.value);
+      const rawDoc = unwrapPdfProxy(props.pdfDocProxy);
+      const page = await rawDoc.getPage(previewPage.value);
       const vp = page.getViewport({ scale: 1.0 });
       pageDimensionsPt.value = { width: vp.width, height: vp.height };
     } catch (_) {}

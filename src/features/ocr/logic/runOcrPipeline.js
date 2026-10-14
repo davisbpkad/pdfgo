@@ -1,6 +1,7 @@
 import { getOcrWorker } from './ocrWorkerManager.js';
 import { formatOcrText } from './formatOcrText.js';
 import { buildSearchablePdf } from './buildSearchablePdf.js';
+import { unwrapPdfProxy } from '../../../core/pdf.js';
 
 /**
  * Execute OCR pipeline across targeted PDF pages
@@ -15,6 +16,7 @@ import { buildSearchablePdf } from './buildSearchablePdf.js';
  */
 export async function runOcrPipeline(pdfDocProxy, targetPages, selectedLang, targetDpi, originalPdfBytes, onProgress, cancelRef) {
   const worker = await getOcrWorker(selectedLang);
+  const rawDoc = unwrapPdfProxy(pdfDocProxy);
   const pageResults = [];
   const scale = targetDpi === 300 ? 4.16 : 2.08;
 
@@ -24,7 +26,7 @@ export async function runOcrPipeline(pdfDocProxy, targetPages, selectedLang, tar
     const pageIndex = targetPages[i];
     if (onProgress) onProgress(i, targetPages.length, Math.round((i / targetPages.length) * 100));
 
-    const page = await pdfDocProxy.getPage(pageIndex + 1);
+    const page = await rawDoc.getPage(pageIndex + 1);
     const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');

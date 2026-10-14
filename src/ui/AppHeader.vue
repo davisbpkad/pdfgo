@@ -3,6 +3,7 @@ import { theme, toggleTheme } from '../app/providers/theme.js';
 import { currentLang, toggleLang, t } from '../app/providers/i18n.js';
 import { queueState, toggleQueueDrawer } from '../app/providers/queue.js';
 import BaseBadge from './BaseBadge.vue';
+import logoUrl from '../assets/favicon.png';
 
 defineEmits(['toggle-sidebar']);
 </script>
@@ -23,7 +24,12 @@ defineEmits(['toggle-sidebar']);
         </svg>
       </button>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2.5">
+        <img
+          :src="logoUrl"
+          alt="PDF To Go Logo"
+          class="h-8 md:h-9 w-8 md:w-9 object-contain select-none shrink-0"
+        />
         <span class="font-display font-black text-xl md:text-2xl tracking-tight text-ink uppercase">
           PDF To Go
         </span>

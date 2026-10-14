@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, shallowRef, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
@@ -17,7 +17,7 @@ import OcrResultsCard from './OcrResultsCard.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
-const pdfDocProxy = ref(null);
+const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 
 const availableLangs = ref([]);

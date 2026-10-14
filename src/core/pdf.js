@@ -57,6 +57,17 @@ export async function loadPdfLibDocument(data, password = '') {
 }
 
 /**
+ * Safely unwrap a Vue Reactive Proxy around a PDFDocumentProxy
+ * (Prevents "Cannot read private member #r" when calling methods with private identifiers)
+ * @param {any} doc
+ * @returns {any}
+ */
+export function unwrapPdfProxy(doc) {
+  if (!doc) return doc;
+  return (typeof doc === 'object' && doc.__v_raw) ? doc.__v_raw : doc;
+}
+
+/**
  * Render a single page to an HTMLCanvasElement
  * @param {pdfjsLib.PDFDocumentProxy} pdfDoc
  * @param {number} pageNum (1-indexed)
@@ -64,7 +75,8 @@ export async function loadPdfLibDocument(data, password = '') {
  * @returns {Promise<{ canvas: HTMLCanvasElement, width: number, height: number }>}
  */
 export async function renderPageToCanvas(pdfDoc, pageNum = 1, scale = 1.5) {
-  const page = await pdfDoc.getPage(pageNum);
+  const rawDoc = unwrapPdfProxy(pdfDoc);
+  const page = await rawDoc.getPage(pageNum);
   const viewport = page.getViewport({ scale });
 
   const canvas = document.createElement('canvas');
@@ -94,9 +106,10 @@ export async function renderPageToCanvas(pdfDoc, pageNum = 1, scale = 1.5) {
  */
 export async function generateThumbnail(docOrData, targetWidth = 180) {
   try {
-    const doc = (docOrData && typeof docOrData.getPage === 'function')
-      ? docOrData
-      : await loadPdfJsDocument(docOrData);
+    const rawDoc = unwrapPdfProxy(docOrData);
+    const doc = (rawDoc && typeof rawDoc.getPage === 'function')
+      ? rawDoc
+      : await loadPdfJsDocument(rawDoc);
     const page = await doc.getPage(1);
     const unscaledViewport = page.getViewport({ scale: 1.0 });
     const scale = targetWidth / unscaledViewport.width;

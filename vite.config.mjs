@@ -18,6 +18,7 @@ export default defineConfig({
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
   },
   build: {
+    assetsInlineLimit: 100000,
     write: false,
     cssCodeSplit: false,
     minify: false,

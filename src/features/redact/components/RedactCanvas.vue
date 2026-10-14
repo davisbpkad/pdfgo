@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { unwrapPdfProxy } from '../../../core/pdf.js';
 import { MIN_BOX_FRACTION, nudgeBox, moveBox, resizeBox } from '../logic/boxInteractions.js';
 
 const props = defineProps({
@@ -33,7 +34,8 @@ watch(() => [props.pdfDocProxy, props.currentPage, props.scale], () => renderPag
 async function renderPage() {
   if (!props.pdfDocProxy || !canvasRef.value) return;
   try {
-    const page = await props.pdfDocProxy.getPage(props.currentPage);
+    const rawDoc = unwrapPdfProxy(props.pdfDocProxy);
+    const page = await rawDoc.getPage(props.currentPage);
     const viewport = page.getViewport({ scale: props.scale });
     const canvas = canvasRef.value;
     canvas.width = Math.floor(viewport.width);

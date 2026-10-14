@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { loadPdfJsDocument } from '../../../core/pdf.js';
+import { ref, shallowRef, onMounted, watch } from 'vue';
+import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
@@ -14,7 +14,7 @@ import FormEmptyBanner from './FormEmptyBanner.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
-const pdfDocProxy = ref(null);
+const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 const currentPage = ref(1);
 const canvasRef = ref(null);
@@ -71,7 +71,8 @@ async function loadDocument(file) {
 async function renderPagePreview() {
   if (!pdfDocProxy.value || !canvasRef.value) return;
   try {
-    const page = await pdfDocProxy.value.getPage(currentPage.value);
+    const rawDoc = unwrapPdfProxy(pdfDocProxy.value);
+    const page = await rawDoc.getPage(currentPage.value);
     const viewport = page.getViewport({ scale: 0.8 });
     const canvas = canvasRef.value;
     canvas.width = Math.floor(viewport.width);

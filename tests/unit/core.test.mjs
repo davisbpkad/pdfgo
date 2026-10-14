@@ -6,7 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { t, setLang, getLang } from '../../src/core/i18n.js';
 import { queue } from '../../src/core/queue.js';
-import { convertUiCoordsToPdfCoords } from '../../src/core/pdf.js';
+import { convertUiCoordsToPdfCoords, unwrapPdfProxy } from '../../src/core/pdf.js';
 
 test('i18n: translations and interpolation', () => {
   setLang('id');
@@ -90,3 +90,33 @@ test('pdf: coordinate conversion from UI top-left to PDF bottom-left', () => {
   assert.equal(coordsCenter.x, 250);
   assert.equal(coordsCenter.y, 375);
 });
+
+test('pdf: unwrapPdfProxy unwraps Vue reactive proxy with private fields', () => {
+  class DocumentWithPrivateField {
+    #secret = 42;
+    getSecret() {
+      return this.#secret;
+    }
+  }
+
+  const rawInstance = new DocumentWithPrivateField();
+  assert.equal(rawInstance.getSecret(), 42);
+
+  // Simulate Vue 3 reactive proxy
+  const fakeVueProxy = new Proxy(rawInstance, {
+    get(target, prop, receiver) {
+      if (prop === '__v_raw') return target;
+      return Reflect.get(target, prop, receiver);
+    }
+  });
+
+  // Calling getSecret on the proxy directly fails with private identifier error
+  assert.throws(() => {
+    fakeVueProxy.getSecret();
+  }, /Cannot read private member/);
+
+  // unwrapPdfProxy retrieves raw instance and succeeds safely
+  const unwrapped = unwrapPdfProxy(fakeVueProxy);
+  assert.equal(unwrapped.getSecret(), 42);
+});
+

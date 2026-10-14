@@ -18,7 +18,8 @@ const MIME_TYPES = {
   '.jpg': 'image/jpeg',
   '.webp': 'image/webp',
   '.woff2': 'font/woff2',
-  '.woff': 'font/woff'
+  '.woff': 'font/woff',
+  '.ico': 'image/x-icon'
 };
 
 const BASE_DIR = path.resolve('dist');

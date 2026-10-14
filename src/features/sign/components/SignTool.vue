@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { loadPdfJsDocument } from '../../../core/pdf.js';
+import { ref, shallowRef, watch, onMounted } from 'vue';
+import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
@@ -18,7 +18,7 @@ import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
-const pdfDocProxy = ref(null);
+const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 const currentPage = ref(1);
 
@@ -40,7 +40,8 @@ onMounted(() => {
 watch(() => [pdfDocProxy.value, currentPage.value], async () => {
   if (pdfDocProxy.value) {
     try {
-      const page = await pdfDocProxy.value.getPage(currentPage.value);
+      const rawDoc = unwrapPdfProxy(pdfDocProxy.value);
+      const page = await rawDoc.getPage(currentPage.value);
       const vp = page.getViewport({ scale: 1.0 });
       pageDimensionsPt.value = { width: vp.width, height: vp.height };
     } catch (_) {}
@@ -95,16 +96,17 @@ async function handleSave() {
     const resp = await fetch(signatureUrl.value);
     const signBuffer = await resp.arrayBuffer();
 
+    const rawDoc = unwrapPdfProxy(pdfDocProxy.value);
     const placements = [];
     if (applyTarget.value === 'all') {
       for (let i = 0; i < totalPages.value; i++) {
-        const pProxy = await pdfDocProxy.value.getPage(i + 1);
+        const pProxy = await rawDoc.getPage(i + 1);
         const vp = pProxy.getViewport({ scale: 1.0 });
         const pRect = toPdfRect(placement.value, vp.width, vp.height);
         placements.push({ pageIndex: i, x: pRect.x, y: pRect.y, width: pRect.width, height: pRect.height });
       }
     } else {
-      const pageProxy = await pdfDocProxy.value.getPage(currentPage.value);
+      const pageProxy = await rawDoc.getPage(currentPage.value);
       const vp = pageProxy.getViewport({ scale: 1.0 });
       const pRect = toPdfRect(placement.value, vp.width, vp.height);
       placements.push({ pageIndex: currentPage.value - 1, x: pRect.x, y: pRect.y, width: pRect.width, height: pRect.height });

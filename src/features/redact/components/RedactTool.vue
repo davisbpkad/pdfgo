@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { loadPdfJsDocument } from '../../../core/pdf.js';
+import { ref, shallowRef, computed, onMounted, onUnmounted } from 'vue';
+import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
@@ -18,7 +18,7 @@ import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
-const pdfDocProxy = ref(null);
+const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 const currentPage = ref(1);
 const pageDimensionsPt = ref({ width: 595.28, height: 841.89 });
@@ -53,7 +53,8 @@ onMounted(() => {
 watch(() => [pdfDocProxy.value, currentPage.value], async () => {
   if (pdfDocProxy.value) {
     try {
-      const p = await pdfDocProxy.value.getPage(currentPage.value);
+      const rawDoc = unwrapPdfProxy(pdfDocProxy.value);
+      const p = await rawDoc.getPage(currentPage.value);
       const vp = p.getViewport({ scale: 1.0 });
       pageDimensionsPt.value = { width: vp.width, height: vp.height };
     } catch (_) {}
