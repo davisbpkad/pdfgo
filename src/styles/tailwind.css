@@ -53,10 +53,21 @@
 }
 
 @layer base {
+  html,
   body {
-    background-color: var(--color-paper);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  body {
+    background-color: var(--color-paper-dark);
     color: var(--color-ink);
     font-family: var(--font-ui);
+  }
+  #app {
+    height: 100%;
+    overflow: hidden;
   }
 }
 

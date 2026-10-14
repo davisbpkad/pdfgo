@@ -31,17 +31,17 @@ function closeSidebar() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-paper-dark text-ink flex flex-col font-ui antialiased selection:bg-accent selection:text-black">
-    <!-- Header -->
-    <AppHeader @toggle-sidebar="toggleSidebar" />
+  <div class="h-screen h-[100dvh] max-h-screen overflow-hidden bg-paper-dark text-ink flex flex-col font-ui antialiased selection:bg-accent selection:text-black">
+    <!-- Header (fixed at top) -->
+    <AppHeader class="shrink-0" @toggle-sidebar="toggleSidebar" />
 
     <!-- Main Workspace (Sidebar + Outlet) -->
-    <div class="flex-1 flex overflow-hidden">
-      <!-- Sidebar Navigation -->
+    <div class="flex-1 flex overflow-hidden min-h-0 relative">
+      <!-- Sidebar Navigation (Independent scroll) -->
       <AppSidebar :is-open="isSidebarOpen" @close="closeSidebar" />
 
-      <!-- Tool Workspace Outlet -->
-      <main class="flex-1 overflow-y-auto p-4 md:p-8 max-w-5xl mx-auto w-full">
+      <!-- Tool Workspace Outlet (Independent scroll with overscroll-contain) -->
+      <main class="flex-1 overflow-y-auto overscroll-contain p-4 md:p-8 max-w-5xl mx-auto w-full">
         <!-- Native Vue 3 Tools (All 13 Tools Native) -->
         <MergeTool v-if="activeToolId === 'merge'" />
         <SplitTool v-else-if="activeToolId === 'split'" />

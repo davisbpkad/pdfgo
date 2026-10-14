@@ -43,7 +43,7 @@ function selectTool(id) {
 </script>
 
 <template>
-  <div>
+  <div class="h-full shrink-0 flex flex-col">
     <!-- Backdrop for mobile -->
     <div
       v-if="isOpen"
@@ -51,13 +51,13 @@ function selectTool(id) {
       @click="$emit('close')"
     />
 
-    <!-- Sidebar Container -->
+    <!-- Sidebar Container (Bounded to full height, flex-col, overflow-hidden) -->
     <aside
-      class="fixed inset-y-0 left-0 z-50 w-72 bg-paper border-r-2 border-ink flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 select-none shadow-hard lg:shadow-none"
+      class="fixed inset-y-0 left-0 z-50 w-72 bg-paper border-r-2 border-ink flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 h-full max-h-full select-none shadow-hard lg:shadow-none overflow-hidden"
       :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Mobile Close Header -->
-      <div class="p-4 border-b-2 border-ink flex items-center justify-between lg:hidden bg-paper-dark">
+      <div class="shrink-0 p-4 border-b-2 border-ink flex items-center justify-between lg:hidden bg-paper-dark">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-accent border border-ink"></span>
           <span class="font-display font-extrabold text-base text-ink uppercase tracking-tight">Menu Alat</span>
@@ -71,8 +71,8 @@ function selectTool(id) {
         </button>
       </div>
 
-      <!-- Navigation List with Brutalism Categories -->
-      <nav class="flex-1 overflow-y-auto p-3 space-y-4">
+      <!-- Navigation List (Only this element scrolls, overscroll-contain prevents parent/sibling scroll) -->
+      <nav class="flex-1 overflow-y-auto overscroll-contain p-3 space-y-4">
         <div v-for="section in menuSections" :key="section.defaultTitle" class="space-y-1">
           <!-- Section category title -->
           <div class="text-[10px] font-extrabold uppercase tracking-widest text-ink/50 px-2.5 pt-1 pb-0.5 flex items-center gap-1.5">
