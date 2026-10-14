@@ -81,11 +81,11 @@ async function startServer() {
 
   server.listen(freePort, '127.0.0.1', () => {
     console.log('\n========================================================');
-    console.log('       PDF Toolkit - Local Preview Server               ');
+    console.log('       PDF To Go - Local Preview Server                 ');
     console.log('========================================================');
     console.log(`> URL: http://localhost:${freePort}`);
     console.log(`> Port ${freePort} terpilih secara dinamis (BEBAS BENTROK).`);
-    console.log(`> Atau buka langsung file HTML via: file://${path.join(BASE_DIR, 'PDF Toolkit.html')}`);
+    console.log(`> Atau buka langsung file HTML via: file://${path.join(BASE_DIR, 'PDF To Go.html')}`);
     console.log('========================================================\n');
   });
 }

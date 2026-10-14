@@ -1,4 +1,4 @@
-# PDF Toolkit (PDFGO) - 100% Client-Side & Offline PDF Suite
+# PDF To Go (PDFGO) - 100% Client-Side & Offline PDF Suite
 
 A high-performance, private, and 100% offline-first PDF manipulation suite. Built with clean code, standard web APIs, zero backend servers, zero telemetry, and zero remote dependencies. Your documents never leave your local device.
 

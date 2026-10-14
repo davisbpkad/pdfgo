@@ -9,7 +9,7 @@ const STORAGE_KEY = 'pdfgo_lang';
 const translations = {
   id: {
     app: {
-      name: 'PDF Toolkit',
+      name: 'PDF To Go',
       tagline: 'Manipulasi PDF 100% Offline & Privat',
       badge: 'Offline Total',
       offlineBanner: '100% Offline • File tidak pernah meninggalkan perangkat Anda'
@@ -281,7 +281,7 @@ const translations = {
   },
   en: {
     app: {
-      name: 'PDF Toolkit',
+      name: 'PDF To Go',
       tagline: '100% Offline & Private PDF Manipulation',
       badge: 'Full Offline',
       offlineBanner: '100% Offline • Your files never leave your device'

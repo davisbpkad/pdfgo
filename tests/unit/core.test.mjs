@@ -11,7 +11,7 @@ import { convertUiCoordsToPdfCoords } from '../../src/core/pdf.js';
 test('i18n: translations and interpolation', () => {
   setLang('id');
   assert.equal(getLang(), 'id');
-  assert.equal(t('app.name'), 'PDF Toolkit');
+  assert.equal(t('app.name'), 'PDF To Go');
   assert.equal(t('queue.totalFiles', { count: 5 }), '5 file');
 
   setLang('en');

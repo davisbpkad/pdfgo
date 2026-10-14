@@ -264,7 +264,7 @@ async function buildVariant(variantType) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;">
-  <title>PDF Toolkit - 100% Offline</title>
+  <title>PDF To Go</title>
   <style>
 ${fontCss}
 ${minifiedCss}
@@ -285,10 +285,12 @@ ${minifiedJs}
   if (isFull) {
     filesToWrite.push(
       path.join(DIST_DIR, 'index.html'),
+      path.join(DIST_DIR, 'PDF To Go.html'),
       path.join(DIST_DIR, 'PDF Toolkit.html')
     );
   } else {
     filesToWrite.push(
+      path.join(DIST_DIR, 'PDF To Go Lite.html'),
       path.join(DIST_DIR, 'PDF Toolkit Lite.html')
     );
   }
