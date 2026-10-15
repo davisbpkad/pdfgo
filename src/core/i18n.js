@@ -122,6 +122,19 @@ const translations = {
         emptyWarning: 'Harap masukkan kode HTML terlebih dahulu sebelum mencetak.',
         printInstruction: 'Dialog cetak dibuka. Pilih "Simpan sebagai PDF" untuk mengunduh.'
       },
+      pdfToWord: {
+        title: 'PDF ke Word',
+        desc: 'Konversi dokumen PDF menjadi dokumen Microsoft Word (.docx) yang dapat diedit dengan mudah.',
+        optionsTitle: 'Opsi Dokumen Word:',
+        includeImages: 'Sertakan pratinjau gambar halaman dokumen',
+        disclaimer: 'Tata letak disusun ulang; font bisa berbeda; kolom majalah dan teks dalam bentuk grafik tidak didukung.',
+        actionBtn: 'Simpan sebagai Word',
+        successTitle: 'Konversi Word Berhasil!',
+        successDetail: '{pages} halaman • Ukuran berkas: {size}',
+        downloadBtn: 'Unduh Dokumen Word',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal mengonversi ke Word: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -521,6 +534,19 @@ const translations = {
         actionBtn: 'Print to PDF',
         emptyWarning: 'Please provide HTML markup before printing.',
         printInstruction: 'Print dialog opened. Select "Save as PDF" to download.'
+      },
+      pdfToWord: {
+        title: 'PDF to Word',
+        desc: 'Convert PDF documents into editable Microsoft Word (.docx) files with ease.',
+        optionsTitle: 'Word Document Options:',
+        includeImages: 'Include visual page snapshot images',
+        disclaimer: 'Layout is reflowed; fonts may vary; multi-column magazine layouts and text inside graphics are not supported.',
+        actionBtn: 'Save as Word',
+        successTitle: 'Word Conversion Succeeded!',
+        successDetail: '{pages} pages • File size: {size}',
+        downloadBtn: 'Download Word Document',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to convert to Word: {reason}'
       },
       merge: {
         title: 'Merge PDF',

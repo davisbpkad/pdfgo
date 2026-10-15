@@ -19,6 +19,7 @@ import * as protect from './protect.js';
 import * as pdfToMarkdown from './pdf-to-markdown.js';
 import * as scanToPdf from './scan-to-pdf.js';
 import * as htmlToPdf from './html-to-pdf.js';
+import * as pdfToWord from './pdf-to-word.js';
 
 export const allModules = [
   merge,
@@ -40,5 +41,6 @@ allModules.push(protect);
 allModules.push(pdfToMarkdown);
 allModules.push(scanToPdf);
 allModules.push(htmlToPdf);
+allModules.push(pdfToWord);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

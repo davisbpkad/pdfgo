@@ -209,6 +209,8 @@ function verifyZeroNetwork(htmlContent, filePath) {
     /https?:\/\/vuejs\.org\/[^\s"'`<>)]*/gi
   ];
   allowedPatterns.push(/https?:\/\/(?:www\.)?aiim\.org\/[^\s"'`<>)]*/gi, /https?:\/\/purl\.org\/[^\s"'`<>)]*/gi);
+  allowedPatterns.push(/https?:\/\/schemas\.(?:openxmlformats\.org|microsoft\.com)\/[^\s"'`<>)]*/gi, /https?:\/\/rolldown\.rs\/[^\s"'`<>)]*/gi);
+  allowedPatterns.push(/https?:\/\/answers\.microsoft\.com\/[^\s"'`<>)]*/gi, /https?:\/\/stuk\.github\.io\/[^\s"'`<>)]*/gi);
 
   let sanitized = htmlContent;
   for (const pattern of allowedPatterns) {
