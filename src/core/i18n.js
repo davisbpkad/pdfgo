@@ -106,6 +106,22 @@ const translations = {
         resetBtn: 'Pindai Dokumen Baru',
         failed: 'Gagal memproses dokumen pindai: {reason}'
       },
+      htmlToPdf: {
+        title: 'HTML ke PDF',
+        desc: 'Ubah kode HTML atau berkas halaman web menjadi dokumen PDF berkualitas vektor dengan dukungan cetak standar.',
+        editorTitle: 'Kode HTML Sumber',
+        placeholder: 'Ketik atau tempel kode HTML di sini (misal: <h1>Judul</h1><p>Paragraf...</p>)...',
+        importBtn: 'Impor .html',
+        sampleBtn: 'Contoh',
+        previewTitle: 'Pratinjau Halaman A4',
+        emptyPreview: 'Pratinjau HTML akan muncul di sini...',
+        offlineNotice: 'Gambar dan font eksternal tidak dimuat agar dokumen tetap 100% offline dan aman.',
+        instructionHeader: 'Petunjuk Simpan PDF:',
+        instructionText: 'Saat dialog cetak muncul, pilih tujuan "Simpan sebagai PDF" (Save as PDF) untuk menghasilkan berkas PDF vektor berkualitas tajam.',
+        actionBtn: 'Cetak jadi PDF',
+        emptyWarning: 'Harap masukkan kode HTML terlebih dahulu sebelum mencetak.',
+        printInstruction: 'Dialog cetak dibuka. Pilih "Simpan sebagai PDF" untuk mengunduh.'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -489,6 +505,22 @@ const translations = {
         downloadBtn: 'Download Result',
         resetBtn: 'Scan Another Document',
         failed: 'Failed to process scanned document: {reason}'
+      },
+      htmlToPdf: {
+        title: 'HTML to PDF',
+        desc: 'Convert HTML markup or local web documents into crisp vector PDF files using standard print rendering.',
+        editorTitle: 'Source HTML Markup',
+        placeholder: 'Type or paste HTML markup here (e.g., <h1>Title</h1><p>Paragraph...</p>)...',
+        importBtn: 'Import .html',
+        sampleBtn: 'Sample',
+        previewTitle: 'A4 Page Preview',
+        emptyPreview: 'HTML preview will appear here...',
+        offlineNotice: 'External images and web fonts are not loaded to keep documents 100% offline and secure.',
+        instructionHeader: 'Save as PDF Instructions:',
+        instructionText: 'When the print dialog opens, select "Save as PDF" destination for crisp, high-resolution vector output.',
+        actionBtn: 'Print to PDF',
+        emptyWarning: 'Please provide HTML markup before printing.',
+        printInstruction: 'Print dialog opened. Select "Save as PDF" to download.'
       },
       merge: {
         title: 'Merge PDF',
