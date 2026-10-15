@@ -63,6 +63,24 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal mengunci PDF: {reason}'
       },
+      pdfToMarkdown: {
+        title: 'PDF ke Markdown',
+        desc: 'Ubah dokumen PDF menjadi format Markdown (.md) terstruktur dengan deteksi judul, daftar, tabel, dan gambar.',
+        optionsTitle: 'Opsi Konversi:',
+        separatePages: 'Pisahkan per halaman (---)',
+        includeImages: 'Ekstrak & sertakan gambar halaman (ZIP)',
+        clientSideNotice: '100% diproses di browser tanpa kirim data ke server',
+        actionBtn: 'Konversi ke Markdown',
+        previewTitle: 'Pratinjau Markdown',
+        copyBtn: 'Salin Markdown',
+        copiedBtn: 'Tersalin',
+        copied: 'Markdown disalin ke clipboard!',
+        downloadMdBtn: 'Unduh .md',
+        downloadZipBtn: 'Unduh Arsip .zip',
+        resetBtn: 'Kerjakan File Lain',
+        successTitle: 'Konversi Markdown Berhasil!',
+        failed: 'Gagal mengonversi ke Markdown: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -403,6 +421,24 @@ const translations = {
         downloadBtn: 'Download Result',
         resetBtn: 'Process Another File',
         failed: 'Failed to protect PDF: {reason}'
+      },
+      pdfToMarkdown: {
+        title: 'PDF to Markdown',
+        desc: 'Convert PDF documents into structured Markdown (.md) with headings, lists, tables, and image extraction.',
+        optionsTitle: 'Conversion Options:',
+        separatePages: 'Separate by page (---)',
+        includeImages: 'Extract & include page images (ZIP)',
+        clientSideNotice: '100% processed locally in browser with zero server uploads',
+        actionBtn: 'Convert to Markdown',
+        previewTitle: 'Markdown Preview',
+        copyBtn: 'Copy Markdown',
+        copiedBtn: 'Copied',
+        copied: 'Markdown copied to clipboard!',
+        downloadMdBtn: 'Download .md',
+        downloadZipBtn: 'Download .zip Archive',
+        resetBtn: 'Process Another File',
+        successTitle: 'Markdown Conversion Succeeded!',
+        failed: 'Failed to convert to Markdown: {reason}'
       },
       merge: {
         title: 'Merge PDF',

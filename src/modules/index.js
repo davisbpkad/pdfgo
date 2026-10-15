@@ -16,6 +16,7 @@ import * as pdfToImage from './pdf-to-image.js';
 import * as imageToPdf from './image-to-pdf.js';
 import * as unlock from './unlock.js';
 import * as protect from './protect.js';
+import * as pdfToMarkdown from './pdf-to-markdown.js';
 
 export const allModules = [
   merge,
@@ -34,5 +35,6 @@ export const allModules = [
 ];
 allModules.push(unlock);
 allModules.push(protect);
+allModules.push(pdfToMarkdown);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));
