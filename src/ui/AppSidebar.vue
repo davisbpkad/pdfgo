@@ -36,6 +36,7 @@ const menuSections = [
   }
 ];
 menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('unlock');
+menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('protect');
 
 function selectTool(id) {
   navigateTo(id);

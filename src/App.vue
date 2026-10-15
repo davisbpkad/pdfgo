@@ -19,6 +19,7 @@ import FormTool from './features/form/components/FormTool.vue';
 import RedactTool from './features/redact/components/RedactTool.vue';
 import OcrTool from './features/ocr/components/OcrTool.vue';
 import UnlockTool from './features/unlock/components/UnlockTool.vue';
+import ProtectTool from './features/protect/components/ProtectTool.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -58,6 +59,7 @@ function closeSidebar() {
         <RedactTool v-else-if="activeToolId === 'redact'" />
         <OcrTool v-else-if="activeToolId === 'ocr'" />
         <UnlockTool v-else-if="activeToolId === 'unlock'" />
+        <ProtectTool v-else-if="activeToolId === 'protect'" />
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">

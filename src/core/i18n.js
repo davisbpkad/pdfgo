@@ -43,6 +43,26 @@ const translations = {
         emptyPassword: 'Harap masukkan password dokumen.',
         failed: 'Gagal membuka kunci PDF: {reason}'
       },
+      protect: {
+        title: 'Kunci dengan Password',
+        desc: 'Lindungi dokumen PDF Anda dengan enkripsi standar AES-256 dan izin akses khusus.',
+        passwordLabel: 'Password Dokumen:',
+        passwordPlaceholder: 'Masukkan password baru...',
+        confirmPasswordLabel: 'Konfirmasi Password:',
+        confirmPasswordPlaceholder: 'Ketik ulang password...',
+        passwordMismatch: 'Konfirmasi password tidak cocok.',
+        permissionsTitle: 'Izin Akses Dokumen:',
+        permPrinting: 'Izinkan mencetak dokumen',
+        permCopying: 'Izinkan menyalin teks & gambar',
+        permModifying: 'Izinkan mengubah isi dokumen',
+        permAnnotating: 'Izinkan komentar & anotasi',
+        actionBtn: 'Kunci dengan Password',
+        successTitle: 'PDF Berhasil Dikunci!',
+        successDetail: 'Terenkripsi AES-256 • {pages} halaman • {size}',
+        downloadBtn: 'Unduh Hasil',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal mengunci PDF: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -363,6 +383,26 @@ const translations = {
         wrongPassword: 'Password incorrect. Please check and try again.',
         emptyPassword: 'Please enter the document password.',
         failed: 'Failed to unlock PDF: {reason}'
+      },
+      protect: {
+        title: 'Protect PDF',
+        desc: 'Secure your PDF documents with industry-standard AES-256 encryption and custom permissions.',
+        passwordLabel: 'Document Password:',
+        passwordPlaceholder: 'Enter new password...',
+        confirmPasswordLabel: 'Confirm Password:',
+        confirmPasswordPlaceholder: 'Retype password...',
+        passwordMismatch: 'Passwords do not match.',
+        permissionsTitle: 'Document Permissions:',
+        permPrinting: 'Allow printing document',
+        permCopying: 'Allow copying text & graphics',
+        permModifying: 'Allow modifying content',
+        permAnnotating: 'Allow comments & annotations',
+        actionBtn: 'Protect with Password',
+        successTitle: 'PDF Protected Successfully!',
+        successDetail: 'AES-256 encrypted • {pages} pages • {size}',
+        downloadBtn: 'Download Result',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to protect PDF: {reason}'
       },
       merge: {
         title: 'Merge PDF',
