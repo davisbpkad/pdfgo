@@ -26,6 +26,7 @@ import * as wordToPdf from './word-to-pdf.js';
 import * as editPdf from './edit-pdf.js';
 import * as powerpointToPdf from './powerpoint-to-pdf.js';
 import * as pdfToExcel from './pdf-to-excel.js';
+import * as aiSummary from './ai-summary.js';
 
 export const allModules = [
   merge,
@@ -54,5 +55,6 @@ allModules.push(wordToPdf);
 allModules.push(editPdf);
 allModules.push(powerpointToPdf);
 allModules.push(pdfToExcel);
+allModules.push(aiSummary);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

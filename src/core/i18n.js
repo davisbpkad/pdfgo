@@ -229,6 +229,31 @@ const translations = {
         downloadBtn: 'Unduh Berkas Excel (.xlsx)',
         anotherFile: 'Pilih Berkas Lain'
       },
+      aiSummary: {
+        title: 'Siapkan untuk AI',
+        desc: 'Ekstrak teks PDF dan susun prompt terstruktur untuk diringkas, diterjemahkan, atau dianalisis oleh AI pilihan Anda.',
+        step1Title: 'Langkah 1: Pilih Tugas & Salin Prompt AI',
+        step1Desc: 'Format prompt siap pakai untuk ChatGPT, Claude, Gemini, atau model AI lokal.',
+        taskSummarize: 'Ringkas',
+        taskTranslate: 'Terjemahkan',
+        taskActions: 'Poin Kunci',
+        taskQa: 'Tanya Jawab',
+        taskCustom: 'Kustom',
+        targetLangLabel: 'Bahasa Tujuan:',
+        customLabel: 'Instruksi Kustom:',
+        promptPreview: 'Pratinjau Prompt AI',
+        copyPromptBtn: 'Salin Prompt ke Papan Klip',
+        step2Title: 'Langkah 2: Tempel & Simpan Hasil dari AI',
+        step2Desc: 'Tempel teks balasan yang Anda dapatkan dari AI, lalu simpan sebagai dokumen baru.',
+        pastePlaceholder: 'Tempelkan hasil ringkasan, terjemahan, atau analisis dari AI di sini...',
+        offlineNotice: '100% Offline & Privat — Teks Anda tidak pernah dikirim ke internet oleh aplikasi ini. Anda memiliki kendali penuh.',
+        exportMd: 'Simpan .md',
+        exportTxt: 'Simpan .txt',
+        exportPdf: 'Simpan PDF',
+        resetBtn: 'Mulai Ulang',
+        noTextWarning: 'Tidak ada teks yang dapat diekstrak dari dokumen PDF ini (mungkin dokumen hasil scan/gambar).',
+        copiedToast: 'Prompt AI berhasil disalin ke papan klip!'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -736,6 +761,31 @@ const translations = {
         downloadBtn: 'Download Excel File (.xlsx)',
         anotherFile: 'Choose Another File'
       },
+      aiSummary: {
+        title: 'Prepare for AI',
+        desc: 'Extract PDF text and format structured prompts for summarizing, translating, or analyzing with any AI.',
+        step1Title: 'Step 1: Select Task & Copy AI Prompt',
+        step1Desc: 'Ready-to-use structured prompt for ChatGPT, Claude, Gemini, or local AI models.',
+        taskSummarize: 'Summarize',
+        taskTranslate: 'Translate',
+        taskActions: 'Key Points',
+        taskQa: 'Q & A',
+        taskCustom: 'Custom',
+        targetLangLabel: 'Target Language:',
+        customLabel: 'Custom Instruction:',
+        promptPreview: 'AI Prompt Preview',
+        copyPromptBtn: 'Copy Prompt to Clipboard',
+        step2Title: 'Step 2: Paste & Save AI Response',
+        step2Desc: 'Paste the response returned by your AI, then save it into a new document.',
+        pastePlaceholder: 'Paste summary, translation, or insights from AI here...',
+        offlineNotice: '100% Offline & Private — Your document text is never sent to any external server. You retain full control.',
+        exportMd: 'Save .md',
+        exportTxt: 'Save .txt',
+        exportPdf: 'Save PDF',
+        resetBtn: 'Start Over',
+        noTextWarning: 'No selectable text could be extracted from this PDF (it might be a scanned document).',
+        copiedToast: 'AI prompt copied to clipboard!'
+      },
       merge: {
         title: 'Merge PDF',
         desc: 'Combine multiple PDF files into a single unified document with custom ordering.',
@@ -1025,6 +1075,8 @@ const translations = {
 
 translations.id.pdfToExcel = translations.id.tools.pdfToExcel;
 translations.en.pdfToExcel = translations.en.tools.pdfToExcel;
+translations.id.aiSummary = translations.id.tools.aiSummary;
+translations.en.aiSummary = translations.en.tools.aiSummary;
 
 let currentLang = 'id';
 const listeners = new Set();

@@ -1,0 +1,10 @@
+import AiSummaryTool from './components/AiSummaryTool.vue';
+
+export const id = 'ai-summary';
+export const titleKey = 'tools.aiSummary.title';
+export const descKey = 'tools.aiSummary.desc';
+export const icon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>`;
+export const component = AiSummaryTool;
+
+export { buildAiPrompt, estimateTokens, TASK_TEMPLATES } from './logic/formatAiPrompt.js';
+export { createMarkdownExport, createTextExport, createPdfExport } from './logic/exportAiResult.js';
