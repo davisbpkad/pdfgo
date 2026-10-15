@@ -7,9 +7,10 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 ## 🌟 Key Highlights
 
 - **100% Client-Side & Offline:** Works natively over `file://` protocol or any static file server without network connectivity.
-- **Neo-Brutalist Design System:** Striking visual hierarchy featuring high-contrast hard borders (`border-3 border-ink`), tactile hard drop shadows (`shadow-hard`), vivid lime accents (`#BEF264`), physical button press micro-interactions, and independent isolated scrolling (`overscroll-contain`) between sidebar and workspace.
+- **Neo-Brutalist Design System:** Striking visual hierarchy featuring high-contrast hard borders (`border-2 border-ink`), tactile hard drop shadows (`shadow-hard`), vivid accents, physical button press micro-interactions, and independent isolated scrolling (`overscroll-contain`) between sidebar and workspace.
 - **Strict Content Security Policy (CSP):** Hardware-enforced isolation (`default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;`).
-- **All-in-One Standalone Single File:** Fonts, WebAssembly engines, PDF.js & Tesseract workers are compressed and embedded into a single portable `.html` file.
+- **All-in-One Standalone Single File:** Fonts, WebAssembly engines, PDF.js & Tesseract workers, and conversion parsers are compressed and embedded into a single portable `.html` file.
+- **26 Complete Offline Tools:** From document manipulation, digital signatures, AcroForms, OCR, and document redaction, to full multi-format Office conversions (Word, Excel, PowerPoint, Markdown, HTML, Scans) and zero-network AI preparation.
 - **Direct Image & Scanned PDF OCR:** Extract text directly from image files (`PNG`, `JPG`, `JPEG`, `WebP`, `BMP`) and scanned documents without leaving the interface.
 - **Multi-File Batch Queue:** Process multiple files sequentially with isolated error boundaries. Download processed files individually or package them all into a single ZIP archive.
 - **Bilingual Interface:** Seamless real-time switching between **Bahasa Indonesia (ID)** and **English (EN)**.
@@ -18,50 +19,63 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 
 ---
 
-## 🛠️ Complete Tool Suite (13 Core Modules)
+## 🛠️ Complete Tool Suite (26 Modules)
 
+### 1. Tata Letak Dokumen (Document Layout & Editing)
 1. **Gabung PDF (Merge):** Combine multiple PDF documents into a unified file with drag-and-drop reordering and memory recovery.
 2. **Pisah PDF (Split):** Extract arbitrary page ranges (e.g. `1-3, 5, 8-10`) or break documents into N-page batches directly or as a ZIP.
 3. **Atur Halaman (Organize):** Visual thumbnail grid with drag-and-drop reordering, 90°/180°/270° rotation, and page deletion.
-4. **Tanda Tangan Digital (Sign):** Draw freehand signatures, upload stamp/signature images with automatic background transparency removal, or type cursive signatures (*Dancing Script* & *Caveat*).
-5. **Isi Formulir (Fill Form):** Automatically detect AcroForm fields (text boxes, checkboxes, dropdowns) with optional form flattening.
-6. **Sensor Dokumen (Redact):** True permanent raster sanitization — redacted canvas areas are permanently cleared and restamped into the underlying PDF stream; all document metadata (Title, Author, Producer) is stripped.
-7. **Kompres PDF (Compress):** Multi-level canvas compression with live reduction metrics (file size, percentage saved).
-8. **Pengenalan Karakter OCR (Text Recognition):** Extract printed text and generate searchable PDFs with an invisible text layer (`opacity: 0`) using local Tesseract WASM with Indonesian and English language models. Supports both PDF and image inputs directly.
-9. **Ekstrak Teks (Extract Text):** Extract readable text with page headers and line preservation. Directly accepts image files (`PNG`, `JPG`, `WebP`, `BMP`) and features one-click in-place OCR for scanned PDF documents.
-10. **Watermark:** Customizable diagonal, centered, or repeated text watermarks with adjustable angle, opacity, and font styling.
-11. **Nomor Halaman (Page Numbers):** Stamp flexible numbering (`Halaman {n} dari {total}`) across 9 position alignments with custom margins.
-12. **PDF ke Gambar (PDF to Image):** Render pages to high-resolution PNG or JPEG images packaged into a ZIP archive.
-13. **Gambar ke PDF (Image to PDF):** Convert images (PNG, JPG, WebP) to PDF with configurable page size (A4, Letter, Auto), margins, and orientation.
+4. **Edit PDF / Tambah Objek (Edit PDF):** Overlay text (custom font embedding), freehand drawings, rectangle/ellipse/arrow shapes, and cover boxes over existing PDF pages.
+5. **Nomor Halaman (Page Numbers):** Stamp flexible numbering (`Halaman {n} dari {total}`) across 9 position alignments with custom margins.
+6. **Watermark:** Customizable diagonal, centered, or repeated text watermarks with adjustable angle, opacity, and font styling.
+
+### 2. Konversi Dokumen & Media (Conversion & Formats)
+7. **PDF ke Word (PDF to Word):** Convert PDF layouts into formatted Microsoft Word `.docx` documents preserving paragraphs, headings, tables, and page snapshots.
+8. **Word ke PDF (Word to PDF):** Convert Word `.docx` files to print-ready PDF with clean HTML layout rendering.
+9. **PDF ke Excel (PDF to Excel):** Extract structured tables or raw coordinate layouts from PDF into editable Microsoft Excel `.xlsx` spreadsheets.
+10. **Excel ke PDF (Excel to PDF):** Render Excel `.xlsx` workbooks and `.csv` files into paginated vector PDF tables with auto column sizing.
+11. **PDF ke PowerPoint (PDF to PowerPoint):** Convert PDF pages into Microsoft PowerPoint `.pptx` presentations with custom slide dimension mapping.
+12. **PowerPoint ke PDF (PowerPoint to PDF):** Extract OpenXML slide structures, shapes, text, and embedded media into vector PDF presentations.
+13. **PDF ke Markdown (PDF to Markdown):** Extract semantic Markdown with automatic heading detection, table structures, and page image extraction.
+14. **HTML ke PDF (HTML to PDF):** Convert HTML files or raw markup into PDF with offline-safe sanitization and multi-page canvas slicing.
+15. **Pindai jadi PDF (Scan to PDF):** Camera/file scanner with 4-corner document cropping, rotation, and document filters (*Asli*, *Abu-abu*, *Hitam-Putih Dokumen*, *Perjelas Teks*).
+16. **PDF ke Gambar (PDF to Image):** Render pages to high-resolution PNG or JPEG images packaged into a ZIP archive.
+17. **Gambar ke PDF (Image to PDF):** Convert images (PNG, JPG, WebP) to PDF with configurable page size (A4, Letter, Auto), margins, and orientation.
+
+### 3. Keamanan Dokumen (Document Security & Privacy)
+18. **Buka Kunci PDF (Unlock PDF):** Remove password protection and decrypt PDF documents protected with standard PDF encryption.
+19. **Kunci dengan Password (Protect PDF):** Encrypt documents with military-grade AES-256 standard and customizable permissions (printing, copying, modification, annotation).
+20. **Tanda Tangan Digital (Sign PDF):** Draw freehand signatures, upload signature stamps with automatic background removal, or type cursive signatures.
+21. **Sensor Dokumen (Redact PDF):** True permanent raster sanitization — redacted canvas areas are permanently cleared and restamped into the underlying PDF stream; all document metadata (Title, Author, Producer) is stripped.
+
+### 4. Optimasi, Teks & AI (Optimization, Text & AI)
+22: **Kompres PDF (Compress PDF):** Multi-level canvas compression with live reduction metrics (file size, percentage saved).
+23. **Pengenalan Karakter OCR (Text Recognition):** Extract printed text and generate searchable PDFs with an invisible text layer using local Tesseract WASM with Indonesian and English language models.
+24. **Ekstrak Teks (Extract Text):** Extract readable text with page headers and line preservation. Directly accepts image files (`PNG`, `JPG`, `WebP`, `BMP`) with in-place OCR.
+25. **Isi Formulir (Fill Form):** Automatically detect AcroForm fields (text boxes, checkboxes, dropdowns) with optional form flattening.
+26. **Siapkan untuk AI (AI Summary & Translation Prompt):** 100% offline text extraction and structured prompt builder for summarizing, translating, key-point extraction, or analyzing documents with ChatGPT, Claude, Gemini, or local LLMs. Save AI responses back to `.md`, `.txt`, or `.pdf`.
 
 ---
 
 ## 📦 Build Variants (Full vs. Lite)
 
-PDF Toolkit is distributed in two editions to accommodate different storage and deployment requirements:
+PDF Toolkit is distributed in two self-contained editions:
 
 | Feature | Full Edition (`PDF Toolkit.html` / `PDF To Go.html`) | Lite Edition (`PDF Toolkit Lite.html` / `PDF To Go Lite.html`) |
 | :--- | :--- | :--- |
-| **File Size** | **~7.23 MB** | **~3.93 MB** |
-| **13 Core PDF Tools** | ✅ Pre-loaded & Ready | ✅ Pre-loaded & Ready |
+| **Total HTML Size** | **~10.0 MB** | **~6.7 MB** |
+| **All 26 Tools Pre-loaded** | ✅ Ready out-of-the-box | ✅ Ready out-of-the-box |
 | **Tesseract WASM Engine** | ✅ Embedded | ✅ Embedded |
 | **OCR Bahasa Indonesia (`ind`)** | ✅ Embedded out-of-the-box (gzip) | 📥 Import local `.traineddata` |
 | **OCR English (`eng`)** | ✅ Embedded out-of-the-box (gzip) | 📥 Import local `.traineddata` |
 | **Ideal For** | Complete offline use with zero setup | Ultra-lightweight distribution & low bandwidth |
 
-### How to Import OCR Models in Lite Edition
-1. Open `dist/PDF Toolkit Lite.html` (or `PDF To Go Lite.html`) in your browser.
-2. Select **Pengenalan Teks (OCR)** or **Ekstrak Teks** in the navigation sidebar.
-3. Under the language model selector, click **"Impor Berkas Model (.traineddata)"**.
-4. Choose your local `ind.traineddata` or `eng.traineddata` file (uncompressed or `.gz`).
-5. The model is validated and cached securely in your browser's private **IndexedDB**. Future OCR operations will recognize and use the imported model immediately without asking again.
-
 ---
 
-## 🚀 Quick Start & Usage
+## 🚀 Quick Start & Development
 
 ### Running Directly (No Installation Required)
-Simply double-click or open either HTML file directly in any modern browser:
+Simply double-click or open either standalone HTML file directly in any browser:
 ```bash
 # Full Edition
 open "dist/PDF To Go.html"
@@ -77,14 +91,14 @@ open "dist/PDF To Go Lite.html"
    npm install
    ```
 
-2. **Run test suite (49 pure unit tests):**
+2. **Run test suite (97 pure unit tests):**
    ```bash
    npm test
    ```
 
 3. **Build standalone distribution files:**
    ```bash
-   # Build all variants (Full and Lite)
+   # Build all variants (Full and Lite) with Zero-Network leak verification
    npm run build
 
    # Build Full edition only
@@ -94,25 +108,32 @@ open "dist/PDF To Go Lite.html"
    npm run build:lite
    ```
 
-4. **Run automated release pipeline:**
-   ```bash
-   npm run release
-   ```
-   *Runs tests, builds all variants, verifies zero-network leaks, captures automated promotional screenshots via headless Chrome, and packages `dist/release/PDF-Toolkit-v1.0.0.zip`.*
-
-5. **Start conflict-free local development server:**
+4. **Start local development server:**
    ```bash
    npm run serve
    ```
-   *Automatically scans from port 3000 to 3050 to avoid any local port collisions.*
+   *Scans ports 3000–3050 automatically to avoid local port collisions.*
+
+---
+
+## 🧠 Code Architecture & Graphify Knowledge Graph
+
+The codebase is built on strict modular engineering principles:
+- **Modular Feature Isolation:** Every tool resides in its own self-contained directory `src/features/<tool-id>/` exposing a standardized `index.js` and pure `logic/` layer.
+- **$\le 120$ Lines Contract:** Every single source file in `src/features/*` strictly adheres to a maximum length of 120 lines to ensure maintainability, readability, and testability.
+- **Graphify Knowledge Graph:** The repository maintains an active knowledge graph in `graphify-out/`:
+  - `graphify-out/graph.html`: Interactive force-directed graph of all 1,487 nodes and 3,393 connections across 92 communities.
+  - `graphify-out/PDFGO-callflow.html`: Mermaid-based interactive call-flow architecture diagram.
+  - `graphify-out/GRAPH_TREE.html`: D3 collapsible-tree hierarchy.
+  - `graphify-out/GRAPH_REPORT.md`: Comprehensive architectural report and community breakdown.
 
 ---
 
 ## 🔒 Security & Privacy Architecture
 
-- **Zero Remote Calls:** External `<script src>` and `<link href>` tags are prohibited. The build system verifies zero-network compliance on every build.
+- **Zero Remote Calls:** External `<script src>` and `<link href>` tags are strictly prohibited. The build system automatically scans and verifies zero-network compliance on every build.
 - **Worker & WASM Isolation:** Web Workers and WebAssembly binaries are decoded from compressed byte arrays in memory and instantiated via dynamic `Blob` URLs (`blob:`), complying with strict CSP policies without touching disk or network.
-- **Memory Management:** Every canvas, object URL (`URL.revokeObjectURL`), and intermediate ArrayBuffer is explicitly reclaimed after processing to prevent browser tab crashes during long sessions.
+- **Memory Management:** Every canvas, object URL (`URL.revokeObjectURL`), and intermediate ArrayBuffer is explicitly reclaimed after processing to prevent browser tab crashes during intensive operations.
 
 ---
 
