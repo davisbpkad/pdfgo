@@ -3,10 +3,12 @@ import { t } from '../../../app/providers/i18n.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 
 const props = defineProps({
-  isDrawMode: { type: Boolean, default: false }
+  isDrawMode: { type: Boolean, default: false },
+  isTextMode: { type: Boolean, default: false },
+  changedCount: { type: Number, default: 0 }
 });
 
-const emit = defineEmits(['add-object', 'toggle-draw-mode', 'upload-image']);
+const emit = defineEmits(['add-object', 'toggle-draw-mode', 'toggle-text-mode', 'reset-text', 'upload-image']);
 
 function handleImageInput(e) {
   const file = e.target.files?.[0];
@@ -19,8 +21,36 @@ function handleImageInput(e) {
 </script>
 
 <template>
-  <div class="p-3 border-2 border-ink bg-paper shadow-hard flex items-center gap-2 flex-wrap">
-    <span class="text-xs font-bold uppercase text-ink mr-1">{{ t('tools.editPdf.addLabel') }}:</span>
+  <div class="p-3 border-2 border-ink bg-paper shadow-hard space-y-2">
+    <div class="flex items-center gap-2 flex-wrap">
+      <BaseButton
+        :variant="isTextMode ? 'primary' : 'secondary'"
+        class="text-xs font-bold px-2.5 py-1.5"
+        @click="$emit('toggle-text-mode')"
+      >
+        ⌨️ {{ t('tools.editPdf.textModeBtn') }}
+      </BaseButton>
+
+      <span v-if="changedCount > 0" class="text-xs font-bold px-2 py-1 border-2 border-ink bg-accent-2">
+        {{ t('tools.editPdf.textChanged', { count: changedCount }) }}
+      </span>
+
+      <BaseButton
+        v-if="changedCount > 0"
+        variant="danger"
+        class="text-xs font-bold px-2.5 py-1.5"
+        @click="$emit('reset-text')"
+      >
+        ↺ {{ t('tools.editPdf.textResetBtn') }}
+      </BaseButton>
+    </div>
+
+    <p v-if="isTextMode" class="text-[11px] font-medium text-ink/80 border-l-4 border-accent pl-2">
+      {{ t('tools.editPdf.textHint') }}
+    </p>
+
+    <div v-if="!isTextMode" class="flex items-center gap-2 flex-wrap">
+      <span class="text-xs font-bold uppercase text-ink mr-1">{{ t('tools.editPdf.addLabel') }}:</span>
 
     <BaseButton variant="secondary" class="text-xs font-bold px-2.5 py-1.5" @click="$emit('add-object', 'text')">
       ✍️ {{ t('tools.editPdf.btnText') }}
@@ -54,5 +84,6 @@ function handleImageInput(e) {
       <span>🖼️ {{ t('tools.editPdf.btnImage') }}</span>
       <input type="file" accept="image/png,image/jpeg" class="sr-only" @change="handleImageInput" />
     </label>
+    </div>
   </div>
 </template>

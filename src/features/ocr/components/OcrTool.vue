@@ -3,6 +3,7 @@ import { ref, shallowRef, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { ensureBuiltinModelsLoaded, getAvailableOcrLangs } from '../../../core/assets.js';
 import { parsePageRange } from '../logic/parsePageRange.js';
@@ -10,12 +11,14 @@ import { runOcrPipeline } from '../logic/runOcrPipeline.js';
 import { terminateOcrWorker } from '../logic/ocrWorkerManager.js';
 import { convertImageToPngBuffer } from '../../image-to-pdf/logic/convertImageToPngBuffer.js';
 import { buildPdfFromImages } from '../../image-to-pdf/logic/buildPdfFromImages.js';
+import { checkWorkerWasmSupport, getBuildStamp } from '../../../core/wasmCheck.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
 import BaseProgressBar from '../../../ui/BaseProgressBar.vue';
 import OcrModelStatusBar from './OcrModelStatusBar.vue';
 import OcrConfigCard from './OcrConfigCard.vue';
 import OcrResultsCard from './OcrResultsCard.vue';
+import OcrEnvBanner from './OcrEnvBanner.vue';
 
 const activeFile = ref(null);
 let activeBuffer = null;
@@ -35,9 +38,12 @@ const progressLabel = ref('Memproses OCR...');
 const cancelRef = ref({ value: false });
 
 const lastOcrResults = ref(null);
+const buildStamp = getBuildStamp();
+const envIssue = ref(null);
 let lastSearchablePdfBytes = null;
 
 onMounted(async () => {
+  probeWasmSupport();
   await ensureBuiltinModelsLoaded();
   await refreshLangs();
 
@@ -55,6 +61,17 @@ async function refreshLangs() {
   availableLangs.value = langs;
   if (langs.includes('ind')) selectedLang.value = 'ind';
   else if (langs.includes('eng')) selectedLang.value = 'eng';
+}
+
+/**
+ * Fail fast when the running HTML file cannot compile WebAssembly (usually a stale build).
+ */
+async function probeWasmSupport() {
+  const result = await checkWorkerWasmSupport();
+  if (!result.ok) {
+    envIssue.value = result;
+    console.warn('[PDFGO] WebAssembly preflight failed:', result.reason, result.message, 'Build:', buildStamp);
+  }
 }
 
 async function handleIncomingFiles(files) {
@@ -112,6 +129,11 @@ function cancelOcr() {
 
 async function handleStartOcr() {
   if (!activeBuffer || !pdfDocProxy.value) return;
+
+  if (envIssue.value) {
+    showToast(t('tools.ocr.envBlockedHint'), 'error');
+    return;
+  }
 
   const targetPages = pageMode.value === 'all'
     ? Array.from({ length: totalPages.value }, (_, i) => i)
@@ -193,6 +215,8 @@ function handleCopyText() {
       :is-full-variant="isFullVariant"
       @model-imported="refreshLangs"
     />
+
+    <OcrEnvBanner v-if="envIssue" :issue="envIssue" :build-stamp="buildStamp" />
 
     <DropZone
       v-if="!activeFile"

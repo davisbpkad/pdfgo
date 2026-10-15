@@ -6,7 +6,9 @@ import { queueState } from '../../../app/providers/queue.js';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { useOverlayObjects } from '../logic/useOverlayObjects.js';
+import { useTextEdits } from '../logic/useTextEdits.js';
 import { renderOverlayToPdf } from '../logic/renderOverlayToPdf.js';
+import { renderTextEditsToPdf } from '../logic/renderTextEditsToPdf.js';
 import DropZone from '../../../ui/DropZone.vue';
 import PreviewViewport from '../../../ui/PreviewViewport.vue';
 import EditHeaderBar from './EditHeaderBar.vue';
@@ -20,12 +22,17 @@ const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 const currentPage = ref(1);
 const isDrawMode = ref(false);
+const isTextMode = ref(false);
 const isSaving = ref(false);
 
 const {
   objectsByPage, selectedObjectId, currentObjects, selectedObject,
   canUndo, canRedo, addObject, updateObject, removeObject, undo, redo, reset
 } = useOverlayObjects(currentPage);
+
+const {
+  currentEdits, changedCount, setText, snapshot: snapshotText, reset: resetTextEdits, clear: clearTextEdits
+} = useTextEdits(currentPage, pdfDocProxy);
 
 onMounted(() => {
   const c = queueState.value?.items?.find((i) => i.name?.toLowerCase().endsWith('.pdf'));
@@ -40,13 +47,15 @@ async function loadDocument(file) {
   totalPages.value = pdfDocProxy.value.numPages;
   currentPage.value = 1;
   reset();
+  clearTextEdits();
 }
 
 async function handleSave() {
   if (!rawBuffer) return;
   isSaving.value = true;
   try {
-    const { pdfBytes } = await renderOverlayToPdf(rawBuffer, objectsByPage.value);
+    const textResult = await renderTextEditsToPdf(rawBuffer, editsByPage.value);
+    const { pdfBytes } = await renderOverlayToPdf(textResult.pdfBytes, objectsByPage.value);
     const safe = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(pdfBytes, `${safe}-edit.pdf`, 'application/pdf');
     showToast(t('tools.editPdf.successTitle'), 'success');
@@ -73,15 +82,27 @@ async function handleSave() {
         @prev-page="currentPage--" @next-page="currentPage++" @save="handleSave" @change-file="activeFile = null"
       />
 
-      <EditToolbar :is-draw-mode="isDrawMode" @add-object="addObject" @toggle-draw-mode="isDrawMode = !isDrawMode" @upload-image="(url) => addObject('image', { dataUrl: url })" />
+      <EditToolbar
+        :is-draw-mode="isDrawMode"
+        :is-text-mode="isTextMode"
+        :changed-count="changedCount"
+        @add-object="addObject"
+        @toggle-draw-mode="isDrawMode = !isDrawMode"
+        @toggle-text-mode="isTextMode = !isTextMode"
+        @reset-text="resetTextEdits"
+        @upload-image="(url) => addObject('image', { dataUrl: url })"
+      />
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
         <div class="lg:col-span-3">
           <PreviewViewport v-slot="{ effectiveScale }">
             <EditCanvas
               :pdf-doc-proxy="pdfDocProxy" :current-page="currentPage" :objects="currentObjects"
+              :text-edits="currentEdits"
               :selected-object-id="selectedObjectId" :scale="effectiveScale" :is-draw-mode="isDrawMode"
+              :is-text-mode="isTextMode"
               @add-object="addObject" @update-object="updateObject" @remove-object="removeObject" @select-object="selectedObjectId = $event"
+              @update-text="setText" @start-edit="snapshotText"
             />
           </PreviewViewport>
         </div>

@@ -1,22 +1,29 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { unwrapPdfProxy } from '../../../core/pdf.js';
-import { nudgeObject, moveObject, resizeObject } from '../logic/objectInteractions.js';
+import { nudgeObject } from '../logic/objectInteractions.js';
+import { usePointerSession } from '../logic/usePointerSession.js';
 import EditOverlayItem from './EditOverlayItem.vue';
+import EditTextLayer from './EditTextLayer.vue';
 
 const props = defineProps({
   pdfDocProxy: { type: Object, default: null },
   currentPage: { type: Number, default: 1 },
   objects: { type: Array, default: () => [] },
+  textEdits: { type: Array, default: () => [] },
   selectedObjectId: { type: String, default: null },
   scale: { type: Number, default: 1.0 },
-  isDrawMode: { type: Boolean, default: false }
+  isDrawMode: { type: Boolean, default: false },
+  isTextMode: { type: Boolean, default: false }
 });
 
-const emit = defineEmits(['add-object', 'update-object', 'remove-object', 'select-object', 'rendered']);
+const emit = defineEmits(['add-object', 'update-object', 'remove-object', 'select-object', 'update-text', 'start-edit', 'rendered']);
 const canvasRef = ref(null);
 const wrapperRef = ref(null);
-let activeDrag = null;
+const session = usePointerSession(wrapperRef, {
+  onUpdate: (obj) => emit('update-object', obj),
+  onDraw: (points) => emit('add-object', { type: 'draw', points })
+});
 
 onMounted(() => {
   renderPage();
@@ -43,6 +50,7 @@ async function renderPage() {
 }
 
 function onKeyDown(e) {
+  if (props.isTextMode) return; // typing/backspace belongs to the text editors
   if (!props.selectedObjectId) return;
   const obj = props.objects.find((o) => o.id === props.selectedObjectId);
   if (!obj) return;
@@ -57,10 +65,9 @@ function onKeyDown(e) {
 }
 
 function onPointerDown(e) {
-  const rect = wrapperRef.value.getBoundingClientRect();
+  if (props.isTextMode) return; // let the inline text editors own the pointer
   if (props.isDrawMode) {
-    activeDrag = { mode: 'draw', points: [{ x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height }] };
-    wrapperRef.value.setPointerCapture(e.pointerId);
+    session.beginDraw(e);
     return;
   }
   if (!e.target.closest('.edit-obj-item')) emit('select-object', null);
@@ -69,39 +76,23 @@ function onPointerDown(e) {
 function startDrag(e, obj, mode) {
   if (props.isDrawMode) return;
   emit('select-object', obj.id);
-  const rect = wrapperRef.value.getBoundingClientRect();
-  activeDrag = { mode, objId: obj.id, startX: e.clientX, startY: e.clientY, rectW: rect.width, rectH: rect.height, initObj: { ...obj } };
-  wrapperRef.value.setPointerCapture(e.pointerId);
+  session.beginTransform(e, obj, mode);
 }
 
 function onPointerMove(e) {
-  if (!activeDrag) return;
-  const rect = wrapperRef.value.getBoundingClientRect();
-  if (activeDrag.mode === 'draw') {
-    activeDrag.points.push({ x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height });
-  } else if (activeDrag.mode === 'move') {
-    const dx = (e.clientX - activeDrag.startX) / activeDrag.rectW;
-    const dy = (e.clientY - activeDrag.startY) / activeDrag.rectH;
-    emit('update-object', moveObject(activeDrag.initObj, dx, dy));
-  } else if (activeDrag.mode === 'resize') {
-    const dw = (e.clientX - activeDrag.startX) / activeDrag.rectW;
-    const dh = (e.clientY - activeDrag.startY) / activeDrag.rectH;
-    emit('update-object', resizeObject(activeDrag.initObj, dw, dh));
-  }
+  session.move(e);
 }
 
 function onPointerUp() {
-  if (activeDrag?.mode === 'draw' && activeDrag.points.length > 1) {
-    emit('add-object', { type: 'draw', points: [...activeDrag.points] });
-  }
-  activeDrag = null;
+  session.end();
 }
 </script>
 
 <template>
   <div
     ref="wrapperRef"
-    class="relative inline-block select-none shadow-hard border-2 border-ink"
+    class="relative inline-block shadow-hard border-2 border-ink"
+    :class="isTextMode ? 'select-text' : 'select-none'"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
@@ -115,5 +106,14 @@ function onPointerUp() {
       :is-selected="selectedObjectId === obj.id"
       @start-drag="startDrag"
     />
+
+    <div v-if="isTextMode && !isDrawMode" class="absolute inset-0 pointer-events-none">
+      <EditTextLayer
+        :edits="textEdits"
+        :scale="scale"
+        @update-text="(id, value) => emit('update-text', id, value)"
+        @start-edit="emit('start-edit')"
+      />
+    </div>
   </div>
 </template>

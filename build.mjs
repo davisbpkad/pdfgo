@@ -274,6 +274,7 @@ async function buildVariant(variantType) {
   const tesseractWorkerData = getEmbeddedTesseractWorker();
   const ocrModelsData = getEmbeddedOcrModels(isFull);
   const faviconDataUri = getEmbeddedFavicon();
+  const buildStamp = new Date().toISOString();
 
   // Single File HTML Assembly
   const html = `<!DOCTYPE html>
@@ -292,6 +293,7 @@ ${minifiedCss}
 <body>
   <div id="app"></div>
   <script>
+window.__PDFGO_BUILD__ = "${buildStamp}";
 ${workerData.injectionCode}
 ${tesseractWorkerData.injectionCode}
 ${ocrModelsData.injectionCode}
@@ -299,6 +301,14 @@ ${minifiedJs}
   </script>
 </body>
 </html>`;
+
+  // Guard: OCR requires WebAssembly, which the CSP must explicitly allow.
+  if (!/script-src[^;]*'wasm-unsafe-eval'/.test(html)) {
+    throw new Error(
+      "CSP tidak mengizinkan WebAssembly ('wasm-unsafe-eval' hilang pada script-src). " +
+      'OCR akan gagal di browser. Perbaiki CSP di build.mjs dan netlify.toml terlebih dahulu.'
+    );
+  }
 
   const filesToWrite = [];
   if (isFull) {

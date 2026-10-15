@@ -181,7 +181,7 @@ const translations = {
       },
       editPdf: {
         title: 'Edit PDF / Tambah Objek',
-        desc: 'Tambahkan teks baru, kotak penutup (whiteout), bentuk garis, panah, coretan tangan, dan gambar di atas dokumen PDF.',
+        desc: 'Ketik ulang atau hapus tulisan yang sudah ada di halaman, lalu tambahkan teks baru, kotak penutup, bentuk, panah, coretan tangan, dan gambar.',
         addLabel: 'Tambah Objek',
         btnText: 'Teks',
         btnWhiteout: 'Tutup Teks',
@@ -194,10 +194,14 @@ const translations = {
         textLabel: 'Isi Teks:',
         removeBtn: 'Hapus Objek Ini',
         noSelection: 'Klik objek di kanvas untuk menggeser, mengubah ukuran, atau mengedit propertinya.',
-        disclaimer: 'Alat ini menambah objek di atas halaman. Mengubah teks yang sudah ada di dalam PDF tidak didukung — tutupi teks lama lalu tulis teks baru.',
+        disclaimer: 'Tulisan lama ditutupi dengan kotak putih lalu ditulis ulang memakai font bawaan, jadi bentuk huruf bisa sedikit berbeda dari aslinya.',
         saveBtn: 'Ratakan & Simpan PDF',
         successTitle: 'Dokumen PDF Berhasil Disimpan!',
-        failed: 'Gagal menyimpan PDF: {reason}'
+        failed: 'Gagal menyimpan PDF: {reason}',
+        textModeBtn: 'Edit Tulisan Dokumen',
+        textChanged: '{count} tulisan diubah',
+        textResetBtn: 'Batalkan Perubahan Tulisan',
+        textHint: 'Klik tulisan di halaman lalu ketik atau hapus seperti mengetik biasa. Tulisan lama ditutupi, lalu ditulis ulang. Tekan Tab atau klik di luar untuk lanjut ke tulisan lain.'
       },
       powerpointToPdf: {
         title: 'PowerPoint ke PDF',
@@ -418,7 +422,12 @@ const translations = {
         emptyPrompt: 'Pilih file PDF atau hasil scan untuk mengenali dan mengekstrak teksnya.',
         cancel: 'Batal',
         notLoadedWarning: 'Silakan impor model bahasa OCR terlebih dahulu sebelum memulai proses.',
-        noTextFound: 'Tidak ada teks yang dapat dikenali pada halaman ini.'
+        noTextFound: 'Tidak ada teks yang dapat dikenali pada halaman ini.',
+        envTitle: 'WebAssembly tidak dapat dijalankan di berkas ini',
+        envBodyCsp: 'Berkas HTML ini versi lama: CSP-nya belum mengizinkan WebAssembly, sehingga OCR tidak bisa berjalan. Tutup tab ini, lalu buka berkas hasil build terbaru (dist/PDF To Go.html). Versi build berkas ini: {stamp}.',
+        envBodyOther: 'Browser ini gagal menyiapkan WebAssembly di dalam worker, sehingga OCR tidak bisa berjalan. Coba buka berkas hasil build terbaru memakai browser lain (Chrome/Edge/Firefox modern). Versi build berkas ini: {stamp}.',
+        envDetails: 'Detail teknis',
+        envBlockedHint: 'Pengenalan teks dinonaktifkan sampai masalah ini selesai.'
       },
       extractText: {
         title: 'Ekstrak Teks',
@@ -713,7 +722,7 @@ const translations = {
       },
       editPdf: {
         title: 'Edit PDF / Add Objects',
-        desc: 'Add new text, whiteout boxes, shapes, arrows, freehand drawings, and images on top of PDF documents.',
+        desc: 'Retype or delete text that already exists on the page, then add new text, whiteout boxes, shapes, arrows, freehand drawings, and images.',
         addLabel: 'Add Object',
         btnText: 'Text',
         btnWhiteout: 'Whiteout',
@@ -726,10 +735,14 @@ const translations = {
         textLabel: 'Text Content:',
         removeBtn: 'Remove This Object',
         noSelection: 'Click an object on the canvas to move, resize, or adjust its properties.',
-        disclaimer: 'This tool adds objects on top of the page. Editing existing in-place text inside PDF is not supported — whiteout old text and type new text over it.',
+        disclaimer: 'Existing text is covered with a white box and retyped using a built-in font, so letter shapes may differ slightly from the original.',
         saveBtn: 'Flatten & Save PDF',
         successTitle: 'PDF Document Saved Successfully!',
-        failed: 'Failed to save PDF: {reason}'
+        failed: 'Failed to save PDF: {reason}',
+        textModeBtn: 'Edit Document Text',
+        textChanged: '{count} text lines changed',
+        textResetBtn: 'Discard Text Changes',
+        textHint: 'Click any text on the page and type or delete as usual. The old text is covered and retyped. Press Tab or click outside to move to the next line.'
       },
       powerpointToPdf: {
         title: 'PowerPoint to PDF',
@@ -950,7 +963,12 @@ const translations = {
         emptyPrompt: 'Select a scanned PDF or document to recognize and extract its text.',
         cancel: 'Cancel',
         notLoadedWarning: 'Please import an OCR language model before starting recognition.',
-        noTextFound: 'No readable text could be recognized on this page.'
+        noTextFound: 'No readable text could be recognized on this page.',
+        envTitle: 'WebAssembly cannot run in this file',
+        envBodyCsp: 'This HTML file is an older build: its CSP does not allow WebAssembly, so OCR cannot run. Close this tab and open the newest build (dist/PDF To Go.html). Build version of this file: {stamp}.',
+        envBodyOther: 'This browser failed to prepare WebAssembly inside a worker, so OCR cannot run. Try the newest build in another modern browser (Chrome/Edge/Firefox). Build version of this file: {stamp}.',
+        envDetails: 'Technical details',
+        envBlockedHint: 'Text recognition is disabled until this is resolved.'
       },
       extractText: {
         title: 'Extract Text',

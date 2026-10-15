@@ -115,7 +115,7 @@ function onKeyDown(e) {
 }
 
 function onPointerDown(e) {
-  if (e.target.closest('canvas, .redact-box-item, .cursor-move, button, input, select')) return;
+  if (e.target.closest('canvas, .redact-box-item, .cursor-move, button, input, select, textarea')) return;
   isPanning = true;
   panStartX = e.clientX;
   panStartY = e.clientY;
