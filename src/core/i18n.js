@@ -168,6 +168,17 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal mengonversi ke PDF: {reason}'
       },
+      wordToPdf: {
+        title: 'Word ke PDF',
+        desc: 'Konversi dokumen Word (.docx) menjadi berkas PDF berkualitas cetak dengan cepat dan aman.',
+        instructionText: 'Saat dialog cetak muncul, pilih tujuan "Simpan sebagai PDF" (Save as PDF) untuk menghasilkan berkas PDF vektor berkualitas tajam.',
+        actionBtn: 'Cetak jadi PDF',
+        previewTitle: 'Pratinjau Dokumen Word',
+        disclaimer: 'Format dan tata letak paragraf dikonversi ke HTML standar; efek visual tingkat lanjut seperti WordArt dan macro tidak didukung.',
+        successToast: 'Dokumen Word berhasil diproses!',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal memproses dokumen Word: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -613,6 +624,17 @@ const translations = {
         downloadBtn: 'Download PDF Document',
         resetBtn: 'Process Another File',
         failed: 'Failed to convert to PDF: {reason}'
+      },
+      wordToPdf: {
+        title: 'Word to PDF',
+        desc: 'Convert Word documents (.docx) into crisp, print-ready PDF files safely and rapidly.',
+        instructionText: 'When the print dialog opens, select "Save as PDF" destination for crisp, high-resolution vector output.',
+        actionBtn: 'Print to PDF',
+        previewTitle: 'Word Document Preview',
+        disclaimer: 'Layout and paragraph flow are converted to standard HTML; advanced formatting like WordArt and macros are not supported.',
+        successToast: 'Word document processed successfully!',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to process Word document: {reason}'
       },
       merge: {
         title: 'Merge PDF',
