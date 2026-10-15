@@ -21,6 +21,7 @@ import * as scanToPdf from './scan-to-pdf.js';
 import * as htmlToPdf from './html-to-pdf.js';
 import * as pdfToWord from './pdf-to-word.js';
 import * as pdfToPowerpoint from './pdf-to-powerpoint.js';
+import * as excelToPdf from './excel-to-pdf.js';
 
 export const allModules = [
   merge,
@@ -44,5 +45,6 @@ allModules.push(scanToPdf);
 allModules.push(htmlToPdf);
 allModules.push(pdfToWord);
 allModules.push(pdfToPowerpoint);
+allModules.push(excelToPdf);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

@@ -153,6 +153,21 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal mengonversi ke PowerPoint: {reason}'
       },
+      excelToPdf: {
+        title: 'Excel ke PDF',
+        desc: 'Ubah lembar kerja Excel (.xlsx, .csv) menjadi dokumen PDF tabel rapi dan siap cetak.',
+        optionsTitle: 'Opsi Tata Letak Halaman:',
+        orientationLabel: 'Orientasi Kertas (A4):',
+        orientationLandscape: 'Lanskap (Melebar)',
+        orientationPortrait: 'Potret (Tegak)',
+        disclaimer: 'Tata letak tabel disesuaikan otomatis dengan ukuran kertas A4. Kolom yang sangat lebar akan disesuaikan agar pas dalam halaman.',
+        actionBtn: 'Simpan sebagai PDF',
+        successTitle: 'Konversi Excel Berhasil!',
+        successDetail: '{sheets} sheet • {pages} halaman • Ukuran berkas: {size}',
+        downloadBtn: 'Unduh Dokumen PDF',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal mengonversi ke PDF: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -583,6 +598,21 @@ const translations = {
         downloadBtn: 'Download PowerPoint File',
         resetBtn: 'Process Another File',
         failed: 'Failed to convert to PowerPoint: {reason}'
+      },
+      excelToPdf: {
+        title: 'Excel to PDF',
+        desc: 'Convert Excel spreadsheets (.xlsx, .csv) into clean, ready-to-print PDF tables.',
+        optionsTitle: 'Page Layout Options:',
+        orientationLabel: 'Paper Orientation (A4):',
+        orientationLandscape: 'Landscape (Wide)',
+        orientationPortrait: 'Portrait (Tall)',
+        disclaimer: 'Table layout is automatically adapted to standard A4 size. Very wide columns are scaled to fit cleanly within the page margins.',
+        actionBtn: 'Save as PDF',
+        successTitle: 'Excel Conversion Succeeded!',
+        successDetail: '{sheets} sheets • {pages} pages • File size: {size}',
+        downloadBtn: 'Download PDF Document',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to convert to PDF: {reason}'
       },
       merge: {
         title: 'Merge PDF',
