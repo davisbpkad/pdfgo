@@ -28,6 +28,7 @@ import PdfToPowerpointTool from './features/pdf-to-powerpoint/components/PdfToPo
 import ExcelToPdfTool from './features/excel-to-pdf/components/ExcelToPdfTool.vue';
 import WordToPdfTool from './features/word-to-pdf/components/WordToPdfTool.vue';
 import EditPdfTool from './features/edit-pdf/components/EditPdfTool.vue';
+import PptxToPdfTool from './features/powerpoint-to-pdf/components/PptxToPdfTool.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -76,6 +77,7 @@ function closeSidebar() {
         <ExcelToPdfTool v-else-if="activeToolId === 'excel-to-pdf'" />
         <WordToPdfTool v-else-if="activeToolId === 'word-to-pdf'" />
         <EditPdfTool v-else-if="activeToolId === 'edit-pdf'" />
+        <PptxToPdfTool v-else-if="activeToolId === 'powerpoint-to-pdf'" />
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">

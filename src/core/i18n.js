@@ -199,6 +199,17 @@ const translations = {
         successTitle: 'Dokumen PDF Berhasil Disimpan!',
         failed: 'Gagal menyimpan PDF: {reason}'
       },
+      powerpointToPdf: {
+        title: 'PowerPoint ke PDF',
+        desc: 'Ubah slide presentasi PowerPoint (.pptx) menjadi dokumen PDF dengan tata letak teks dan gambar yang rapi.',
+        disclaimer: 'Tata letak teks, bentuk, dan gambar diekstraksi langsung dari OpenXML presentasi; transisi dan animasi PowerPoint tidak dimuat ke dalam PDF.',
+        actionBtn: 'Simpan sebagai PDF',
+        successTitle: 'Konversi PowerPoint Berhasil!',
+        successDetail: '{slides} slide • Ukuran berkas: {size}',
+        downloadBtn: 'Unduh Dokumen PDF',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal mengonversi presentasi ke PDF: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -675,6 +686,17 @@ const translations = {
         saveBtn: 'Flatten & Save PDF',
         successTitle: 'PDF Document Saved Successfully!',
         failed: 'Failed to save PDF: {reason}'
+      },
+      powerpointToPdf: {
+        title: 'PowerPoint to PDF',
+        desc: 'Convert PowerPoint presentation slides (.pptx) into clean PDF documents with preserved layout and graphics.',
+        disclaimer: 'Text, shape, and image layouts are extracted directly from OpenXML presentation slides; transitions and animations are not included in the PDF.',
+        actionBtn: 'Save as PDF',
+        successTitle: 'PowerPoint Conversion Succeeded!',
+        successDetail: '{slides} slides • File size: {size}',
+        downloadBtn: 'Download PDF Document',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to convert presentation to PDF: {reason}'
       },
       merge: {
         title: 'Merge PDF',
