@@ -210,6 +210,25 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal mengonversi presentasi ke PDF: {reason}'
       },
+      pdfToExcel: {
+        title: 'PDF ke Excel',
+        desc: 'Ekstrak tabel dan teks dari PDF ke lembar kerja spreadsheet Excel (.xlsx)',
+        notice: 'Hasil deteksi tabel otomatis bergantung pada kerapian tata letak PDF dan perlu diperiksa kembali di Excel.',
+        modeTitle: 'Mode Konversi',
+        modeTable: 'Deteksi Tabel Otomatis',
+        modeTableDesc: 'Mengelompokkan teks ke baris & kolom tabel',
+        modeRaw: 'Semua Teks (Posisi & Font)',
+        modeRawDesc: 'Mencatat posisi X, Y, ukuran teks, dan ketebalan',
+        pageRangeLabel: 'Halaman yang diproses',
+        pageRangePlaceholder: 'Semua (atau contoh: 1-3, 5)',
+        convertBtn: 'Ekspor ke Excel (.xlsx)',
+        converting: 'Mengekspor ke Excel...',
+        successTitle: 'Berhasil Diekspor ke Excel!',
+        sheetsCount: 'Jumlah Lembar',
+        rowsCount: 'Total Baris',
+        downloadBtn: 'Unduh Berkas Excel (.xlsx)',
+        anotherFile: 'Pilih Berkas Lain'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -697,6 +716,25 @@ const translations = {
         downloadBtn: 'Download PDF Document',
         resetBtn: 'Process Another File',
         failed: 'Failed to convert presentation to PDF: {reason}'
+      },
+      pdfToExcel: {
+        title: 'PDF to Excel',
+        desc: 'Extract tables and text from PDF into Excel spreadsheet (.xlsx)',
+        notice: 'Automatic table detection depends on PDF text structure and should be reviewed in Excel.',
+        modeTitle: 'Conversion Mode',
+        modeTable: 'Automatic Table Detection',
+        modeTableDesc: 'Group text into table rows and columns',
+        modeRaw: 'All Text (Position & Font)',
+        modeRawDesc: 'Record X, Y coordinates, font size, and bold flag',
+        pageRangeLabel: 'Pages to process',
+        pageRangePlaceholder: 'All (or e.g.: 1-3, 5)',
+        convertBtn: 'Export to Excel (.xlsx)',
+        converting: 'Exporting to Excel...',
+        successTitle: 'Successfully Exported to Excel!',
+        sheetsCount: 'Sheet count',
+        rowsCount: 'Total rows',
+        downloadBtn: 'Download Excel File (.xlsx)',
+        anotherFile: 'Choose Another File'
       },
       merge: {
         title: 'Merge PDF',
