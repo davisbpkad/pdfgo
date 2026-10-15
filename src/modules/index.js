@@ -14,6 +14,7 @@ import * as watermark from './watermark.js';
 import * as pageNumbers from './page-numbers.js';
 import * as pdfToImage from './pdf-to-image.js';
 import * as imageToPdf from './image-to-pdf.js';
+import * as unlock from './unlock.js';
 
 export const allModules = [
   merge,
@@ -30,5 +31,6 @@ export const allModules = [
   pdfToImage,
   imageToPdf
 ];
+allModules.push(unlock);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

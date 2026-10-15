@@ -208,6 +208,7 @@ function verifyZeroNetwork(htmlContent, filePath) {
     /https?:\/\/tailwindcss\.com[^\s"'`<>)]*/gi,
     /https?:\/\/vuejs\.org\/[^\s"'`<>)]*/gi
   ];
+  allowedPatterns.push(/https?:\/\/(?:www\.)?aiim\.org\/[^\s"'`<>)]*/gi, /https?:\/\/purl\.org\/[^\s"'`<>)]*/gi);
 
   let sanitized = htmlContent;
   for (const pattern of allowedPatterns) {

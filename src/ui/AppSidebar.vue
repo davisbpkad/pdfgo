@@ -35,6 +35,7 @@ const menuSections = [
     toolIds: ['sign', 'redact']
   }
 ];
+menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('unlock');
 
 function selectTool(id) {
   navigateTo(id);

@@ -20,6 +20,29 @@ const translations = {
       categorySecurity: 'Keamanan & Anotasi'
     },
     tools: {
+      section: {
+        layout: 'Tata Letak Dokumen',
+        optimize: 'Optimasi & Teks',
+        conversion: 'Konversi Media',
+        security: 'Keamanan Dokumen',
+        advanced: 'Alat Lanjutan'
+      },
+      unlock: {
+        title: 'Buka Kunci PDF',
+        desc: 'Hapus proteksi password dari file PDF terenkripsi agar dapat dibuka bebas.',
+        passwordLabel: 'Password Dokumen PDF:',
+        passwordPlaceholder: 'Masukkan password untuk membuka kunci...',
+        actionBtn: 'Buka Kunci PDF',
+        notEncryptedNotice: 'Dokumen ini tidak terenkripsi password. Anda tetap dapat mengunduh salinannya.',
+        disclaimer: 'Hanya gunakan untuk dokumen milik Anda sendiri atau yang Anda berhak akses secara sah.',
+        successTitle: 'Kunci PDF Berhasil Dibuka!',
+        successDesc: 'Dokumen berhasil didekripsi dan dapat dibuka tanpa password.',
+        downloadBtn: 'Unduh Hasil',
+        workAnotherBtn: 'Kerjakan File Lain',
+        wrongPassword: 'Password salah. Silakan periksa kembali dan coba lagi.',
+        emptyPassword: 'Harap masukkan password dokumen.',
+        failed: 'Gagal membuka kunci PDF: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -318,6 +341,29 @@ const translations = {
       categorySecurity: 'Security & Annotation'
     },
     tools: {
+      section: {
+        layout: 'Document Layout',
+        optimize: 'Optimization & Text',
+        conversion: 'Media Conversion',
+        security: 'Document Security',
+        advanced: 'Advanced Tools'
+      },
+      unlock: {
+        title: 'Unlock PDF',
+        desc: 'Remove password protection from encrypted PDF files for unrestricted access.',
+        passwordLabel: 'PDF Document Password:',
+        passwordPlaceholder: 'Enter password to unlock...',
+        actionBtn: 'Unlock PDF',
+        notEncryptedNotice: 'This document is not password-protected. You can still download an unencrypted copy.',
+        disclaimer: 'Only use this tool for documents you own or are legally authorized to access.',
+        successTitle: 'PDF Unlocked Successfully!',
+        successDesc: 'The document has been decrypted and can now be opened without a password.',
+        downloadBtn: 'Download Result',
+        workAnotherBtn: 'Process Another File',
+        wrongPassword: 'Password incorrect. Please check and try again.',
+        emptyPassword: 'Please enter the document password.',
+        failed: 'Failed to unlock PDF: {reason}'
+      },
       merge: {
         title: 'Merge PDF',
         desc: 'Combine multiple PDF files into a single unified document with custom ordering.',
