@@ -1023,6 +1023,9 @@ const translations = {
   }
 };
 
+translations.id.pdfToExcel = translations.id.tools.pdfToExcel;
+translations.en.pdfToExcel = translations.en.tools.pdfToExcel;
+
 let currentLang = 'id';
 const listeners = new Set();
 
