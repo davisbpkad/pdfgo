@@ -80,6 +80,8 @@ async function getOcrWorker(lang, onProgress) {
     activeWorkerLang = null;
   }
 
+  await ensureBuiltinModelsLoaded();
+
   const workerBlobUrl = getTesseractWorkerBlobUrl();
   const options = {
     gzip: true,
@@ -93,11 +95,16 @@ async function getOcrWorker(lang, onProgress) {
     options.workerBlobURL = false; // Directly instantiate worker from blob URL
   }
 
-  const worker = await createWorker(lang, 1, options);
-  activeWorker = worker;
-  activeWorkerLang = lang;
-
-  return worker;
+  try {
+    const worker = await createWorker(lang, 1, options);
+    activeWorker = worker;
+    activeWorkerLang = lang;
+    return worker;
+  } catch (err) {
+    activeWorker = null;
+    activeWorkerLang = null;
+    throw err;
+  }
 }
 
 /**

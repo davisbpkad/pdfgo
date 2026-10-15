@@ -67,12 +67,15 @@ async function startServer() {
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       const ext = path.extname(filePath).toLowerCase();
-      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, {
+      const headers = {
         'Content-Type': contentType,
         'Cache-Control': 'no-store, no-cache, must-revalidate',
         'X-Content-Type-Options': 'nosniff'
-      });
+      };
+      if (ext === '.html') {
+        headers['Content-Security-Policy'] = "default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob: data:; worker-src blob: data: 'self'; child-src blob: 'self'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;";
+      }
+      res.writeHead(200, headers);
       fs.createReadStream(filePath).pipe(res);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });

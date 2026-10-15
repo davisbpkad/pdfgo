@@ -281,7 +281,7 @@ async function buildVariant(variantType) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob: data:; worker-src blob: data: 'self'; child-src blob: 'self'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;">
   <title>PDF To Go</title>
   ${faviconDataUri ? `<link rel="icon" type="image/png" href="${faviconDataUri}">` : ''}
   <style>

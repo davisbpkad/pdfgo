@@ -122,7 +122,7 @@ The codebase is built on strict modular engineering principles:
 - **Modular Feature Isolation:** Every tool resides in its own self-contained directory `src/features/<tool-id>/` exposing a standardized `index.js` and pure `logic/` layer.
 - **$\le 120$ Lines Contract:** Every single source file in `src/features/*` strictly adheres to a maximum length of 120 lines to ensure maintainability, readability, and testability.
 - **Graphify Knowledge Graph:** The repository maintains an active knowledge graph in `graphify-out/`:
-  - `graphify-out/graph.html`: Interactive force-directed graph of all 1,487 nodes and 3,393 connections across 92 communities.
+  - `graphify-out/graph.html`: Interactive force-directed graph of all 1,490 nodes and 3,387 connections across 92 communities.
   - `graphify-out/PDFGO-callflow.html`: Mermaid-based interactive call-flow architecture diagram.
   - `graphify-out/GRAPH_TREE.html`: D3 collapsible-tree hierarchy.
   - `graphify-out/GRAPH_REPORT.md`: Comprehensive architectural report and community breakdown.

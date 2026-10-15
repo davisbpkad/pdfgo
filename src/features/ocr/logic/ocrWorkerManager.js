@@ -1,5 +1,6 @@
 import { createWorker } from 'tesseract.js';
 import { getTesseractWorkerBlobUrl } from '../../../core/workers.js';
+import { ensureBuiltinModelsLoaded } from '../../../core/assets.js';
 
 let activeWorker = null;
 let activeWorkerLang = null;
@@ -23,6 +24,8 @@ export async function getOcrWorker(lang, onProgress) {
     activeWorkerLang = null;
   }
 
+  await ensureBuiltinModelsLoaded();
+
   const workerBlobUrl = getTesseractWorkerBlobUrl();
   const options = {
     gzip: true,
@@ -36,11 +39,16 @@ export async function getOcrWorker(lang, onProgress) {
     options.workerBlobURL = false; // Directly instantiate worker from blob URL
   }
 
-  const worker = await createWorker(lang, 1, options);
-  activeWorker = worker;
-  activeWorkerLang = lang;
-
-  return worker;
+  try {
+    const worker = await createWorker(lang, 1, options);
+    activeWorker = worker;
+    activeWorkerLang = lang;
+    return worker;
+  } catch (err) {
+    activeWorker = null;
+    activeWorkerLang = null;
+    throw err;
+  }
 }
 
 /**
