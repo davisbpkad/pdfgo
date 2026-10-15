@@ -362,6 +362,19 @@ async function run() {
     fs.copyFileSync(faviconPath, path.join(DIST_DIR, 'favicon.ico'));
   }
 
+  // Generate Netlify _headers and _redirects in publish directory (dist/) for direct CDN priority
+  const netlifyHeaders = `/*\n` +
+    `  Content-Security-Policy: ${CONTENT_SECURITY_POLICY}\n` +
+    `  X-Frame-Options: DENY\n` +
+    `  X-Content-Type-Options: nosniff\n` +
+    `  Referrer-Policy: no-referrer\n` +
+    `  Permissions-Policy: camera=(), microphone=(), geolocation=()\n` +
+    `  Cache-Control: public, max-age=0, must-revalidate\n`;
+  fs.writeFileSync(path.join(DIST_DIR, '_headers'), netlifyHeaders, 'utf-8');
+
+  const netlifyRedirects = `/*    /index.html   200\n`;
+  fs.writeFileSync(path.join(DIST_DIR, '_redirects'), netlifyRedirects, 'utf-8');
+
   // Print Summary Table
   console.log(`\n======================================================`);
   console.log(`                 BUILD SIZE REPORT                     `);

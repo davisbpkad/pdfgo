@@ -68,6 +68,7 @@ async function startServer() {
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       const ext = path.extname(filePath).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
       const headers = {
         'Content-Type': contentType,
         'Cache-Control': 'no-store, no-cache, must-revalidate',

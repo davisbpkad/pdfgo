@@ -46,3 +46,13 @@ test('csp: built HTML carries the shared policy when dist exists', () => {
   assert.ok(meta, 'built HTML must contain a CSP meta tag');
   assert.equal(meta[1], CONTENT_SECURITY_POLICY);
 });
+
+test('csp: dist/_headers matches the shared policy when dist exists', () => {
+  const target = path.join(ROOT, 'dist', '_headers');
+  if (!fs.existsSync(target)) return;
+
+  const content = fs.readFileSync(target, 'utf8');
+  assert.ok(content.includes(CONTENT_SECURITY_POLICY), 'dist/_headers must include shared CSP');
+  assert.equal(allowsWebAssembly(CONTENT_SECURITY_POLICY), true);
+});
+
