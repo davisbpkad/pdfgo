@@ -11,7 +11,7 @@ import { runOcrPipeline } from '../logic/runOcrPipeline.js';
 import { terminateOcrWorker } from '../logic/ocrWorkerManager.js';
 import { convertImageToPngBuffer } from '../../image-to-pdf/logic/convertImageToPngBuffer.js';
 import { buildPdfFromImages } from '../../image-to-pdf/logic/buildPdfFromImages.js';
-import { checkWorkerWasmSupport, getBuildStamp } from '../../../core/wasmCheck.js';
+import { diagnoseWasm, getBuildStamp } from '../../../core/wasmCheck.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
 import BaseProgressBar from '../../../ui/BaseProgressBar.vue';
@@ -64,13 +64,21 @@ async function refreshLangs() {
 }
 
 /**
- * Fail fast when the running HTML file cannot compile WebAssembly (usually a stale build).
+ * Fail fast when the running page cannot compile WebAssembly (stale build or a stale server CSP header).
  */
 async function probeWasmSupport() {
-  const result = await checkWorkerWasmSupport();
+  const result = await diagnoseWasm();
   if (!result.ok) {
     envIssue.value = result;
-    console.warn('[PDFGO] WebAssembly preflight failed:', result.reason, result.message, 'Build:', buildStamp);
+    console.warn(
+      '[PDFGO] WebAssembly preflight failed:',
+      result.reason,
+      '| served from:', result.servedFrom,
+      '| meta CSP allows wasm:', result.metaAllowsWasm,
+      '| blocking policy:', result.enforcedPolicy,
+      '| build:', buildStamp,
+      '\n', result.message
+    );
   }
 }
 

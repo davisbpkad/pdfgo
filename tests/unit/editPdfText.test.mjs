@@ -18,7 +18,7 @@ import {
   splitLines
 } from '../../src/features/edit-pdf/logic/textEditInteractions.js';
 import { renderTextEditsToPdf } from '../../src/features/edit-pdf/logic/renderTextEditsToPdf.js';
-import { checkWasmSupport, classifyWasmError } from '../../src/core/wasmCheck.js';
+import { checkWasmSupport, classifyWasmError, classifyWasmBlock, extractEnforcedPolicy } from '../../src/core/wasmCheck.js';
 
 const CONTAINER = { width: 600, height: 800 };
 
@@ -124,4 +124,19 @@ test('wasmCheck: minimal module compiles in this runtime', async () => {
   const result = await checkWasmSupport();
   assert.equal(result.ok, true, result.message);
   assert.equal(result.reason, 'ok');
+});
+
+test('wasmCheck: distinguishes a stale file from a stale server CSP header', () => {
+  assert.equal(classifyWasmBlock({ documentOk: true, workerOk: true, metaAllowsWasm: true }), 'ok');
+  assert.equal(classifyWasmBlock({ documentOk: false, workerOk: false, metaAllowsWasm: true }), 'host-csp');
+  assert.equal(classifyWasmBlock({ documentOk: false, workerOk: false, metaAllowsWasm: false }), 'stale-file');
+  assert.equal(classifyWasmBlock({ documentOk: true, workerOk: false, metaAllowsWasm: true }), 'worker-csp');
+});
+
+test('wasmCheck: extracts the blocking directive from the reported error', () => {
+  const report =
+    "WebAssembly.compile(): Compiling or instantiating WebAssembly module violates the following Content Security policy directive because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' blob:\".";
+
+  assert.equal(extractEnforcedPolicy(report), "script-src 'self' 'unsafe-inline' blob:");
+  assert.equal(extractEnforcedPolicy('no policy here'), '');
 });

@@ -8,6 +8,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import net from 'net';
+import { CONTENT_SECURITY_POLICY } from './csp.mjs';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -73,7 +74,7 @@ async function startServer() {
         'X-Content-Type-Options': 'nosniff'
       };
       if (ext === '.html') {
-        headers['Content-Security-Policy'] = "default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob: data:; worker-src blob: data: 'self'; child-src blob: 'self'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;";
+        headers['Content-Security-Policy'] = CONTENT_SECURITY_POLICY;
       }
       res.writeHead(200, headers);
       fs.createReadStream(filePath).pipe(res);

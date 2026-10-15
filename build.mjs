@@ -9,6 +9,7 @@ import path from 'path';
 import { build as viteBuild } from 'vite';
 import * as esbuild from 'esbuild';
 import * as fflate from 'fflate';
+import { CONTENT_SECURITY_POLICY, allowsWebAssembly } from './scripts/csp.mjs';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -282,7 +283,7 @@ async function buildVariant(variantType) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob: data:; worker-src blob: data: 'self'; child-src blob: 'self'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;">
+  <meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}">
   <title>PDF To Go</title>
   ${faviconDataUri ? `<link rel="icon" type="image/png" href="${faviconDataUri}">` : ''}
   <style>
@@ -303,10 +304,10 @@ ${minifiedJs}
 </html>`;
 
   // Guard: OCR requires WebAssembly, which the CSP must explicitly allow.
-  if (!/script-src[^;]*'wasm-unsafe-eval'/.test(html)) {
+  if (!allowsWebAssembly(CONTENT_SECURITY_POLICY)) {
     throw new Error(
       "CSP tidak mengizinkan WebAssembly ('wasm-unsafe-eval' hilang pada script-src). " +
-      'OCR akan gagal di browser. Perbaiki CSP di build.mjs dan netlify.toml terlebih dahulu.'
+      'OCR akan gagal di browser. Perbaiki scripts/csp.mjs terlebih dahulu.'
     );
   }
 

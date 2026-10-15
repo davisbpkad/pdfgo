@@ -1,9 +1,11 @@
 /**
- * wasmCheck.js - WebAssembly capability preflight
- * Detects CSP / browser conditions that would block WASM (used by OCR) BEFORE a long job starts.
+ * wasmCheck.js - WebAssembly capability preflight and diagnosis
+ * OCR runs WASM inside a Blob worker. A stale local server or an old deploy can keep sending an
+ * outdated CSP header, which blocks WASM even when the HTML file itself allows it.
  */
 
 const MINIMAL_WASM = new Uint8Array([0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00]);
+const POLICY_ALLOWS_WASM = /script-src[^;]*'wasm-unsafe-eval'/i;
 
 /**
  * Classify a WASM failure into a stable reason code.
@@ -18,7 +20,42 @@ export function classifyWasmError(err) {
 }
 
 /**
- * Check whether the current document can compile WebAssembly.
+ * Decide why WASM is unavailable, based on the document check, the worker check, and the file's own CSP.
+ * @param {{ documentOk: boolean, workerOk: boolean, metaAllowsWasm: boolean }} input
+ * @returns {'ok'|'host-csp'|'stale-file'|'worker-csp'}
+ */
+export function classifyWasmBlock({ documentOk, workerOk, metaAllowsWasm }) {
+  if (documentOk && workerOk) return 'ok';
+  if (!documentOk) return metaAllowsWasm ? 'host-csp' : 'stale-file';
+  return 'worker-csp';
+}
+
+/**
+ * Read the enforced directive out of a browser CSP violation message.
+ * @param {string} message
+ * @returns {string}
+ */
+export function extractEnforcedPolicy(message) {
+  const match = String(message || '').match(/Policy directive:\s*"([^"]+)"/i);
+  return match ? match[1] : '';
+}
+
+/** The CSP declared inside this HTML file (meta tag), if any. */
+export function getMetaPolicy() {
+  if (typeof document === 'undefined') return '';
+  const el = document.querySelector('meta[http-equiv="Content-Security-Policy" i]');
+  return el ? el.getAttribute('content') || '' : '';
+}
+
+/** Where this file is being served from. */
+export function getServedFrom() {
+  if (typeof window === 'undefined' || !window.location) return 'unknown';
+  const { protocol, host } = window.location;
+  return host ? `${protocol}//${host}` : protocol;
+}
+
+/**
+ * Compile WebAssembly in the document context.
  * @returns {Promise<{ ok: boolean, reason: string, message: string }>}
  */
 export async function checkWasmSupport() {
@@ -45,7 +82,7 @@ self.onmessage = async () => {
 `;
 
 /**
- * Check WebAssembly support INSIDE a Blob worker, which is the environment OCR actually uses.
+ * Compile WebAssembly inside a Blob worker, the environment OCR actually uses.
  * @param {number} [timeoutMs=4000]
  * @returns {Promise<{ ok: boolean, reason: string, message: string }>}
  */
@@ -67,19 +104,24 @@ export function checkWorkerWasmSupport(timeoutMs = 4000) {
       resolve(result);
     };
 
-    const timer = setTimeout(() => finish({ ok: false, reason: 'timeout', message: 'Pemeriksaan WebAssembly melebihi batas waktu.' }), timeoutMs);
+    const timer = setTimeout(
+      () => finish({ ok: false, reason: 'timeout', message: 'Pemeriksaan WebAssembly melebihi batas waktu.' }),
+      timeoutMs
+    );
 
     try {
       url = URL.createObjectURL(new Blob([WORKER_PROBE_CODE], { type: 'application/javascript' }));
       worker = new Worker(url);
       worker.onmessage = (e) => {
         clearTimeout(timer);
-        const ok = !!(e.data && e.data.ok);
-        finish(ok ? { ok: true, reason: 'ok', message: '' } : { ok: false, reason: classifyWasmError(e.data && e.data.reason), message: String((e.data && e.data.reason) || '') });
+        const data = e.data || {};
+        const reason = data.ok ? 'ok' : classifyWasmError(data.reason);
+        finish({ ok: !!data.ok, reason, message: String(data.reason || '') });
       };
       worker.onerror = (e) => {
         clearTimeout(timer);
-        finish({ ok: false, reason: classifyWasmError(e && e.message) === 'unknown' ? 'worker' : classifyWasmError(e && e.message), message: String((e && e.message) || 'Gagal menjalankan worker.') });
+        const message = String((e && e.message) || 'Gagal menjalankan worker.');
+        finish({ ok: false, reason: classifyWasmError(message) === 'unknown' ? 'worker' : classifyWasmError(message), message });
       };
       worker.postMessage('probe');
     } catch (err) {
@@ -90,9 +132,38 @@ export function checkWorkerWasmSupport(timeoutMs = 4000) {
 }
 
 /**
- * Read the build stamp embedded by build.mjs (used to spot stale HTML files).
- * @returns {string}
+ * Full preflight used by the OCR tool: document check, worker check, and the reason behind a block.
+ * @returns {Promise<{ ok: boolean, reason: string, message: string, metaAllowsWasm: boolean, enforcedPolicy: string, servedFrom: string }>}
  */
+export async function diagnoseWasm() {
+  const metaPolicy = getMetaPolicy();
+  const metaAllowsWasm = POLICY_ALLOWS_WASM.test(metaPolicy);
+  const servedFrom = getServedFrom();
+
+  const documentResult = await checkWasmSupport();
+  const workerResult = documentResult.ok
+    ? await checkWorkerWasmSupport()
+    : { ok: false, message: documentResult.message };
+
+  const reason = classifyWasmBlock({
+    documentOk: documentResult.ok,
+    workerOk: workerResult.ok,
+    metaAllowsWasm
+  });
+
+  const message = documentResult.ok ? workerResult.message : documentResult.message;
+
+  return {
+    ok: reason === 'ok',
+    reason,
+    message,
+    metaAllowsWasm,
+    enforcedPolicy: extractEnforcedPolicy(message),
+    servedFrom
+  };
+}
+
+/** Build stamp embedded by build.mjs, used to spot stale HTML files. */
 export function getBuildStamp() {
   if (typeof window === 'undefined') return 'unknown';
   return window.__PDFGO_BUILD__ || 'unknown';
