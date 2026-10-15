@@ -21,6 +21,7 @@ import OcrTool from './features/ocr/components/OcrTool.vue';
 import UnlockTool from './features/unlock/components/UnlockTool.vue';
 import ProtectTool from './features/protect/components/ProtectTool.vue';
 import PdfToMarkdownTool from './features/pdf-to-markdown/components/PdfToMarkdownTool.vue';
+import ScanToPdfTool from './features/scan-to-pdf/components/ScanToPdfTool.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -62,6 +63,7 @@ function closeSidebar() {
         <UnlockTool v-else-if="activeToolId === 'unlock'" />
         <ProtectTool v-else-if="activeToolId === 'protect'" />
         <PdfToMarkdownTool v-else-if="activeToolId === 'pdf-to-markdown'" />
+        <ScanToPdfTool v-else-if="activeToolId === 'scan-to-pdf'" />
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">

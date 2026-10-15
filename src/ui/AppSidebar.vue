@@ -38,6 +38,7 @@ const menuSections = [
 menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('unlock');
 menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('protect');
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-markdown');
+menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('scan-to-pdf');
 
 function selectTool(id) {
   navigateTo(id);
