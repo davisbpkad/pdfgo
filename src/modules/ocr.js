@@ -103,6 +103,10 @@ async function getOcrWorker(lang, onProgress) {
   } catch (err) {
     activeWorker = null;
     activeWorkerLang = null;
+    const msg = String(err?.message || err || '');
+    if (msg.includes('Content Security') || msg.includes('unsafe-eval') || msg.includes('WebAssembly')) {
+      throw new Error('Pelanggaran CSP: Browser masih memuat versi file lama dari cache. Silakan tutup tab ini dan buka ulang file "dist/PDF To Go.html", atau lakukan Hard Reload (Cmd + Shift + R).');
+    }
     throw err;
   }
 }
