@@ -44,6 +44,7 @@ menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push(
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-powerpoint');
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('excel-to-pdf');
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('word-to-pdf');
+menuSections.find(s => s.titleKey === 'tools.section.layout')?.toolIds.push('edit-pdf');
 
 function selectTool(id) {
   navigateTo(id);

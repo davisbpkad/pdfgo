@@ -179,6 +179,26 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal memproses dokumen Word: {reason}'
       },
+      editPdf: {
+        title: 'Edit PDF / Tambah Objek',
+        desc: 'Tambahkan teks baru, kotak penutup (whiteout), bentuk garis, panah, coretan tangan, dan gambar di atas dokumen PDF.',
+        addLabel: 'Tambah Objek',
+        btnText: 'Teks',
+        btnWhiteout: 'Tutup Teks',
+        btnRect: 'Kotak',
+        btnEllipse: 'Lingkaran',
+        btnLine: 'Garis',
+        btnDraw: 'Coretan',
+        btnImage: 'Gambar',
+        panelTitle: 'Daftar Objek',
+        textLabel: 'Isi Teks:',
+        removeBtn: 'Hapus Objek Ini',
+        noSelection: 'Klik objek di kanvas untuk menggeser, mengubah ukuran, atau mengedit propertinya.',
+        disclaimer: 'Alat ini menambah objek di atas halaman. Mengubah teks yang sudah ada di dalam PDF tidak didukung — tutupi teks lama lalu tulis teks baru.',
+        saveBtn: 'Ratakan & Simpan PDF',
+        successTitle: 'Dokumen PDF Berhasil Disimpan!',
+        failed: 'Gagal menyimpan PDF: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -635,6 +655,26 @@ const translations = {
         successToast: 'Word document processed successfully!',
         resetBtn: 'Process Another File',
         failed: 'Failed to process Word document: {reason}'
+      },
+      editPdf: {
+        title: 'Edit PDF / Add Objects',
+        desc: 'Add new text, whiteout boxes, shapes, arrows, freehand drawings, and images on top of PDF documents.',
+        addLabel: 'Add Object',
+        btnText: 'Text',
+        btnWhiteout: 'Whiteout',
+        btnRect: 'Rectangle',
+        btnEllipse: 'Ellipse',
+        btnLine: 'Line',
+        btnDraw: 'Draw',
+        btnImage: 'Image',
+        panelTitle: 'Object List',
+        textLabel: 'Text Content:',
+        removeBtn: 'Remove This Object',
+        noSelection: 'Click an object on the canvas to move, resize, or adjust its properties.',
+        disclaimer: 'This tool adds objects on top of the page. Editing existing in-place text inside PDF is not supported — whiteout old text and type new text over it.',
+        saveBtn: 'Flatten & Save PDF',
+        successTitle: 'PDF Document Saved Successfully!',
+        failed: 'Failed to save PDF: {reason}'
       },
       merge: {
         title: 'Merge PDF',
