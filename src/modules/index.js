@@ -20,6 +20,7 @@ import * as pdfToMarkdown from './pdf-to-markdown.js';
 import * as scanToPdf from './scan-to-pdf.js';
 import * as htmlToPdf from './html-to-pdf.js';
 import * as pdfToWord from './pdf-to-word.js';
+import * as pdfToPowerpoint from './pdf-to-powerpoint.js';
 
 export const allModules = [
   merge,
@@ -42,5 +43,6 @@ allModules.push(pdfToMarkdown);
 allModules.push(scanToPdf);
 allModules.push(htmlToPdf);
 allModules.push(pdfToWord);
+allModules.push(pdfToPowerpoint);
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

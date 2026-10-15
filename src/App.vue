@@ -24,6 +24,7 @@ import PdfToMarkdownTool from './features/pdf-to-markdown/components/PdfToMarkdo
 import ScanToPdfTool from './features/scan-to-pdf/components/ScanToPdfTool.vue';
 import HtmlToPdfTool from './features/html-to-pdf/components/HtmlToPdfTool.vue';
 import PdfToWordTool from './features/pdf-to-word/components/PdfToWordTool.vue';
+import PdfToPowerpointTool from './features/pdf-to-powerpoint/components/PdfToPowerpointTool.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -68,6 +69,7 @@ function closeSidebar() {
         <ScanToPdfTool v-else-if="activeToolId === 'scan-to-pdf'" />
         <HtmlToPdfTool v-else-if="activeToolId === 'html-to-pdf'" />
         <PdfToWordTool v-else-if="activeToolId === 'pdf-to-word'" />
+        <PdfToPowerpointTool v-else-if="activeToolId === 'pdf-to-powerpoint'" />
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">

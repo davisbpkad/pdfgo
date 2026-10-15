@@ -41,6 +41,7 @@ menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push(
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('scan-to-pdf');
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('html-to-pdf');
 menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-word');
+menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-powerpoint');
 
 function selectTool(id) {
   navigateTo(id);

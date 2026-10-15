@@ -135,6 +135,24 @@ const translations = {
         resetBtn: 'Kerjakan File Lain',
         failed: 'Gagal mengonversi ke Word: {reason}'
       },
+      pdfToPowerpoint: {
+        title: 'PDF ke PowerPoint',
+        desc: 'Konversi setiap halaman PDF menjadi slide presentasi Microsoft PowerPoint (.pptx) dengan tata letak presisi.',
+        optionsTitle: 'Opsi Presentasi PowerPoint:',
+        pageRangeLabel: 'Halaman yang Dikonversi:',
+        pageRangePlaceholder: 'Semua (contoh: 1-3, 5)',
+        qualityLabel: 'Kualitas Gambar Slide:',
+        qualityDraft: 'Cepat (1.0x)',
+        qualityNormal: 'Standar (1.5x)',
+        qualityHigh: 'Tinggi (2.0x)',
+        disclaimer: 'Setiap halaman diubah menjadi gambar slide seukuran halaman dokumen aslinya untuk menjaga tampilan 100% presisi.',
+        actionBtn: 'Simpan sebagai PowerPoint',
+        successTitle: 'Konversi PowerPoint Berhasil!',
+        successDetail: '{slides} slide • Ukuran berkas: {size}',
+        downloadBtn: 'Unduh Presentasi PowerPoint',
+        resetBtn: 'Kerjakan File Lain',
+        failed: 'Gagal mengonversi ke PowerPoint: {reason}'
+      },
       merge: {
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
@@ -547,6 +565,24 @@ const translations = {
         downloadBtn: 'Download Word Document',
         resetBtn: 'Process Another File',
         failed: 'Failed to convert to Word: {reason}'
+      },
+      pdfToPowerpoint: {
+        title: 'PDF to PowerPoint',
+        desc: 'Convert every PDF page into Microsoft PowerPoint (.pptx) presentation slides with precision layout.',
+        optionsTitle: 'PowerPoint Presentation Options:',
+        pageRangeLabel: 'Pages to Convert:',
+        pageRangePlaceholder: 'All (e.g. 1-3, 5)',
+        qualityLabel: 'Slide Image Quality:',
+        qualityDraft: 'Draft (1.0x)',
+        qualityNormal: 'Standard (1.5x)',
+        qualityHigh: 'High (2.0x)',
+        disclaimer: 'Each page is converted into a slide image matching original document dimensions to guarantee 100% visual precision.',
+        actionBtn: 'Save as PowerPoint',
+        successTitle: 'PowerPoint Conversion Succeeded!',
+        successDetail: '{slides} slides • File size: {size}',
+        downloadBtn: 'Download PowerPoint File',
+        resetBtn: 'Process Another File',
+        failed: 'Failed to convert to PowerPoint: {reason}'
       },
       merge: {
         title: 'Merge PDF',
