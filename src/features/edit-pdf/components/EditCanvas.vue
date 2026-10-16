@@ -10,7 +10,7 @@ const props = defineProps({
   scale: { type: Number, default: 1.0 }
 });
 
-const emit = defineEmits(['update-text', 'start-edit', 'rendered']);
+const emit = defineEmits(['update-text', 'start-edit']);
 const canvasRef = ref(null);
 
 onMounted(() => renderPage());
@@ -26,7 +26,6 @@ async function renderPage() {
     const canvas = canvasRef.value;
     canvas.width = Math.floor(viewport.width);
     canvas.height = Math.floor(viewport.height);
-    emit('rendered', { width: canvas.width, height: canvas.height });
     await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
   } catch (err) {
     console.warn('Gagal merender halaman edit:', err);
