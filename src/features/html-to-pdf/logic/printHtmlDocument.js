@@ -56,6 +56,9 @@ export function printHtmlViaIframe(htmlContent) {
 
   const printableHtml = buildPrintableHtml(htmlContent);
   const iframe = document.createElement('iframe');
+  // No 'allow-scripts': any markup that survives sanitizing still cannot execute.
+  // 'allow-same-origin' is required so the parent can call contentWindow.print().
+  iframe.setAttribute('sandbox', 'allow-same-origin allow-modals');
   iframe.style.position = 'fixed';
   iframe.style.right = '0';
   iframe.style.bottom = '0';

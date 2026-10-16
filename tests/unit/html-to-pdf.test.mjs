@@ -48,6 +48,44 @@ test('html-to-pdf: sanitizeHtml neutralizes external src and url() to keep offli
   assert.ok(clean.includes('src=""'));
 });
 
+test('html-to-pdf: sanitizeHtml blocks markup that bypassed the old regex denylist', () => {
+  const payloads = [
+    '<script>alert(1)',                                     // unclosed script
+    '<a href=javascript:alert(1)>x</a>',                    // unquoted protocol
+    '<a href="javascript&colon;alert(1)">x</a>',            // entity-encoded protocol
+    '<meta http-equiv=refresh content="0;url=https://evil.com">',
+    '<link rel=stylesheet href="https://evil.com/x.css">',
+    '<img src="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">',
+    '<img src=x onerror=alert(1)>'                          // event handler without quotes
+  ];
+  for (const payload of payloads) {
+    const clean = sanitizeHtml(payload);
+    assert.ok(!/<script/i.test(clean), `script survived: ${clean}`);
+    assert.ok(!/<meta/i.test(clean), `meta survived: ${clean}`);
+    assert.ok(!/<link/i.test(clean), `link survived: ${clean}`);
+    assert.ok(!/javascript:/i.test(clean), `javascript: survived: ${clean}`);
+    assert.ok(!/evil\.com/i.test(clean), `external host survived: ${clean}`);
+    assert.ok(!/\son\w+\s*=/i.test(clean), `event handler survived: ${clean}`);
+  }
+});
+
+test('html-to-pdf: sanitizeHtml keeps safe markup, data URIs and table structure', () => {
+  const clean = sanitizeHtml(`
+    <table><tr><th colspan="2">Judul</th></tr><tr><td>Isi</td><td>Lagi</td></tr></table>
+    <p style="color: red">Teks <strong>tebal</strong></p>
+    <img src="data:image/png;base64,AAAA" alt="gambar" width="100">
+    <div style="background: url(data:image/png;base64,BBBB)">Box</div>
+  `);
+  assert.ok(clean.includes('<table>'));
+  assert.ok(clean.includes('colspan="2"'));
+  assert.ok(clean.includes('<strong>tebal</strong>'));
+  assert.ok(clean.includes('src="data:image/png;base64,AAAA"'));
+  assert.ok(clean.includes('alt="gambar"'));
+  assert.ok(clean.includes('width="100"'));
+  assert.ok(clean.includes("url(data:image/png;base64,BBBB)"));
+  assert.ok(clean.includes('Judul'));
+});
+
 test('html-to-pdf: calculateCanvasPagination calculates A4 slices accurately', () => {
   const canvasWidth = 794; // approx A4 96dpi
   // If height is 2246 (approx 2 A4 pages at 794 width)
