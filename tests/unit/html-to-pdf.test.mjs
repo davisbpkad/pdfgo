@@ -86,6 +86,17 @@ test('html-to-pdf: sanitizeHtml keeps safe markup, data URIs and table structure
   assert.ok(clean.includes('Judul'));
 });
 
+test('html-to-pdf: sanitizeHtml keeps harmless presentational attributes', () => {
+  const clean = sanitizeHtml(
+    '<table border="1" cellpadding="4"><tr><td align="center" valign="top" bgcolor="#eee">Isi</td></tr></table>'
+  );
+  assert.ok(clean.includes('border="1"'));
+  assert.ok(clean.includes('cellpadding="4"'));
+  assert.ok(clean.includes('align="center"'));
+  assert.ok(clean.includes('valign="top"'));
+  assert.ok(clean.includes('bgcolor="#eee"'));
+});
+
 test('html-to-pdf: calculateCanvasPagination calculates A4 slices accurately', () => {
   const canvasWidth = 794; // approx A4 96dpi
   // If height is 2246 (approx 2 A4 pages at 794 width)

@@ -23,7 +23,9 @@ const DROP_WITH_CONTENT = new Set([
 ]);
 
 const ALLOWED_ATTRS = new Set([
-  'style', 'colspan', 'rowspan', 'alt', 'width', 'height', 'src', 'href'
+  'style', 'colspan', 'rowspan', 'alt', 'width', 'height', 'src', 'href',
+  // Presentational attributes pasted HTML still uses; they cannot execute anything.
+  'align', 'valign', 'bgcolor', 'border', 'cellpadding', 'cellspacing', 'title', 'dir'
 ]);
 
 const URL_ATTRS = new Set(['src', 'href']);
