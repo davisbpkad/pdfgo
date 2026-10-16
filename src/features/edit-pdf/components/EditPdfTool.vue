@@ -31,7 +31,7 @@ const {
 } = useOverlayObjects(currentPage);
 
 const {
-  currentEdits, changedCount, setText, snapshot: snapshotText, reset: resetTextEdits, clear: clearTextEdits
+  editsByPage, currentEdits, changedCount, setText, snapshot: snapshotText, reset: resetTextEdits, clear: clearTextEdits
 } = useTextEdits(currentPage, pdfDocProxy);
 
 onMounted(() => {
