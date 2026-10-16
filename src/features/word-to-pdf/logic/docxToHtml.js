@@ -17,7 +17,12 @@ export async function docxToHtml(docxBuffer, options = {}) {
     : docxBuffer.slice(0);
 
   const Mammoth = mammoth.default || mammoth;
-  const result = await Mammoth.convertToHtml({ buffer: safeArrayBuffer }, options);
+  // mammoth's browser build only reads `arrayBuffer`, its Node build only reads
+  // `buffer`; passing both keeps one code path working in the browser and in tests.
+  const result = await Mammoth.convertToHtml(
+    { buffer: safeArrayBuffer, arrayBuffer: safeArrayBuffer },
+    options
+  );
 
   const rawHtml = result.value || '';
   const sanitized = sanitizeHtml(rawHtml);
