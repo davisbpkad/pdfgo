@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { downloadFile } from '../../../core/download.js';
@@ -82,6 +82,11 @@ function resetState() {
   isProcessing.value = false;
   progressVal.value = 0;
 }
+
+// Leaving the tool must not keep every scanned page alive for the rest of the session.
+onUnmounted(() => {
+  pages.value.forEach((p) => URL.revokeObjectURL(p.url));
+});
 </script>
 
 <template>

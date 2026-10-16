@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
@@ -71,6 +71,13 @@ function clearAll() {
   });
   imageList.value = [];
 }
+
+// Leaving the tool must not keep every image blob alive for the rest of the session.
+onUnmounted(() => {
+  imageList.value.forEach(img => {
+    if (img.thumbUrl) URL.revokeObjectURL(img.thumbUrl);
+  });
+});
 
 function onDragStart(idx) {
   draggedIdx = idx;

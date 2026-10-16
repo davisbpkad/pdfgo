@@ -39,8 +39,12 @@ async function handleIncomingFiles(files) {
       const buffer = await file.arrayBuffer();
       try {
         const docProxy = await loadPdfJsDocument(buffer);
-        item.pageCount = docProxy.numPages;
-        item.thumbnail = await generateThumbnail(docProxy, 120);
+        try {
+          item.pageCount = docProxy.numPages;
+          item.thumbnail = await generateThumbnail(docProxy, 120);
+        } finally {
+          await docProxy.destroy();
+        }
       } catch (err) {
         if (err.name === 'PasswordException' || (err.message && err.message.includes('password'))) {
           item.isEncrypted = true;
@@ -62,8 +66,12 @@ async function unlockFile({ index, password }) {
   try {
     const buffer = await item.file.arrayBuffer();
     const docProxy = await loadPdfJsDocument(buffer, password);
-    item.pageCount = docProxy.numPages;
-    item.thumbnail = await generateThumbnail(docProxy, 120);
+    try {
+      item.pageCount = docProxy.numPages;
+      item.thumbnail = await generateThumbnail(docProxy, 120);
+    } finally {
+      await docProxy.destroy();
+    }
     item.password = password;
     item.isEncrypted = false;
     item.error = null;
@@ -118,12 +126,15 @@ async function handleMerge() {
 
     const blob = new Blob([mergedBytes], { type: 'application/pdf' });
     const verifyDoc = await loadPdfJsDocument(mergedBytes);
-
-    mergedResult.value = {
-      blob,
-      pageCount: verifyDoc.numPages,
-      size: (blob.size / 1024 / 1024).toFixed(2) + ' MB'
-    };
+    try {
+      mergedResult.value = {
+        blob,
+        pageCount: verifyDoc.numPages,
+        size: (blob.size / 1024 / 1024).toFixed(2) + ' MB'
+      };
+    } finally {
+      await verifyDoc.destroy();
+    }
 
     isProcessing.value = false;
     downloadFile(blob, `PDFToolkit_Merged_${Date.now()}.pdf`);
