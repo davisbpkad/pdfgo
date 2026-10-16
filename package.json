@@ -8,7 +8,7 @@
     "build:lite": "node build.mjs --variant=lite",
     "serve": "node scripts/serve.mjs",
     "test": "node --test tests/unit/*.test.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "release": "node release.mjs"
   },
   "keywords": [],
