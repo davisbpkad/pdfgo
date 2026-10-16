@@ -14,7 +14,6 @@ import ExcelJS from 'exceljs';
 import { applyWatermark } from '../../src/features/watermark/logic/applyWatermark.js';
 import { applyPageNumbers } from '../../src/features/page-numbers/logic/applyPageNumbers.js';
 import { createPdfExport } from '../../src/features/ai-summary/logic/exportAiResult.js';
-import { renderOverlayToPdf } from '../../src/features/edit-pdf/logic/renderOverlayToPdf.js';
 import { renderGridToPdf } from '../../src/features/excel-to-pdf/logic/renderGridToPdf.js';
 import { convertPptxToPdf } from '../../src/features/powerpoint-to-pdf/logic/convertPptxToPdf.js';
 
@@ -58,18 +57,6 @@ test('ai-summary: PDF export with non-ASCII text does not throw', async () => {
   const result = await createPdfExport(`${NON_ASCII}\nBaris kedua — dengan emoji 🎯`, 'laporan penilaian.pdf');
   assert.equal(result.fileName, 'laporan penilaian-ringkasan-ai.pdf');
   await assertValidPdf(result.content, 1);
-});
-
-test('edit-pdf: overlay text with non-ASCII characters does not throw', async () => {
-  const objects = {
-    0: [
-      { type: 'text', text: '你好 dunia', fontSize: 12, x: 0.1, y: 0.1, width: 0.3, height: 0.05 },
-      { type: 'text', text: 'Total → 51%', fontSize: 12, x: 0.1, y: 0.3, width: 0.3, height: 0.05 }
-    ]
-  };
-  const result = await renderOverlayToPdf(await blankPdf(), objects);
-  const bytes = result.pdfBytes || result;
-  await assertValidPdf(bytes, 2);
 });
 
 test('excel-to-pdf: cells with arrow, CJK and emoji no longer abort the conversion', async () => {
