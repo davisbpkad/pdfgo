@@ -5,9 +5,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PDFDocument } from 'pdf-lib';
-import { parsePageRange, extractPages, splitEveryN } from '../../src/modules/split.js';
-import { reorganizePdfPages } from '../../src/modules/organize.js';
-import { buildPdfFromImages } from '../../src/modules/image-to-pdf.js';
+import { parsePageRange } from '../../src/features/split/logic/parsePageRange.js';
+import { extractPages } from '../../src/features/split/logic/extractPages.js';
+import { splitEveryN } from '../../src/features/split/logic/splitEveryN.js';
+import { reorganizePdfPages } from '../../src/features/organize/logic/reorganizePdfPages.js';
+import { buildPdfFromImages } from '../../src/features/image-to-pdf/logic/buildPdfFromImages.js';
 
 test('split: parsePageRange parser logic', () => {
   const result1 = parsePageRange('1-3, 5, 8-10', 12);

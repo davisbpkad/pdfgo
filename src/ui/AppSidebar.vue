@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { activeToolId, navigateTo } from '../app/router.js';
 import { t } from '../app/providers/i18n.js';
-import { allModules, moduleMap } from '../modules/index.js';
+import { allModules, moduleMap } from '../features/registry.js';
 
 defineProps({
   isOpen: {

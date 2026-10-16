@@ -5,7 +5,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PDFDocument } from 'pdf-lib';
-import { mergePdfFiles } from '../../src/modules/merge.js';
+import { mergePdfFiles } from '../../src/features/merge/logic/mergePdfFiles.js';
 import { loadPdfJsDocument } from '../../src/core/pdf.js';
 
 test('merge: successfully merges multiple PDF documents', async () => {

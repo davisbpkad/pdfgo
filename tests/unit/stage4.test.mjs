@@ -5,10 +5,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PDFDocument } from 'pdf-lib';
-import { applyWatermark } from '../../src/modules/watermark.js';
-import { applyPageNumbers } from '../../src/modules/page-numbers.js';
-import { applySignatures } from '../../src/modules/sign.js';
-import { inspectAcroForm, fillAcroForm } from '../../src/modules/form.js';
+import { applyWatermark } from '../../src/features/watermark/logic/applyWatermark.js';
+import { applyPageNumbers } from '../../src/features/page-numbers/logic/applyPageNumbers.js';
+import { applySignatures } from '../../src/features/sign/logic/applySignatures.js';
+import { inspectAcroForm } from '../../src/features/form/logic/inspectAcroForm.js';
+import { fillAcroForm } from '../../src/features/form/logic/fillAcroForm.js';
 
 test('watermark: applies watermark to PDF document', async () => {
   const doc = await PDFDocument.create();

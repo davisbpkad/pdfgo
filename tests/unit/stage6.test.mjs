@@ -10,12 +10,10 @@ import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { loadPdfJsDocument } from '../../src/core/pdf.js';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
-import {
-  parsePageRange,
-  sanitizeTextForPdf,
-  formatOcrText,
-  buildSearchablePdf
-} from '../../src/modules/ocr.js';
+import { parsePageRange } from '../../src/features/ocr/logic/parsePageRange.js';
+import { sanitizeTextForPdf } from '../../src/features/ocr/logic/sanitizeTextForPdf.js';
+import { formatOcrText } from '../../src/features/ocr/logic/formatOcrText.js';
+import { buildSearchablePdf } from '../../src/features/ocr/logic/buildSearchablePdf.js';
 
 test('Tahap 6: parsePageRange parses single and multi-page range strings', () => {
   // Empty or whitespace returns all pages

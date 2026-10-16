@@ -1,12 +1,6 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
-
-function hexToRgb(hex) {
-  let clean = (hex || '#000000').replace('#', '');
-  if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
-  const num = parseInt(clean, 16);
-  return rgb(((num >> 16) & 255) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255);
-}
+import { hexToRgb } from '../../edit-pdf/logic/hexColor.js';
 
 /**
  * Stamp page numbers across a PDF document
