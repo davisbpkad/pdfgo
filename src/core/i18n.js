@@ -182,7 +182,7 @@ const translations = {
       editPdf: {
         title: 'Edit Tulisan PDF',
         desc: 'Klik tulisan yang sudah ada di halaman, lalu ketik atau hapus seperti mengetik biasa. Tulisan lama ditutupi dan ditulis ulang memakai font bawaan.',
-        saveBtn: 'Ratakan & Simpan PDF',
+        saveBtn: 'Simpan PDF',
         successTitle: 'Dokumen PDF Berhasil Disimpan!',
         failed: 'Gagal menyimpan PDF: {reason}',
         textChanged: '{count} tulisan diubah',
@@ -690,7 +690,7 @@ const translations = {
       editPdf: {
         title: 'Edit PDF Text',
         desc: 'Click text that already exists on the page, then type or delete as usual. The old text is covered and retyped using a built-in font.',
-        saveBtn: 'Flatten & Save PDF',
+        saveBtn: 'Save PDF',
         successTitle: 'PDF Document Saved Successfully!',
         failed: 'Failed to save PDF: {reason}',
         textChanged: '{count} text lines changed',
