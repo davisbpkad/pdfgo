@@ -30,13 +30,22 @@ onMounted(() => {
 });
 
 async function loadDocument(file) {
-  activeFile.value = file;
-  rawBuffer = await file.arrayBuffer();
-  const rawDoc = await loadPdfJsDocument(new Uint8Array(rawBuffer));
-  pdfDocProxy.value = unwrapPdfProxy(rawDoc);
-  totalPages.value = pdfDocProxy.value.numPages;
-  currentPage.value = 1;
-  clearTextEdits();
+  try {
+    const buffer = await file.arrayBuffer();
+    const rawDoc = await loadPdfJsDocument(new Uint8Array(buffer));
+    rawBuffer = buffer;
+    pdfDocProxy.value = unwrapPdfProxy(rawDoc);
+    totalPages.value = pdfDocProxy.value.numPages;
+    currentPage.value = 1;
+    activeFile.value = file;
+    clearTextEdits();
+  } catch (err) {
+    // A file that is not a real PDF must not leave the tool in a half-loaded state.
+    rawBuffer = null;
+    pdfDocProxy.value = null;
+    activeFile.value = null;
+    showToast(t('tools.editPdf.openFailed', { reason: err.message || '' }), 'error');
+  }
 }
 
 async function handleSave() {
