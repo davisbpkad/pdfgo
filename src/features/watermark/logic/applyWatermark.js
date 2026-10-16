@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib';
 import { parsePageRange } from '../../split/logic/parsePageRange.js';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 function hexToRgb(hex) {
   let clean = (hex || '#000000').replace('#', '');
@@ -56,7 +57,12 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
     else if (pageFilter === 'custom' && customPages.includes(pageNum)) targetIndices.push(i);
   }
 
-  const textWidth = font.widthOfTextAtSize(text, fontSize);
+  const safeText = sanitizeTextForPdf(text);
+  if (!safeText) {
+    throw new Error('Teks watermark kosong atau hanya berisi karakter yang tidak didukung font PDF.');
+  }
+
+  const textWidth = font.widthOfTextAtSize(safeText, fontSize);
   const textHeight = font.heightAtSize(fontSize);
 
   for (let idx = 0; idx < targetIndices.length; idx++) {
@@ -69,7 +75,7 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
       const stepY = Math.max(textHeight + 80, 150);
       for (let x = -width * 0.5; x < width * 1.5; x += stepX) {
         for (let y = -height * 0.5; y < height * 1.5; y += stepY) {
-          page.drawText(text, {
+          page.drawText(safeText, {
             x,
             y,
             size: fontSize * 0.7,
@@ -86,7 +92,7 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
       const x = (width - (textWidth * Math.cos(rad) - textHeight * Math.sin(rad))) / 2;
       const y = (height - (textWidth * Math.sin(rad) + textHeight * Math.cos(rad))) / 2;
 
-      page.drawText(text, {
+      page.drawText(safeText, {
         x,
         y,
         size: fontSize,
@@ -99,7 +105,7 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
       const x = (width - textWidth) / 2;
       const y = (height - textHeight) / 2;
 
-      page.drawText(text, {
+      page.drawText(safeText, {
         x,
         y,
         size: fontSize,

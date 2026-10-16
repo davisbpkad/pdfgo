@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 export function createMarkdownExport(text, originalFileName = 'dokumen') {
   const safeName = originalFileName.replace(/\.[^/.]+$/, '');
@@ -38,7 +39,7 @@ export async function createPdfExport(text, originalFileName = 'dokumen') {
   let y = pageHeight - margin;
 
   // Header Title
-  page.drawText(`Ringkasan AI: ${safeName}`, {
+  page.drawText(sanitizeTextForPdf(`Ringkasan AI: ${safeName}`), {
     x: margin,
     y,
     size: 14,
@@ -47,7 +48,7 @@ export async function createPdfExport(text, originalFileName = 'dokumen') {
   });
   y -= lineHeight * 2;
 
-  const rawLines = (text || '').split('\n');
+  const rawLines = String(text || '').split('\n').map(sanitizeTextForPdf);
   for (const rawLine of rawLines) {
     const words = rawLine.split(/\s+/);
     let currentLine = '';

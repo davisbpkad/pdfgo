@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 function hexToRgb(hex) {
   let clean = (hex || '#000000').replace('#', '');
@@ -48,34 +49,36 @@ export async function applyPageNumbers(srcBuffer, options, onProgress = null) {
     const page = pdfDoc.getPage(i);
     const { width, height } = page.getSize();
 
-    const text = format
+    const text = sanitizeTextForPdf(format
       .replace(/\{n\}/g, String(pageCounter))
-      .replace(/\{total\}/g, String(effectiveTotal));
+      .replace(/\{total\}/g, String(effectiveTotal)));
 
-    const textWidth = font.widthOfTextAtSize(text, fontSize);
-    const textHeight = font.heightAtSize(fontSize);
+    if (text) {
+      const textWidth = font.widthOfTextAtSize(text, fontSize);
+      const textHeight = font.heightAtSize(fontSize);
 
-    let x = margin;
-    if (position.includes('center')) {
-      x = (width - textWidth) / 2;
-    } else if (position.includes('right')) {
-      x = width - margin - textWidth;
+      let x = margin;
+      if (position.includes('center')) {
+        x = (width - textWidth) / 2;
+      } else if (position.includes('right')) {
+        x = width - margin - textWidth;
+      }
+
+      let y = margin;
+      if (position.startsWith('top')) {
+        y = height - margin - textHeight;
+      } else if (position.startsWith('middle')) {
+        y = (height - textHeight) / 2;
+      }
+
+      page.drawText(text, {
+        x,
+        y,
+        size: fontSize,
+        font,
+        color
+      });
     }
-
-    let y = margin;
-    if (position.startsWith('top')) {
-      y = height - margin - textHeight;
-    } else if (position.startsWith('middle')) {
-      y = (height - textHeight) / 2;
-    }
-
-    page.drawText(text, {
-      x,
-      y,
-      size: fontSize,
-      font,
-      color
-    });
 
     pageCounter++;
 

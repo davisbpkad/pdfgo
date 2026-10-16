@@ -2,6 +2,7 @@ import * as fflate from 'fflate';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { parsePresentationDimensions, parseSlideElements, parseSlideRels } from './parseSlideXml.js';
 import { hexToRgb } from '../../edit-pdf/logic/hexColor.js';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 export async function convertPptxToPdf(pptxBuffer, options = {}) {
   const { onProgress = null } = options;
@@ -80,7 +81,7 @@ export async function convertPptxToPdf(pptxBuffer, options = {}) {
         for (const run of el.textRuns) {
           const size = Math.max(8, run.fontSize || 14);
           const yPos = Math.max(0, heightPt - (el.yPt + currentYOffset + size));
-          page.drawText(run.text, {
+          page.drawText(sanitizeTextForPdf(run.text), {
             x: el.xPt,
             y: yPos,
             size,

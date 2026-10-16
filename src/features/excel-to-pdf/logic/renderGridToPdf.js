@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { readWorkbook } from './readSheet.js';
 import { sheetToGrid } from './sheetToGrid.js';
 import { fitText } from './fitText.js';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 /**
  * Convert Excel workbook or CSV buffer into a formatted PDF document
@@ -40,7 +41,7 @@ export async function renderGridToPdf(buffer, options = {}) {
       let currentY = pageHeight - margin;
 
       // Draw Sheet Header
-      page.drawText(`${sheet.name} (Halaman ${pIdx + 1} dari ${pages.length})`, {
+      page.drawText(sanitizeTextForPdf(`${sheet.name} (Halaman ${pIdx + 1} dari ${pages.length})`), {
         x: margin,
         y: currentY - 10,
         size: 9,
@@ -62,7 +63,7 @@ export async function renderGridToPdf(buffer, options = {}) {
           borderColor: rgb(0.1, 0.1, 0.1),
           borderWidth: 1
         });
-        const headerText = fitText(fontBold, headerRow[c] || `Kolom ${c + 1}`, 9, colW - 8);
+        const headerText = fitText(fontBold, sanitizeTextForPdf(headerRow[c] || `Kolom ${c + 1}`), 9, colW - 8);
         page.drawText(headerText, {
           x: curX + 4,
           y: currentY - headerHeight + 8,
@@ -91,7 +92,7 @@ export async function renderGridToPdf(buffer, options = {}) {
             borderColor: rgb(0.7, 0.7, 0.7),
             borderWidth: 0.5
           });
-          const cellText = fitText(fontRegular, row[c] || '', 8, colW - 8);
+          const cellText = fitText(fontRegular, sanitizeTextForPdf(row[c] || ''), 8, colW - 8);
           page.drawText(cellText, {
             x: curX + 4,
             y: currentY - rowHeight + 6,

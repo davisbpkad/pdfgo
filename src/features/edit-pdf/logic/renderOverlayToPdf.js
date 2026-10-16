@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { toPdfRect } from '../../../core/coordinates.js';
 import { hexToRgb } from './hexColor.js';
+import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 
 export async function renderOverlayToPdf(pdfBuffer, objectsByPage = {}, options = {}) {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
@@ -31,7 +32,10 @@ export async function renderOverlayToPdf(pdfBuffer, objectsByPage = {}, options 
       if (obj.type === 'text') {
         const size = Math.max(6, obj.fontSize || 12);
         const yPos = Math.max(0, rect.y + Math.max(0, rect.height - size));
-        page.drawText(obj.text || '', { x: rect.x, y: yPos, size, font, color: hexToRgb(obj.color) });
+        const safeText = sanitizeTextForPdf(obj.text);
+        if (safeText) {
+          page.drawText(safeText, { x: rect.x, y: yPos, size, font, color: hexToRgb(obj.color) });
+        }
       } else if (obj.type === 'whiteout') {
         page.drawRectangle({ x: rect.x, y: rect.y, width: rect.width, height: rect.height, color: rgb(1, 1, 1) });
       } else if (obj.type === 'rect') {
