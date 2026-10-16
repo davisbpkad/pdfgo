@@ -4,8 +4,12 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { loadPdfJsDocument } from '../../src/core/pdf.js';
+
+const ROOT = path.resolve(import.meta.dirname, '../..');
 import {
   parsePageRange,
   sanitizeTextForPdf,
@@ -116,9 +120,11 @@ test('Tahap 6: buildSearchablePdf embeds invisible text layer verifiable by PDF.
   assert.ok(extractedWords.includes('2026'));
 });
 
-test('Tahap 6: Indonesian and English model identifiers are properly structured', () => {
-  const supportedLanguages = ['ind', 'eng', 'ind+eng'];
-  assert.ok(supportedLanguages.includes('ind'));
-  assert.ok(supportedLanguages.includes('eng'));
-  assert.ok(supportedLanguages.includes('ind+eng'));
+test('Tahap 6: the build wires both OCR language models', () => {
+  const build = fs.readFileSync(path.join(ROOT, 'build.mjs'), 'utf8');
+  // Lite variant must stub both globals, full variant must inject both base64 models.
+  assert.match(build, /__OCR_FULL_ENG_GZ_BASE64__/);
+  assert.match(build, /__OCR_FULL_IND_GZ_BASE64__/);
+  assert.equal((build.match(/__OCR_FULL_ENG_GZ_BASE64__/g) || []).length >= 2, true);
+  assert.equal((build.match(/__OCR_FULL_IND_GZ_BASE64__/g) || []).length >= 2, true);
 });

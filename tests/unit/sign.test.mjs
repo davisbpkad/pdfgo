@@ -4,7 +4,15 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { PDFDocument } from 'pdf-lib';
 import { toPdfRect } from '../../src/core/coordinates.js';
+import { applySignatures } from '../../src/features/sign/logic/applySignatures.js';
+
+// 1x1 white PNG: enough for pdf-lib to embed a real image XObject.
+const TINY_PNG = Uint8Array.from(Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==',
+  'base64'
+));
 
 test('sign: toPdfRect maps normalized placement to PDF points with inverted Y-axis', () => {
   const pageWidthPt = 595.28; // A4 width
@@ -24,45 +32,28 @@ test('sign: toPdfRect maps normalized placement to PDF points with inverted Y-ax
   assert.equal(Math.round(pdfRect.y * 100) / 100, Math.round(expectedY * 100) / 100);
 });
 
-test('sign: metric mm conversion to normalized fraction is accurate and reversible', () => {
-  const MM_PER_PT = 25.4 / 72;
-  const pageWidthPt = 595.28;
-  const pageHeightPt = 841.89;
+test('sign: applySignatures embeds the signature image on the requested page', async () => {
+  const doc = await PDFDocument.create();
+  doc.addPage([595.28, 841.89]);
+  doc.addPage([595.28, 841.89]);
+  const source = await doc.save();
 
-  const pageWMm = pageWidthPt * MM_PER_PT; // ~210 mm
-  const pageHMm = pageHeightPt * MM_PER_PT; // ~297 mm
+  const placement = toPdfRect({ x: 0.1, y: 0.2, width: 0.25, height: 0.1 }, 595.28, 841.89);
+  const result = await applySignatures(source, TINY_PNG, [
+    { pageIndex: 1, x: placement.x, y: placement.y, width: placement.width, height: placement.height }
+  ]);
 
-  const targetWidthMm = 50; // standard signature 50mm
-  const targetHeightMm = 22; // standard signature 22mm
-
-  const normW = targetWidthMm / pageWMm;
-  const normH = targetHeightMm / pageHMm;
-
-  assert.ok(normW > 0 && normW < 1);
-  assert.ok(normH > 0 && normH < 1);
-
-  // Roundtrip
-  const roundtripW = normW * pageWMm;
-  const roundtripH = normH * pageHMm;
-
-  assert.equal(Math.round(roundtripW * 10) / 10, targetWidthMm);
-  assert.equal(Math.round(roundtripH * 10) / 10, targetHeightMm);
+  assert.equal(String.fromCharCode(...result.slice(0, 5)), '%PDF-');
+  const reloaded = await PDFDocument.load(result);
+  assert.equal(reloaded.getPageCount(), 2);
+  // The signature must be a real embedded image, not a silent no-op.
+  assert.match(new TextDecoder('latin1').decode(result), /\/Subtype\s*\/Image/);
 });
 
-test('sign: pointer drag delta normalized calculation is scale-invariant', () => {
-  // Container at 50% scale
-  const containerW_50 = 300;
-  // Container at 200% scale
-  const containerW_200 = 1200;
+test('sign: applySignatures refuses to run without a placement', async () => {
+  const doc = await PDFDocument.create();
+  doc.addPage([595.28, 841.89]);
+  const source = await doc.save();
 
-  // Moving mouse by 30 CSS pixels at 50% scale:
-  const deltaPx50 = 30;
-  const normDelta50 = deltaPx50 / containerW_50; // 0.1 (10% of page width)
-
-  // Moving mouse by 120 CSS pixels at 200% scale:
-  const deltaPx200 = 120;
-  const normDelta200 = deltaPx200 / containerW_200; // 0.1 (10% of page width)
-
-  assert.equal(normDelta50, 0.1);
-  assert.equal(normDelta200, 0.1);
+  await assert.rejects(() => applySignatures(source, TINY_PNG, []), /Tentukan posisi penempatan/);
 });

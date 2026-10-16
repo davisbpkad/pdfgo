@@ -9,6 +9,7 @@ import { ensureBuiltinModelsLoaded, getAvailableOcrLangs } from '../../../core/a
 import { terminateOcrWorker } from '../../ocr/logic/ocrWorkerManager.js';
 import { extractTextContent } from '../logic/extractTextContent.js';
 import { extractTextFromImage, extractTextFromScannedPdf } from '../logic/extractTextFromImage.js';
+import { isImageFile, isImageName } from '../logic/isImageFile.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseButton from '../../../ui/BaseButton.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
@@ -41,7 +42,7 @@ onMounted(async () => {
   if (queueState.value?.items?.length) {
     const candidate = queueState.value.items.find(i => {
       const name = i.name?.toLowerCase() || '';
-      return name.endsWith('.pdf') || /\.(png|jpe?g|webp|bmp)$/i.test(name) || i.file?.type?.startsWith('image/');
+      return name.endsWith('.pdf') || isImageName(name) || i.file?.type?.startsWith('image/');
     });
     if (candidate?.file) loadDocument(candidate.file);
   }
@@ -62,15 +63,10 @@ async function refreshAvailableLangs() {
   }
 }
 
-function isImageFile(file) {
-  if (!file) return false;
-  return file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(file.name);
-}
-
 async function handleIncomingFiles(files) {
   const file = Array.from(files).find(f => {
     const name = f.name.toLowerCase();
-    return name.endsWith('.pdf') || /\.(png|jpe?g|webp|bmp)$/i.test(name) || f.type.startsWith('image/');
+    return name.endsWith('.pdf') || isImageName(name) || f.type.startsWith('image/');
   });
   if (file) await loadDocument(file);
 }

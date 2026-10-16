@@ -1,62 +1,139 @@
 /**
- * tests/unit/stage5.test.mjs - Unit Tests for Stage 5 High-Risk Engines
+ * stage5.test.mjs - High-risk engines: true redaction and compression.
+ *
+ * These run in Node, where there is no canvas, so the page renderer is injected:
+ * the real renderer needs document.createElement('canvas').
  */
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { loadPdfJsDocument } from '../../src/core/pdf.js';
+import { executeTrueRedaction } from '../../src/features/redact/logic/executeTrueRedaction.js';
+import { compressPdfDocument } from '../../src/features/compress/logic/compressPdfDocument.js';
 
-test('redact: metadata sanitization removes title, author, and creator', async () => {
+// 1x1 white PNG / JPEG, enough for pdf-lib to embed a real image XObject.
+const TINY_PNG = Uint8Array.from(Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==',
+  'base64'
+));
+const TINY_JPEG = Uint8Array.from(Buffer.from(
+  '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==',
+  'base64'
+));
+
+/** Stand-in for renderPageToCanvas: a canvas-like object whose toBlob returns real bytes. */
+function fakeCanvas(bytes, mime) {
+  const ctx = { fillStyle: '', fillRect() {} };
+  const canvas = {
+    width: 100,
+    height: 100,
+    getContext: () => ctx,
+    toBlob: (resolve) => resolve(new Blob([bytes], { type: mime }))
+  };
+  return { canvas, width: 100, height: 100 };
+}
+
+const fakeRenderer = (bytes, mime) => async () => fakeCanvas(bytes, mime);
+
+async function pdfWithText(lines, pageCount = lines.length) {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  for (let i = 0; i < pageCount; i++) {
+    const page = doc.addPage([595.28, 841.89]);
+    page.drawText(lines[i] ?? `HALAMAN ${i + 1}`, { x: 50, y: 700, size: 16, font });
+  }
+  return doc.save();
+}
+
+async function pageTexts(bytes) {
+  const doc = await loadPdfJsDocument(bytes);
+  const out = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const content = await page.getTextContent();
+    out.push(content.items.map((item) => item.str).join(' '));
+  }
+  await doc.destroy();
+  return out;
+}
+
+test('redact: redacted text is not extractable from the output', async () => {
+  const source = await pdfWithText(['RAHASIA NEGARA']);
+  const result = await executeTrueRedaction(
+    source,
+    null,
+    { 0: [{ x: 0.05, y: 0.1, width: 0.5, height: 0.08 }] },
+    1,
+    true,
+    null,
+    fakeRenderer(TINY_PNG, 'image/png')
+  );
+
+  const texts = await pageTexts(result);
+  assert.equal(texts.length, 1);
+  assert.ok(!texts[0].includes('RAHASIA'), `redacted text still extractable: "${texts[0]}"`);
+  assert.ok(String.fromCharCode(...result.slice(0, 5)) === '%PDF-');
+});
+
+test('redact: metadata is wiped by the real pipeline', async () => {
   const doc = await PDFDocument.create();
   doc.setTitle('Secret Financial Report');
   doc.setAuthor('John Confidential');
   doc.setProducer('Internal Scanner');
+  doc.setCreator('Some Editor');
   doc.addPage([500, 700]);
-  const bytes = await doc.save();
+  const source = await doc.save();
 
-  const loaded = await PDFDocument.load(bytes);
-  assert.equal(loaded.getTitle(), 'Secret Financial Report');
-  assert.equal(loaded.getAuthor(), 'John Confidential');
+  const result = await executeTrueRedaction(source, null, {}, 1, true, null, fakeRenderer(TINY_PNG, 'image/png'));
+  const verify = await PDFDocument.load(result);
 
-  // Sanitize
-  loaded.setTitle('');
-  loaded.setAuthor('');
-  loaded.setSubject('');
-  loaded.setKeywords([]);
-  loaded.setProducer('');
-  loaded.setCreator('');
-  const sanitizedBytes = await loaded.save();
-
-  const verify = await PDFDocument.load(sanitizedBytes);
-  assert.ok(!verify.getTitle(), 'Title should be empty');
-  assert.ok(!verify.getAuthor(), 'Author should be empty');
+  assert.ok(!verify.getTitle());
+  assert.ok(!verify.getAuthor());
+  assert.ok(!verify.getSubject());
+  assert.ok(!verify.getCreator());
+  // pdf-lib stamps its own Producer on save; what matters is that the original is gone.
+  assert.ok(!String(verify.getProducer() || '').includes('Internal Scanner'));
 });
 
-test('redact: untouched pages remain clean vector copies', async () => {
-  const doc = await PDFDocument.create();
-  doc.addPage([400, 600]);
-  doc.addPage([400, 600]);
-  const bytes = await doc.save();
+test('redact: untouched pages stay vector copies with readable text', async () => {
+  const source = await pdfWithText(['RAHASIA', 'HALAMAN AMAN'], 2);
+  const result = await executeTrueRedaction(
+    source,
+    null,
+    { 0: [{ x: 0.05, y: 0.1, width: 0.5, height: 0.08 }] },
+    1,
+    true,
+    null,
+    fakeRenderer(TINY_PNG, 'image/png')
+  );
 
-  const src = await PDFDocument.load(bytes);
-  const dest = await PDFDocument.create();
-
-  // Copy page 0 directly (untouched page in redact pipeline)
-  const [copied] = await dest.copyPages(src, [0]);
-  dest.addPage(copied);
-
-  const destBytes = await dest.save();
-  const verify = await PDFDocument.load(destBytes);
-  assert.equal(verify.getPageCount(), 1);
+  const texts = await pageTexts(result);
+  assert.equal(texts.length, 2);
+  assert.ok(!texts[0].includes('RAHASIA'));
+  assert.ok(texts[1].includes('HALAMAN AMAN'), 'untouched page lost its text layer');
 });
 
-test('compress: reduction rate formula and statistics', () => {
-  const originalSize = 10000;
-  const compressedSize = 3500;
-  const reductionRate = Math.round(((originalSize - compressedSize) / originalSize) * 100);
-  assert.equal(reductionRate, 65); // 65% reduction
+test('compress: output is a valid PDF and the reported reduction matches the sizes', async () => {
+  const source = await pdfWithText(['Dokumen untuk dikompres'], 2);
+  const pdfDocProxy = { numPages: 2 };
 
-  const largerSize = 12000;
-  const negativeRate = Math.round(((originalSize - largerSize) / originalSize) * 100);
-  assert.equal(negativeRate, -20);
+  const result = await compressPdfDocument(
+    source,
+    pdfDocProxy,
+    { dpiScale: 1, quality: 0.7 },
+    null,
+    fakeRenderer(TINY_JPEG, 'image/jpeg')
+  );
+
+  assert.equal(String.fromCharCode(...result.bytes.slice(0, 5)), '%PDF-');
+  const reloaded = await PDFDocument.load(result.bytes);
+  assert.equal(reloaded.getPageCount(), 2);
+
+  assert.equal(result.originalSize, source.byteLength);
+  assert.equal(result.compressedSize, result.bytes.byteLength);
+  assert.equal(
+    result.reductionRate,
+    Math.round(((result.originalSize - result.compressedSize) / result.originalSize) * 100)
+  );
 });

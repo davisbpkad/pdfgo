@@ -36,9 +36,9 @@ test('csp: netlify.toml header matches the shared policy', () => {
   assert.equal(allowsWebAssembly(match[1]), true);
 });
 
-test('csp: built HTML carries the shared policy when dist exists', () => {
+test('csp: built HTML carries the shared policy when dist exists', (t) => {
   const target = path.join(ROOT, 'dist', 'PDF To Go.html');
-  if (!fs.existsSync(target)) return; // build not run yet
+  if (!fs.existsSync(target)) return t.skip('dist belum dibuild');
 
   const html = fs.readFileSync(target, 'utf8');
   const meta = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/);
@@ -47,9 +47,9 @@ test('csp: built HTML carries the shared policy when dist exists', () => {
   assert.equal(meta[1], CONTENT_SECURITY_POLICY);
 });
 
-test('csp: dist/_headers matches the shared policy when dist exists', () => {
+test('csp: dist/_headers matches the shared policy when dist exists', (t) => {
   const target = path.join(ROOT, 'dist', '_headers');
-  if (!fs.existsSync(target)) return;
+  if (!fs.existsSync(target)) return t.skip('dist belum dibuild');
 
   const content = fs.readFileSync(target, 'utf8');
   assert.ok(content.includes(CONTENT_SECURITY_POLICY), 'dist/_headers must include shared CSP');

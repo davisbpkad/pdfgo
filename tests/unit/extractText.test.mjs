@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { loadPdfJsDocument } from '../../src/core/pdf.js';
 import { extractTextContent } from '../../src/features/extract-text/logic/extractTextContent.js';
+import { isImageFile, isImageName } from '../../src/features/extract-text/logic/isImageFile.js';
 
 test('extractText: correctly extracts text content from vector PDF with separators', async () => {
   const doc = await PDFDocument.create();
@@ -49,16 +50,17 @@ test('extractText: marks isScanned true when PDF has no text layer (scanned/imag
   assert.equal(result.charCount, 0);
 });
 
-test('extractText: image extension regex detects common image formats', () => {
-  const isImageFile = (name) => /\.(png|jpe?g|webp|bmp)$/i.test(name);
+test('extractText: image detection uses the shipped helper', () => {
+  assert.ok(isImageFile({ type: 'image/jpeg', name: 'foto.jpg' }));
+  assert.ok(isImageName('scan.jpeg'));
+  assert.ok(isImageName('DOKUMEN.PNG'));
+  assert.ok(isImageName('screenshot.webp'));
+  assert.ok(isImageName('kartu.bmp'));
+  assert.ok(isImageFile({ type: 'image/png', name: 'tanpa-ekstensi' }));
 
-  assert.ok(isImageFile('foto.jpg'));
-  assert.ok(isImageFile('scan.jpeg'));
-  assert.ok(isImageFile('DOKUMEN.PNG'));
-  assert.ok(isImageFile('screenshot.webp'));
-  assert.ok(isImageFile('kartu.bmp'));
-
-  assert.ok(!isImageFile('dokumen.pdf'));
-  assert.ok(!isImageFile('berkas.txt'));
-  assert.ok(!isImageFile('arsip.zip'));
+  assert.ok(!isImageName('dokumen.pdf'));
+  assert.ok(!isImageName('berkas.txt'));
+  assert.ok(!isImageName('arsip.zip'));
+  assert.ok(!isImageFile({ type: 'application/pdf', name: 'dokumen.pdf' }));
+  assert.ok(!isImageFile(null));
 });

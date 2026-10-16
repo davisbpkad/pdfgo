@@ -7,9 +7,10 @@ import { renderPageToCanvas } from '../../../core/pdf.js';
  * @param {object} pdfDocProxy
  * @param {{ dpiScale: number, quality: number }} options
  * @param {Function} [onProgress]
+ * @param {Function} [renderPage] renderPageToCanvas override, injectable for headless tests
  * @returns {Promise<{ bytes: Uint8Array, originalSize: number, compressedSize: number, reductionRate: number }>}
  */
-export async function compressPdfDocument(srcBuffer, pdfDocProxy, options, onProgress = null) {
+export async function compressPdfDocument(srcBuffer, pdfDocProxy, options, onProgress = null, renderPage = renderPageToCanvas) {
   const { dpiScale = 1.5, quality = 0.70 } = options || {};
   const numPages = pdfDocProxy.numPages;
 
@@ -29,7 +30,7 @@ export async function compressPdfDocument(srcBuffer, pdfDocProxy, options, onPro
     const origPage = srcDoc.getPage(i - 1);
     const { width: origWidth, height: origHeight } = origPage.getSize();
 
-    const { canvas } = await renderPageToCanvas(pdfDocProxy, i, dpiScale);
+    const { canvas } = await renderPage(pdfDocProxy, i, dpiScale);
 
     const jpegBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
     const jpegBuffer = await jpegBlob.arrayBuffer();

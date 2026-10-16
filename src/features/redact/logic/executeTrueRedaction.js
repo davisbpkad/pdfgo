@@ -10,9 +10,10 @@ import { renderRedactionBoxes } from './renderRedactionBoxes.js';
  * @param {number} previewScale
  * @param {boolean} [sanitizeMeta=true]
  * @param {Function} [onProgress]
+ * @param {Function} [renderPage] renderPageToCanvas override, injectable for headless tests
  * @returns {Promise<Uint8Array>}
  */
-export async function executeTrueRedaction(srcBuffer, pdfDocProxy, boxesByPage, previewScale, sanitizeMeta = true, onProgress = null) {
+export async function executeTrueRedaction(srcBuffer, pdfDocProxy, boxesByPage, previewScale, sanitizeMeta = true, onProgress = null, renderPage = renderPageToCanvas) {
   let safeBuffer;
   if (srcBuffer instanceof Uint8Array) {
     safeBuffer = new Uint8Array(srcBuffer.buffer.slice(srcBuffer.byteOffset, srcBuffer.byteOffset + srcBuffer.byteLength));
@@ -36,7 +37,7 @@ export async function executeTrueRedaction(srcBuffer, pdfDocProxy, boxesByPage, 
       newDoc.addPage(copied);
     } else {
       const highResScale = 2.5;
-      const { canvas } = await renderPageToCanvas(pdfDocProxy, i + 1, highResScale);
+      const { canvas } = await renderPage(pdfDocProxy, i + 1, highResScale);
       const ctx = canvas.getContext('2d');
       renderRedactionBoxes(ctx, pageBoxes, canvas.width, canvas.height, highResScale, previewScale);
 
