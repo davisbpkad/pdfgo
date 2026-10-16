@@ -33,6 +33,9 @@ export async function convertPdfToExcel(pdfBuffer, options = {}) {
   let pagesToProcess = [];
   if (pageRange && pageRange.trim()) {
     pagesToProcess = parsePageRange(pageRange, totalPages);
+    if (pagesToProcess.length === 0) {
+      throw new Error('Rentang halaman tidak valid: tidak ada halaman yang cocok.');
+    }
   }
   if (pagesToProcess.length === 0) {
     pagesToProcess = Array.from({ length: totalPages }, (_, i) => i + 1);

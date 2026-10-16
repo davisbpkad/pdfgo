@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { toPdfRect } from '../../../core/coordinates.js';
 import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
-import { fitFontSize, isChanged, splitLines, TEXT_COVER_PADDING_PT } from './textEditInteractions.js';
+import { fitFontSize, isChanged, isCleared, splitLines, TEXT_COVER_PADDING_PT } from './textEditInteractions.js';
 
 /**
  * Apply typed text edits onto the PDF: the original text area is covered, then the new text is drawn.
@@ -9,7 +9,7 @@ import { fitFontSize, isChanged, splitLines, TEXT_COVER_PADDING_PT } from './tex
  * ponytail: cover is always white; use the "Tutup Teks" object for colored/scanned pages.
  * @param {ArrayBuffer|Uint8Array} pdfBuffer
  * @param {Record<number, Array<object>>} editsByPage
- * @returns {Promise<{ pdfBytes: Uint8Array, editCount: number, clearedCount: number }>}
+ * @returns {Promise<{ pdfBytes: Uint8Array, editCount: number, clearedCount: number, skippedCount: number }>}
  */
 export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
@@ -28,6 +28,7 @@ export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
   const totalPages = pdfDoc.getPageCount();
   let editCount = 0;
   let clearedCount = 0;
+  let skippedCount = 0;
 
   for (let pIdx = 0; pIdx < totalPages; pIdx++) {
     const edits = (editsByPage[pIdx] || []).filter(isChanged);
@@ -40,6 +41,27 @@ export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
     for (const edit of edits) {
       const rect = toPdfRect(edit, pW, pH);
       const pad = TEXT_COVER_PADDING_PT;
+      const lines = splitLines(edit.text).map(sanitizeTextForPdf);
+
+      if (lines.every((line) => line.length === 0)) {
+        if (isCleared(edit)) {
+          // The user emptied the box on purpose: cover the original text, draw nothing.
+          page.drawRectangle({
+            x: Math.max(0, rect.x - pad),
+            y: Math.max(0, rect.y - pad),
+            width: rect.width + pad * 2,
+            height: rect.height + pad * 2,
+            color: rgb(1, 1, 1)
+          });
+          clearedCount++;
+          editCount++;
+        } else {
+          // Typed text has no encodable character: leave the page untouched
+          // instead of erasing the original and drawing nothing.
+          skippedCount++;
+        }
+        continue;
+      }
 
       page.drawRectangle({
         x: Math.max(0, rect.x - pad),
@@ -48,13 +70,6 @@ export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
         height: rect.height + pad * 2,
         color: rgb(1, 1, 1)
       });
-
-      const lines = splitLines(edit.text).map(sanitizeTextForPdf);
-      if (lines.every((line) => line.length === 0)) {
-        clearedCount++;
-        editCount++;
-        continue;
-      }
 
       const font = edit.isBold ? fontBold : fontRegular;
       const measure = (text, size) => font.widthOfTextAtSize(text, size);
@@ -77,5 +92,5 @@ export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
     }
   }
 
-  return { pdfBytes: await pdfDoc.save(), editCount, clearedCount };
+  return { pdfBytes: await pdfDoc.save(), editCount, clearedCount, skippedCount };
 }

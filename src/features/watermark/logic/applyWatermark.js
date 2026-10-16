@@ -47,6 +47,9 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
   let customPages = [];
   if (pageFilter === 'custom') {
     customPages = parsePageRange(customRange, totalPages);
+    if (customPages.length === 0) {
+      throw new Error('Rentang halaman kosong atau tidak valid.');
+    }
   }
 
   for (let i = 0; i < totalPages; i++) {

@@ -59,6 +59,9 @@ async function handleSave() {
     const safe = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(pdfBytes, `${safe}-edit.pdf`, 'application/pdf');
     showToast(t('tools.editPdf.successTitle'), 'success');
+    if (textResult.skippedCount > 0) {
+      showToast(`${textResult.skippedCount} edit dilewati: teks mengandung karakter yang tidak didukung font PDF.`, 'error');
+    }
   } catch (err) {
     showToast(t('tools.editPdf.failed', { reason: err.message || '' }), 'error');
   } finally {
