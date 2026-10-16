@@ -48,7 +48,7 @@ async function handleSave() {
     downloadFile(textResult.pdfBytes, `${safe}-edit.pdf`, 'application/pdf');
     showToast(t('tools.editPdf.successTitle'), 'success');
     if (textResult.skippedCount > 0) {
-      showToast(`${textResult.skippedCount} edit dilewati: teks mengandung karakter yang tidak didukung font PDF.`, 'error');
+      showToast(t('tools.editPdf.skippedToast', { count: textResult.skippedCount }), 'error');
     }
   } catch (err) {
     showToast(t('tools.editPdf.failed', { reason: err.message || '' }), 'error');

@@ -185,6 +185,7 @@ const translations = {
         saveBtn: 'Simpan PDF',
         successTitle: 'Dokumen PDF Berhasil Disimpan!',
         failed: 'Gagal menyimpan PDF: {reason}',
+        skippedToast: '{count} edit dilewati: teks mengandung karakter yang tidak didukung font PDF.',
         textChanged: '{count} tulisan diubah',
         textResetBtn: 'Batalkan Perubahan Tulisan',
         textHint: 'Klik tulisan di halaman lalu ketik atau hapus seperti mengetik biasa. Tulisan lama ditutupi, lalu ditulis ulang. Tekan Tab atau klik di luar untuk lanjut ke tulisan lain.'
@@ -693,6 +694,7 @@ const translations = {
         saveBtn: 'Save PDF',
         successTitle: 'PDF Document Saved Successfully!',
         failed: 'Failed to save PDF: {reason}',
+        skippedToast: '{count} edits were skipped: the text contains characters the built-in PDF font does not support.',
         textChanged: '{count} text lines changed',
         textResetBtn: 'Discard Text Changes',
         textHint: 'Click any text on the page and type or delete as usual. The old text is covered and retyped. Press Tab or click outside to move to the next line.'
