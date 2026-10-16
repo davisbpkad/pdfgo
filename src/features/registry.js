@@ -28,13 +28,12 @@ import * as wordToPdf from './word-to-pdf/index.js';
 import * as editPdf from './edit-pdf/index.js';
 import * as powerpointToPdf from './powerpoint-to-pdf/index.js';
 import * as pdfToExcel from './pdf-to-excel/index.js';
-import * as aiSummary from './ai-summary/index.js';
 
 export const allModules = [
   merge, split, organize, sign, form, redact, compress, ocr, extractText,
   watermark, pageNumbers, pdfToImage, imageToPdf, unlock, protect,
   pdfToMarkdown, scanToPdf, htmlToPdf, pdfToWord, pdfToPowerpoint, excelToPdf,
-  wordToPdf, editPdf, powerpointToPdf, pdfToExcel, aiSummary
+  wordToPdf, editPdf, powerpointToPdf, pdfToExcel
 ];
 
 export const moduleMap = new Map(allModules.map((m) => [m.id, m]));

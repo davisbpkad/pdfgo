@@ -25,7 +25,7 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 1. **Gabung PDF (Merge):** Combine multiple PDF documents into a unified file with drag-and-drop reordering and memory recovery.
 2. **Pisah PDF (Split):** Extract arbitrary page ranges (e.g. `1-3, 5, 8-10`) or break documents into N-page batches directly or as a ZIP.
 3. **Atur Halaman (Organize):** Visual thumbnail grid with drag-and-drop reordering, 90°/180°/270° rotation, and page deletion.
-4. **Edit PDF / Tambah Objek (Edit PDF):** Overlay text (custom font embedding), freehand drawings, rectangle/ellipse/arrow shapes, and cover boxes over existing PDF pages.
+4. **Edit Tulisan PDF (Edit PDF):** Click existing text on any page and retype or delete it. The old text is covered with a white box and retyped using a built-in font, so letter shapes may differ slightly from the original.
 5. **Nomor Halaman (Page Numbers):** Stamp flexible numbering (`Halaman {n} dari {total}`) across 9 position alignments with custom margins.
 6. **Watermark:** Customizable diagonal, centered, or repeated text watermarks with adjustable angle, opacity, and font styling.
 
@@ -53,7 +53,6 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 23. **Pengenalan Karakter OCR (Text Recognition):** Extract printed text and generate searchable PDFs with an invisible text layer using local Tesseract WASM with Indonesian and English language models.
 24. **Ekstrak Teks (Extract Text):** Extract readable text with page headers and line preservation. Directly accepts image files (`PNG`, `JPG`, `WebP`, `BMP`) with in-place OCR.
 25. **Isi Formulir (Fill Form):** Automatically detect AcroForm fields (text boxes, checkboxes, dropdowns) with optional form flattening.
-26. **Siapkan untuk AI (AI Summary & Translation Prompt):** 100% offline text extraction and structured prompt builder for summarizing, translating, key-point extraction, or analyzing documents with ChatGPT, Claude, Gemini, or local LLMs. Save AI responses back to `.md`, `.txt`, or `.pdf`.
 
 ---
 

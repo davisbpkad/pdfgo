@@ -13,7 +13,6 @@ import pptxgen from 'pptxgenjs';
 import ExcelJS from 'exceljs';
 import { applyWatermark } from '../../src/features/watermark/logic/applyWatermark.js';
 import { applyPageNumbers } from '../../src/features/page-numbers/logic/applyPageNumbers.js';
-import { createPdfExport } from '../../src/features/ai-summary/logic/exportAiResult.js';
 import { renderGridToPdf } from '../../src/features/excel-to-pdf/logic/renderGridToPdf.js';
 import { convertPptxToPdf } from '../../src/features/powerpoint-to-pdf/logic/convertPptxToPdf.js';
 
@@ -51,12 +50,6 @@ test('watermark: text with no encodable character is rejected instead of silentl
 test('page-numbers: non-ASCII format does not throw', async () => {
   const bytes = await applyPageNumbers(await blankPdf(), { format: 'Hal {n} dari {total} →' });
   await assertValidPdf(bytes, 2);
-});
-
-test('ai-summary: PDF export with non-ASCII text does not throw', async () => {
-  const result = await createPdfExport(`${NON_ASCII}\nBaris kedua — dengan emoji 🎯`, 'laporan penilaian.pdf');
-  assert.equal(result.fileName, 'laporan penilaian-ringkasan-ai.pdf');
-  await assertValidPdf(result.content, 1);
 });
 
 test('excel-to-pdf: cells with arrow, CJK and emoji no longer abort the conversion', async () => {

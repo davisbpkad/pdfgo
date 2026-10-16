@@ -30,7 +30,6 @@ import WordToPdfTool from './features/word-to-pdf/components/WordToPdfTool.vue';
 import EditPdfTool from './features/edit-pdf/components/EditPdfTool.vue';
 import PptxToPdfTool from './features/powerpoint-to-pdf/components/PptxToPdfTool.vue';
 import PdfToExcelTool from './features/pdf-to-excel/components/PdfToExcelTool.vue';
-import AiSummaryTool from './features/ai-summary/components/AiSummaryTool.vue';
 
 const isSidebarOpen = ref(false);
 
@@ -81,7 +80,6 @@ function closeSidebar() {
         <EditPdfTool v-else-if="activeToolId === 'edit-pdf'" />
         <PptxToPdfTool v-else-if="activeToolId === 'powerpoint-to-pdf'" />
         <PdfToExcelTool v-else-if="activeToolId === 'pdf-to-excel'" />
-        <AiSummaryTool v-else-if="activeToolId === 'ai-summary'" />
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">
