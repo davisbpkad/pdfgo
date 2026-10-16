@@ -55,7 +55,8 @@ async function startServer() {
     execSync('node build.mjs', { stdio: 'inherit' });
   }
 
-  const freePort = await findFreePort(3100);
+  // PORT pins the port for automated browser tests; unset keeps the dynamic scan.
+  const freePort = process.env.PORT ? Number(process.env.PORT) : await findFreePort(3100);
 
   const server = http.createServer((req, res) => {
     let reqUrl = req.url.split('?')[0];

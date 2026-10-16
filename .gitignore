@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 graphify-out/
 
+test-results/
+playwright-report/
+blob-report/
+tests/e2e/.fixtures/
