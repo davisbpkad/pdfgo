@@ -9,14 +9,14 @@ import BaseButton from './BaseButton.vue';
 async function downloadBatchZip() {
   const items = queue.getItems().filter(i => i.result);
   if (items.length === 0) {
-    showToast(t('queue.noResults') || 'Tidak ada berkas yang selesai diproses.', 'warning');
+    showToast(t('queue.noResults'), 'warning');
     return;
   }
 
   try {
     const zipBlob = await createZipArchive(items.map(i => ({ name: i.name, data: i.result })));
     downloadFile(zipBlob, `PDFToolkit_Batch_${Date.now()}.zip`, 'application/zip');
-    showToast(t('queue.zipDownloaded') || 'ZIP antrean berhasil diunduh.', 'success');
+    showToast(t('queue.zipDownloaded'), 'success');
   } catch (err) {
     showToast(err.message || 'Gagal membuat ZIP', 'error');
   }

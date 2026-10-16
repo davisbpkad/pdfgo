@@ -20,7 +20,7 @@ export function formatOcrText(pageResults, { includeSeparators = true } = {}) {
 
     if (includeSeparators && pageResults.length > 1) {
       if (fullText) fullText += '\n\n';
-      fullText += `--- ${t('tools.split.summaryPage', { n: pageNum })} ---\n`;
+      fullText += `--- ${t('tools.ocr.pageSeparator', { n: pageNum })} ---\n`;
     } else if (fullText && cleanText) {
       fullText += '\n\n';
     }
