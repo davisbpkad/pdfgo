@@ -36,12 +36,14 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   compressionResult.value = null;
   try {
     activeBuffer = await file.arrayBuffer();
     pdfDocProxy = await loadPdfJsDocument(activeBuffer);
     totalPages.value = pdfDocProxy.numPages;
+    // Publish the file only once it opened, so "Kompres Sekarang" cannot be
+    // clicked (and silently ignored) while the document is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();

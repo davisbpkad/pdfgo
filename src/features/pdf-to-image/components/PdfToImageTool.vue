@@ -40,12 +40,14 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   try {
     const buffer = await file.arrayBuffer();
     pdfDocProxy = await loadPdfJsDocument(buffer);
     totalPages.value = pdfDocProxy.numPages;
     customRange.value = `1-${Math.min(5, totalPages.value)}`;
+    // Publish the file only once it opened, so "Ekstrak Gambar Sekarang"
+    // cannot be clicked (and silently ignored) while it is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();

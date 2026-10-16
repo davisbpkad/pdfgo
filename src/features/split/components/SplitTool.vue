@@ -37,7 +37,6 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   try {
     const buffer = await file.arrayBuffer();
     const docProxy = await loadPdfJsDocument(buffer);
@@ -45,6 +44,9 @@ async function loadDocument(file) {
     activeThumbnail.value = await generateThumbnail(docProxy, 140);
     rangeString.value = totalPages.value > 1 ? `1-${Math.min(3, totalPages.value)}` : '1';
     nPages.value = 1;
+    // Only publish the file once it opened, so the action button cannot be
+    // clicked (and silently ignored) while the document is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     activeFile.value = null;

@@ -91,7 +91,6 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   lastOcrResults.value = null;
   lastSearchablePdfBytes = null;
 
@@ -113,6 +112,9 @@ async function loadDocument(file) {
     const doc = await loadPdfJsDocument(buffer);
     pdfDocProxy.value = doc;
     totalPages.value = doc.numPages;
+    // Publish the file only once it opened, so "Mulai Proses" cannot be
+    // clicked (and silently ignored) while the document is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();
@@ -185,14 +187,18 @@ async function handleStartOcr() {
 
 function handleDownloadPdf() {
   if (!lastSearchablePdfBytes || !activeFile.value) return;
-  const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
+  // OCR also takes images, so drop any image extension too instead of
+  // producing names like "scan.png_searchable.pdf".
+  const safeName = activeFile.value.name.replace(/\.(pdf|png|jpe?g|webp|bmp)$/i, '');
   downloadFile(lastSearchablePdfBytes, `${safeName}_searchable.pdf`, 'application/pdf');
   showToast('PDF Searchable berhasil diunduh!', 'success');
 }
 
 function handleDownloadTxt() {
   if (!lastOcrResults.value?.fullText || !activeFile.value) return;
-  const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
+  // OCR also takes images, so drop any image extension too instead of
+  // producing names like "scan.png_searchable.pdf".
+  const safeName = activeFile.value.name.replace(/\.(pdf|png|jpe?g|webp|bmp)$/i, '');
   const blob = new Blob([lastOcrResults.value.fullText], { type: 'text/plain;charset=utf-8' });
   downloadFile(blob, `${safeName}_ocr.txt`, 'text/plain');
   showToast('File teks berhasil diunduh!', 'success');

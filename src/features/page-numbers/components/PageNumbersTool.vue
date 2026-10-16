@@ -41,11 +41,13 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   try {
     activeBuffer = await file.arrayBuffer();
     pdfDocProxy.value = await loadPdfJsDocument(activeBuffer);
     totalPages.value = pdfDocProxy.value.numPages;
+    // Publish the file only once it opened, so the action button cannot be
+    // clicked (and silently ignored) while the document is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();

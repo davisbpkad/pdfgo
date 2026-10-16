@@ -41,12 +41,14 @@ async function handleIncomingFiles(files) {
 }
 
 async function loadDocument(file) {
-  activeFile.value = file;
   try {
     activeBuffer = await file.arrayBuffer();
     pdfDocProxy.value = await loadPdfJsDocument(activeBuffer);
     totalPages.value = pdfDocProxy.value.numPages;
     customRange.value = `1-${Math.min(5, totalPages.value)}`;
+    // Publish the file only once it opened, so "Terapkan Watermark" cannot be
+    // clicked (and silently ignored) while the document is still loading.
+    activeFile.value = file;
   } catch (err) {
     showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
     resetFile();
