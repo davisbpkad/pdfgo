@@ -1,4 +1,5 @@
 <script setup>
+import { t } from './app/providers/i18n.js';
 import { ref } from 'vue';
 import { activeToolId } from './app/router.js';
 import AppHeader from './ui/AppHeader.vue';
@@ -83,8 +84,8 @@ function closeSidebar() {
 
         <!-- Fallback if route invalid -->
         <div v-else class="border-2 border-ink bg-paper p-8 text-center shadow-hard rounded-sm space-y-2">
-          <h2 class="font-display font-black text-xl text-ink uppercase">Alat Tidak Ditemukan</h2>
-          <p class="text-xs text-ink/70">Silakan pilih salah satu alat dari menu bilah samping.</p>
+          <h2 class="font-display font-black text-xl text-ink uppercase">{{ t('app.notFoundTitle') }}</h2>
+          <p class="text-xs text-ink/70">{{ t('app.notFoundBody') }}</p>
         </div>
       </main>
     </div>

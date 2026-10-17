@@ -1,4 +1,6 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
+
 defineProps({
   page: {
     type: Object,
@@ -52,11 +54,11 @@ function onDrop(e, idx) {
       <img
         v-if="page.thumbUrl"
         :src="page.thumbUrl"
-        :alt="`Hal ${index + 1}`"
+        :alt="t('tools.organize.pageCardLabel', { num: index + 1 })"
         class="max-h-full max-w-full object-contain transition-transform duration-200"
         :style="{ transform: `rotate(${page.rotation}deg)` }"
       />
-      <span v-else class="text-xs font-bold text-ink/40">Memuat...</span>
+      <span v-else class="text-xs font-bold text-ink/40">{{ t('common.loadingThumb') }}</span>
     </div>
 
     <!-- Actions Footer -->
@@ -64,7 +66,7 @@ function onDrop(e, idx) {
       <button
         type="button"
         class="p-1.5 border-2 border-ink bg-paper hover:bg-accent text-xs font-bold cursor-pointer transition-colors"
-        title="Putar 90°"
+        :title="t('tools.organize.rotatePage')"
         @click="emit('rotate', index)"
       >
         ↻ 90°
@@ -73,7 +75,7 @@ function onDrop(e, idx) {
       <button
         type="button"
         class="p-1.5 border-2 border-ink bg-paper hover:bg-danger hover:text-white text-xs font-bold cursor-pointer transition-colors"
-        title="Hapus Halaman"
+        :title="t('tools.organize.deletePage')"
         @click="emit('delete', index)"
       >
         🗑

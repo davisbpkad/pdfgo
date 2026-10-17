@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import ExcelJS from 'exceljs';
 
 /**
@@ -50,7 +51,7 @@ export function parseCsvText(text) {
  */
 export async function readWorkbook(buffer, fileName = '') {
   if (!buffer || buffer.byteLength === 0) {
-    throw new Error('Berkas spreadsheet kosong atau tidak valid.');
+    throw new Error(t('tools.excelToPdf.invalidSheet'));
   }
 
   const isCsv = fileName.toLowerCase().endsWith('.csv');
@@ -103,7 +104,7 @@ export async function readWorkbook(buffer, fileName = '') {
   });
 
   if (sheets.length === 0) {
-    throw new Error('Tidak ada data baris yang ditemukan dalam berkas Excel.');
+    throw new Error(t('tools.excelToPdf.noRows'));
   }
 
   return sheets;

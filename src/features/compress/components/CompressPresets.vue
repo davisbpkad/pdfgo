@@ -1,4 +1,6 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
+
 defineProps({
   modelValue: {
     type: String,
@@ -11,20 +13,20 @@ const emit = defineEmits(['update:modelValue']);
 const presets = [
   {
     id: 'low',
-    title: 'Ringan',
-    desc: 'Kualitas visual sangat tajam, cocok untuk dokumen cetak (DPI 144, Kualitas 85%).',
+    titleKey: 'tools.compress.presetLow',
+    descKey: 'tools.compress.presetLowDesc',
     badge: null
   },
   {
     id: 'balanced',
-    title: 'Seimbang',
-    desc: 'Rekomendasi terbaik antara keterbacaan teks dan efisiensi ukuran berkas.',
-    badge: 'REKOMENDASI'
+    titleKey: 'tools.compress.presetBalanced',
+    descKey: 'tools.compress.presetBalancedDesc',
+    badgeKey: 'tools.compress.badgeRecommended'
   },
   {
     id: 'high',
-    title: 'Maksimal',
-    desc: 'Kompresi agresif untuk ukuran paling kecil, ideal untuk unggah web dan email.',
+    titleKey: 'tools.compress.presetHigh',
+    descKey: 'tools.compress.presetHighDesc',
     badge: null
   }
 ];
@@ -33,7 +35,7 @@ const presets = [
 <template>
   <div class="space-y-2">
     <label class="block text-xs font-black uppercase tracking-wider text-ink">
-      Pilih Tingkat Kompresi
+      {{ t('tools.compress.presetLabel') }}
     </label>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <div
@@ -45,12 +47,12 @@ const presets = [
       >
         <div class="space-y-1">
           <div class="flex items-center justify-between">
-            <span class="font-display font-black text-base">{{ p.title }}</span>
-            <span v-if="p.badge" class="text-2xs font-black bg-ink text-paper px-1.5 py-0.5 uppercase">
-              {{ p.badge }}
+            <span class="font-display font-black text-base">{{ t(p.titleKey) }}</span>
+            <span v-if="p.badgeKey" class="text-2xs font-black bg-ink text-paper px-1.5 py-0.5 uppercase">
+              {{ t(p.badgeKey) }}
             </span>
           </div>
-          <p class="text-xs font-medium opacity-85 leading-relaxed">{{ p.desc }}</p>
+          <p class="text-xs font-medium opacity-85 leading-relaxed">{{ t(p.descKey) }}</p>
         </div>
       </div>
     </div>

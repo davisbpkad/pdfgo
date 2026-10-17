@@ -18,7 +18,7 @@ async function downloadBatchZip() {
     downloadFile(zipBlob, `PDFToolkit_Batch_${Date.now()}.zip`, 'application/zip');
     showToast(t('queue.zipDownloaded'), 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal membuat ZIP', 'error');
+    showToast(err.message || t('queue.zipFailed'), 'error');
   }
 }
 
@@ -61,7 +61,7 @@ function clearAll() {
         <button
           class="w-8 h-8 border-2 border-ink bg-paper rounded-sm flex items-center justify-center font-black text-lg leading-none shadow-hard-sm hover:bg-accent active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
           @click="closeQueueDrawer"
-          aria-label="Tutup antrean"
+          :aria-label="t('queue.closeAria')"
         >
           &times;
         </button>
@@ -95,14 +95,14 @@ function clearAll() {
               v-if="item.result"
               class="w-7 h-7 border-2 border-ink rounded-sm text-xs font-bold bg-accent hover:bg-accent-strong text-black flex items-center justify-center shadow-[1.5px_1.5px_0_0_#000000] active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
               @click="downloadSingle(item.id)"
-              title="Unduh berkas ini"
+              :title="t('queue.downloadItem')"
             >
               ↓
             </button>
             <button
               class="w-7 h-7 border-2 border-ink rounded-sm text-xs font-bold text-black bg-danger hover:opacity-90 flex items-center justify-center shadow-[1.5px_1.5px_0_0_#000000] active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
               @click="queue.removeItem(item.id)"
-              title="Hapus dari antrean"
+              :title="t('queue.removeItem')"
             >
               &times;
             </button>

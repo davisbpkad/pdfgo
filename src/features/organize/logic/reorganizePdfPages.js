@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument, degrees } from 'pdf-lib';
 
 /**
@@ -9,7 +10,7 @@ import { PDFDocument, degrees } from 'pdf-lib';
  */
 export async function reorganizePdfPages(srcBuffer, pageConfigs, password = '') {
   if (!pageConfigs || pageConfigs.length === 0) {
-    throw new Error('Dokumen harus memiliki minimal 1 halaman.');
+    throw new Error(t('tools.organize.needPage'));
   }
 
   let safeBuf;

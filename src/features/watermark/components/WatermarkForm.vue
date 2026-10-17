@@ -1,5 +1,6 @@
 <script setup>
 import BaseInput from '../../../ui/BaseInput.vue';
+import { t } from '../../../app/providers/i18n.js';
 
 defineProps({
   text: {
@@ -46,7 +47,7 @@ const emit = defineEmits([
   'update:customRange'
 ]);
 
-const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
+const presets = ['presetConfidential', 'presetDraft', 'presetSample'];
 </script>
 
 <template>
@@ -54,11 +55,11 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
     <!-- Watermark Text & Presets -->
     <div class="space-y-1.5">
       <label class="block text-xs font-black uppercase tracking-wider text-ink">
-        Teks Watermark
+        {{ t('tools.watermark.textLabel') }}
       </label>
       <BaseInput
         :model-value="text"
-        placeholder="Masukkan teks watermark"
+        :placeholder="t('tools.watermark.textPlaceholder')"
         @update:model-value="emit('update:text', $event)"
       />
       <div class="flex flex-wrap gap-1.5 pt-1">
@@ -67,9 +68,9 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
           :key="preset"
           type="button"
           class="text-2xs font-bold px-2 py-0.5 border border-ink bg-paper-dark hover:bg-accent transition-colors cursor-pointer"
-          @click="emit('update:text', preset)"
+          @click="emit('update:text', t('tools.watermark.' + preset))"
         >
-          {{ preset }}
+          {{ t('tools.watermark.' + preset) }}
         </button>
       </div>
     </div>
@@ -77,7 +78,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
     <!-- Layout & Position -->
     <div class="space-y-1.5">
       <label class="block text-xs font-black uppercase tracking-wider text-ink">
-        Posisi / Tata Letak
+        {{ t('tools.watermark.posLabel') }}
       </label>
       <div class="grid grid-cols-3 gap-2">
         <button
@@ -86,7 +87,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
           :class="position === 'diagonal' ? 'bg-accent shadow-hard-sm text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
           @click="emit('update:position', 'diagonal')"
         >
-          Diagonal
+          {{ t('tools.watermark.posDiagonal') }}
         </button>
         <button
           type="button"
@@ -94,7 +95,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
           :class="position === 'center' ? 'bg-accent shadow-hard-sm text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
           @click="emit('update:position', 'center')"
         >
-          Tengah
+          {{ t('tools.watermark.posCenter') }}
         </button>
         <button
           type="button"
@@ -102,7 +103,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
           :class="position === 'tiled' ? 'bg-accent shadow-hard-sm text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
           @click="emit('update:position', 'tiled')"
         >
-          Ubin (Penuh)
+          {{ t('tools.watermark.posTiled') }}
         </button>
       </div>
     </div>
@@ -111,7 +112,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <div class="space-y-1">
         <label class="block text-2xs font-black uppercase text-ink">
-          Ukuran ({{ fontSize }}pt)
+          {{ t('tools.watermark.sizeLabel') }} ({{ fontSize }}pt)
         </label>
         <input
           type="range"
@@ -125,7 +126,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
 
       <div class="space-y-1">
         <label class="block text-2xs font-black uppercase text-ink">
-          Transparansi ({{ opacity }}%)
+          {{ t('tools.watermark.opacityLabel', { pct: opacity }) }}
         </label>
         <input
           type="range"
@@ -138,9 +139,7 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
       </div>
 
       <div class="space-y-1">
-        <label class="block text-2xs font-black uppercase text-ink">
-          Warna
-        </label>
+        <label class="block text-2xs font-black uppercase text-ink">{{ t('tools.watermark.colorLabel') }}</label>
         <input
           type="color"
           :value="colorHex"
@@ -153,23 +152,23 @@ const presets = ['CONFIDENTIAL', 'RAHASIA', 'DRAFT', 'SAMPLE'];
     <!-- Target Pages Filter -->
     <div class="space-y-1.5">
       <label class="block text-xs font-black uppercase tracking-wider text-ink">
-        Terapkan Pada Halaman
+        {{ t('tools.watermark.pagesLabel') }}
       </label>
       <select
         :value="pageFilter"
         class="w-full px-3 py-2 border-2 border-ink bg-paper text-ink font-bold text-xs focus:outline-none"
         @change="emit('update:pageFilter', $event.target.value)"
       >
-        <option value="all">Semua Halaman ({{ totalPages }} halaman)</option>
-        <option value="odd">Halaman Ganjil Saja</option>
-        <option value="even">Halaman Genap Saja</option>
-        <option value="custom">Rentang Halaman Kustom</option>
+        <option value="all">{{ t('tools.watermark.pagesAll') }} ({{ totalPages }} {{ t('common.pages') }})</option>
+        <option value="odd">{{ t('tools.watermark.pagesOdd') }}</option>
+        <option value="even">{{ t('tools.watermark.pagesEven') }}</option>
+        <option value="custom">{{ t('tools.watermark.pagesCustom') }}</option>
       </select>
 
       <div v-if="pageFilter === 'custom'" class="pt-1">
         <BaseInput
           :model-value="customRange"
-          placeholder="Contoh: 1-3, 5"
+          :placeholder="t('common.rangePlaceholder')"
           @update:model-value="emit('update:customRange', $event)"
         />
       </div>

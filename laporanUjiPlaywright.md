@@ -9,7 +9,7 @@ kembali dan diperiksa isinya.
 
 ```bash
 npm test        # 129 unit test
-npm run test:e2e # build ulang + 49 tes browser
+npm run test:e2e # build ulang + 52 tes browser
 ```
 
 `npm run test:e2e` membangun ulang `dist/` lebih dulu supaya yang diuji bukan hasil
@@ -21,14 +21,14 @@ build lama.
 |---|---|---|
 | `tests/e2e/app-shell.spec.mjs` | 6 | kerangka aplikasi, daftar 25 alat, rute tidak dikenal |
 | `tests/e2e/edit-pdf.spec.mjs` | 7 | Edit Tulisan PDF |
-| `tests/e2e/i18n.spec.mjs` | 4 | 25 rute × id/en, tidak ada kunci i18n bocor |
+| `tests/e2e/i18n.spec.mjs` | 5 | 25 rute × id/en, tidak ada kunci i18n bocor, tidak ada teks Indonesia di mode Inggris |
 | `tests/e2e/workflows-layout.spec.mjs` | 10 | Gabung, Pisah, Atur Halaman, Nomor Halaman, Watermark, Kompres, Ekstrak Teks, Isi Formulir |
-| `tests/e2e/workflows-convert.spec.mjs` | 10 | Gambar→PDF, PDF→Gambar, PDF→Markdown, PDF→Word, PDF→PowerPoint, PDF→Excel, Excel→PDF, PowerPoint→PDF, Pindai→PDF |
+| `tests/e2e/workflows-convert.spec.mjs` | 11 | Gambar→PDF, PDF→Gambar, PDF→Markdown, PDF→Word, PDF→PowerPoint, PDF→Excel, Excel→PDF, PowerPoint→PDF, Pindai→PDF |
 | `tests/e2e/workflows-print.spec.mjs` | 3 | HTML→PDF, Word→PDF (alur dialog cetak) |
 | `tests/e2e/workflows-security.spec.mjs` | 7 | Tanda Tangan, Sensor, Buka Kunci, Kunci PDF |
-| `tests/e2e/ocr.spec.mjs` | 2 | OCR |
+| `tests/e2e/ocr.spec.mjs` | 3 | OCR, termasuk serah-terima Ekstrak Teks → OCR lewat Antrean |
 
-Status akhir: **129/129 unit test lulus, 49/49 tes browser lulus** (≈41 detik).
+Status akhir: **129/129 unit test lulus, 52/52 tes browser lulus** (≈49 detik).
 
 Tes tidak hanya memeriksa "ada berkas terunduh". Hasilnya dibaca kembali dan diperiksa:
 
@@ -82,61 +82,95 @@ benar siap.
 OCR menerima gambar, tetapi hanya ekstensi `.pdf` yang dipotong dari nama berkas.
 Hasilnya `gambar.png_searchable.pdf`. Sekarang ekstensi gambar juga dipotong.
 
-## Temuan yang belum diperbaiki (perlu keputusan Anda)
+## Temuan lanjutan dan perbaikannya
 
-### A. Unduh massal dari Antrean tidak pernah bisa aktif
+Empat temuan berikut ditemukan pada putaran uji kedua. Semuanya sudah dinilai terhadap
+tujuan alat, dan yang tidak sesuai sudah diperbaiki.
 
-`src/ui/QueueDrawer.vue`, `src/core/queue.js`
+### A. Unduh massal dari Antrean tidak pernah bisa aktif — diperbaiki
+
+`src/ui/QueueDrawer.vue`, `src/app/providers/queue.js`
 
 Tombol "Unduh Semua ZIP" aktif hanya jika ada item antrean yang punya `result`. Field
 `result` selalu `null` karena tidak ada satu pun komponen yang mengisinya; method
-`updateItem()` juga tidak pernah dipanggil. Jadi tombolnya selamanya nonaktif dan
-tombol unduh per item tidak pernah muncul.
+`updateItem()` juga tidak pernah dipanggil. Tombolnya selamanya nonaktif.
 
-Antrean sendiri tetap berguna: "Ekstrak Teks" memakai `queue.addFiles()` untuk
-menyerahkan berkas ke OCR. Yang belum jadi hanya bagian unduhannya.
+Satu-satunya alur antrean yang nyata di aplikasi adalah serah-terima **Ekstrak Teks →
+OCR**: berkas pindaian yang tidak punya lapisan teks ditawarkan ke modul OCR lewat
+antrean. Jadi antrean memang alat yang dipakai, hanya bagian unduhannya yang belum
+tersambung.
 
-Pilihan: (a) sambungkan `result` saat alat selesai memproses, atau (b) hapus tombol dan
-kode unduhan yang tidak terpakai. Ini keputusan produk, jadi saya tidak mengubahnya.
+Perbaikan: ditambahkan `publishQueueResult(file, result, mime)` di provider antrean, dan
+OCR memanggilnya setelah proses berhasil. Hasil OCR kini masuk ke antrean dan bisa
+diunduh (ZIP maupun per item). Tes baru membuktikannya: berkas pindaian diserahkan dari
+Ekstrak Teks, diproses OCR, lalu entri `scan.pdf` benar-benar ada di dalam ZIP.
 
-### B. Kompres menghilangkan lapisan teks
+### B. Kompres menghilangkan lapisan teks — perilaku sudah benar, kalimat diperbaiki
 
-Kompresi meraster tiap halaman menjadi gambar. Teks tetap terbaca secara visual, tetapi
-tidak lagi bisa dipilih, dicari, atau disalin. Deskripsi alat saat ini berbunyi
-"tanpa mengorbankan keterbacaan teks", yang bisa menyesatkan. Ini perilaku yang wajar
-untuk kompresi berbasis raster, hanya kalimatnya yang perlu diperjelas.
+Kompresi meraster tiap halaman menjadi gambar (memakai pdf-lib). Teks tetap terbaca
+secara visual, tetapi tidak lagi bisa dipilih atau dicari. Itu perilaku yang wajar untuk
+kompresi berbasis raster, jadi kodenya tidak diubah.
 
-### C. Race kecil di Gambar ke PDF
+Yang keliru hanya kalimat deskripsi alat ("tanpa mengorbankan keterbacaan teks") dan
+pesan ketika hasil kompresi tidak mengecil (`reductionRate` negatif). Keduanya sekarang
+memakai kunci terjemahan yang jujur: "menjaga keseimbangan kualitas visual" dan pesan
+"berkas sudah optimal" saat ukuran tidak turun.
+
+### C. Race di Gambar ke PDF — diperbaiki
 
 `src/features/image-to-pdf/components/ImageToPdfTool.vue`
 
-Item gambar dimasukkan ke daftar sebelum isi berkasnya selesai dibaca. Tombol "Buat PDF"
-aktif begitu daftar berisi, jadi klik yang sangat cepat bisa memproses gambar yang belum
-siap. Bedanya dengan bug nomor 2: di sini muncul pesan error, bukan diam. Perbaikannya
-adalah menonaktifkan tombol sampai semua buffer selesai dibaca.
+Item gambar dimasukkan ke daftar sebelum isi berkasnya selesai dibaca, sehingga klik
+yang sangat cepat bisa memproses gambar yang belum siap.
 
-### D. Beberapa alat belum memakai i18n
+Perbaikan: ditambahkan penanda `isReading` dan janji `pendingRead`. Tombol "Buat PDF"
+menunggu pembacaan selesai; kalau buffer benar-benar masih kosong, muncul peringatan
+yang jelas, bukan kegagalan tanpa pesan. Tes baru sengaja memperlambat pembacaan berkas
+(400 ms) dan membuktikan perbaikan ini: sebelum diperbaiki tes gagal, sesudahnya lulus.
 
-Gabung, Kompres, Watermark, Tanda Tangan, Sensor, Atur Halaman, Nomor Halaman,
-Gambar ke PDF, Ekstrak Teks, dan PDF ke Gambar masih memakai teks Indonesia langsung di
-dalam komponen. Alat-alat ini tidak ikut berubah saat bahasa diganti ke Inggris.
-Tes i18n yang ada tidak menangkapnya karena hanya memeriksa kunci i18n yang bocor,
-bukan teks yang belum diterjemahkan.
+### D. Sebagian besar antarmuka tidak memakai i18n — diperbaiki
+
+Aplikasi punya tombol bahasa ID/EN, tetapi banyak teks masih ditulis langsung dalam
+bahasa Indonesia, sehingga mode Inggris tetap menampilkan bahasa Indonesia. Temuan ini
+jauh lebih luas dari perkiraan awal: bukan 10 alat, tetapi hampir semua alat.
+
+Perbaikan yang dikerjakan:
+
+- Semua label, tombol, judul panel, placeholder, tooltip, dan label proses pada 25 rute
+  kini memakai kunci terjemahan (id + en).
+- Semua pesan hasil di antarmuka (notifikasi berhasil/gagal) kini memakai kunci.
+- Pesan kesalahan di lapisan logika (`src/features/*/logic/*.js`) juga memakai kunci;
+  nilai bahasa Indonesianya dibuat identik dengan teks sebelumnya supaya seluruh unit
+  test lama tetap lulus.
+- Format bawaan nomor halaman mengikuti bahasa aktif.
+- Ditambahkan tes penjaga baru: mode Inggris tidak boleh menampilkan satu pun kata
+  Indonesia di 25 rute. Tes ini yang menjadi ukuran diterimanya perbaikan ini.
+
+Yang **tidak** diterjemahkan: 9 pesan `console.warn` di dalam kanvas editor dan
+pratinjau (hanya untuk pengembang, tidak pernah terlihat pengguna). Isi contoh dokumen
+di HTML→PDF juga tetap Indonesia karena itu contoh konten yang boleh diubah pengguna,
+bukan teks antarmuka.
 
 ## Yang belum diuji lewat browser
 
-- Alur unduh massal Antrean (lihat temuan A — memang tidak bisa dijalankan).
 - Tema terang/gelap dan ukuran tata letak hanya diperiksa di `app-shell`.
 - Pemulihan dari berkas rusak yang berat (PDF rusak, DOCX rusak) baru sebagian.
 - Interaksi kamera pada Pindai jadi PDF (butuh perangkat kamera).
+- Kualitas hasil OCR hanya diperiksa pada satu berkas pindaian sederhana.
 
 ## Catatan teknis
 
 - Fixture dibuat saat tes berjalan ke `tests/e2e/.fixtures` (diabaikan git), termasuk
-  PDF berpassword, PDF berformulir, DOCX, PPTX, XLSX, HTML, dan PNG. Tidak ada berkas
-  biner yang disimpan di repo.
+  PDF berpassword, PDF berformulir, PDF hasil pindai (untuk OCR), DOCX, PPTX, XLSX,
+  HTML, dan PNG. Tidak ada berkas biner yang disimpan di repo.
 - Peringatan `fetchStandardFontData: ... LiberationSans-Regular.ttf` berasal dari pdf.js
   yang berjalan di Node saat membaca hasil tes, bukan dari aplikasi.
 - `page.getByRole('button', { name })` mencocokkan sebagian teks dan tidak case-sensitive,
   jadi bisa mengenai tombol sidebar. Semua pencarian tombol di tes kini dibatasi ke
   elemen `main`.
+- Playwright diberi `actionTimeout: 20000`. Tanpa batas ini, selector yang tidak
+  menemukan apa pun akan menunggu selamanya, sehingga tes menggantung tanpa laporan
+  gagal. Dengan batas ini, selector yang salah gagal dengan pesan yang jelas.
+- Tes memakai kata Indonesia sebagai penanda: kalau mode Inggris masih menampilkan kata
+  dari daftar itu, tes gagal. Daftar kata ini sengaja diisi kata yang tidak mungkin
+  muncul dalam kalimat Inggris biasa.

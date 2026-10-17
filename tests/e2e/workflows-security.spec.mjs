@@ -20,7 +20,7 @@ test.describe('security workflows', () => {
     await page.mouse.up();
 
     await mainButton(page, /Gunakan tanda tangan ini/i).click();
-    const download = await clickAndDownload(page, /Simpan PDF bertanda tangan/i);
+    const download = await clickAndDownload(page, /Simpan Dokumen Bertanda Tangan/i);
     expect(download.suggestedFilename()).toBe('pages2_signed.pdf');
 
     const info = await pdfInfo(await downloadBytes(download));
@@ -32,14 +32,14 @@ test.describe('security workflows', () => {
     await upload(page, twoPagePdf);
 
     // Nothing drawn yet, so the save button must not be usable.
-    await expect(mainButton(page, /Simpan PDF bertanda tangan/i)).toBeDisabled();
+    await expect(mainButton(page, /Simpan Dokumen Bertanda Tangan/i)).toBeDisabled();
   });
 
   test('redact: a drawn box is applied to the output', async ({ page }) => {
     await openTool(page, 'redact');
     await upload(page, textPdf);
 
-    await mainButton(page, /Tandai/).click();
+    await mainButton(page, /Sensor Kata Kunci/i).click();
     const canvas = page.locator('main canvas').first();
     const box = await canvas.boundingBox();
     await page.mouse.move(box.x + 60, box.y + 60);

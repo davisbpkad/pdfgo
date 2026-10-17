@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../app/providers/i18n.js';
 import { toasts, removeToast } from '../app/providers/toast.js';
 
 const typeBg = {
@@ -31,7 +32,7 @@ const typeBg = {
         <button
           class="w-6 h-6 border border-ink bg-white/60 hover:bg-white text-black rounded-xs flex items-center justify-center font-black text-sm leading-none cursor-pointer shadow-[1px_1px_0_0_#000000] shrink-0"
           @click="removeToast(toast.id)"
-          aria-label="Tutup notifikasi"
+          :aria-label="t('common.closeToast')"
         >
           &times;
         </button>

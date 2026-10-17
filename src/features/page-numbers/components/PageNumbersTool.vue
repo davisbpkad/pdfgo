@@ -3,6 +3,7 @@ import { ref, shallowRef, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { applyPageNumbers } from '../logic/applyPageNumbers.js';
 import DropZone from '../../../ui/DropZone.vue';
@@ -17,7 +18,7 @@ let activeBuffer = null;
 const pdfDocProxy = shallowRef(null);
 const totalPages = ref(0);
 
-const format = ref('Halaman {n} dari {total}');
+const format = ref(t('tools.pageNumbers.presetPageOfTotal'));
 const position = ref('bottom-center');
 const startNumber = ref(1);
 const margin = ref(25);
@@ -49,7 +50,7 @@ async function loadDocument(file) {
     // clicked (and silently ignored) while the document is still loading.
     activeFile.value = file;
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -81,9 +82,9 @@ async function handleApply() {
 
     const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(resultBytes, `${safeName}_numbered.pdf`);
-    showToast('Nomor halaman berhasil diterapkan!', 'success');
+    showToast(t('tools.pageNumbers.applySuccess'), 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal menambahkan nomor halaman', 'error');
+    showToast(err.message || t('tools.pageNumbers.applyFailed'), 'error');
   } finally {
     isProcessing.value = false;
   }
@@ -94,10 +95,10 @@ async function handleApply() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Nomor Halaman
+        {{ t('tools.pageNumbers.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Beri nomor halaman otomatis dengan format fleksibel, posisi 9 titik, dan opsi lewati sampul.
+        {{ t('tools.pageNumbers.desc') }}
       </p>
     </div>
 
@@ -107,14 +108,14 @@ async function handleApply() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ t('common.pagesCount', { count: totalPages }) }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
         >
-          Ganti File
+          {{ t('common.changeFile') }}
         </button>
       </BaseCard>
 
@@ -142,7 +143,7 @@ async function handleApply() {
         />
       </div>
 
-      <BaseProgressBar v-if="isProcessing" :progress="progressValue" label="Menambahkan nomor halaman..." />
+      <BaseProgressBar v-if="isProcessing" :progress="progressValue" :label="t('tools.pageNumbers.progress')" />
 
       <div class="flex justify-end pt-2">
         <BaseButton
@@ -152,7 +153,7 @@ async function handleApply() {
           :loading="isProcessing"
           @click="handleApply"
         >
-          Terapkan Nomor Halaman
+          {{ t('tools.pageNumbers.actionApply') }}
         </BaseButton>
       </div>
     </div>

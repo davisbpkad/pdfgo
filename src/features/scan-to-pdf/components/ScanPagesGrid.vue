@@ -30,7 +30,7 @@ defineEmits(['rotate', 'filter', 'move', 'crop', 'remove', 'build']);
     </div>
 
     <div class="flex items-center justify-between pt-2">
-      <span class="text-xs font-bold text-ink">{{ pages.length }} halaman disiapkan</span>
+      <span class="text-xs font-bold text-ink">{{ t('tools.scanToPdf.pagesReady', { count: pages.length }) }}</span>
       <BaseButton variant="primary" :loading="loading" class="px-6 py-2.5 font-black text-xs" @click="$emit('build')">
         📑 {{ t('tools.scanToPdf.actionBtn') }}
       </BaseButton>

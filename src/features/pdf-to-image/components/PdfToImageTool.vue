@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { createZipArchive } from '../../../core/zip.js';
+import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { parsePageRange } from '../../split/logic/parsePageRange.js';
@@ -49,7 +50,7 @@ async function loadDocument(file) {
     // cannot be clicked (and silently ignored) while it is still loading.
     activeFile.value = file;
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -67,14 +68,14 @@ async function handleConvert() {
   if (pageRangeChoice.value === 'custom') {
     pageNumbers = parsePageRange(customRange.value, totalPages.value);
     if (pageNumbers.length === 0) {
-      showToast('Rentang halaman tidak valid.', 'error');
+      showToast(t('tools.pdfToImage.invalidRange'), 'error');
       return;
     }
   }
 
   isConverting.value = true;
   progressValue.value = 5;
-  progressStatusText.value = 'Mempersiapkan ekstraksi gambar...';
+  progressStatusText.value = t('tools.pdfToImage.preparing');
 
   try {
     const baseName = activeFile.value.name.replace(/\.pdf$/i, '');
@@ -89,7 +90,7 @@ async function handleConvert() {
       },
       (pct, cur, total) => {
         progressValue.value = pct;
-        progressStatusText.value = `Mengonversi halaman ${cur} dari ${total}...`;
+        progressStatusText.value = t('tools.pdfToImage.converting', { current: cur, total });
       }
     );
 
@@ -100,9 +101,9 @@ async function handleConvert() {
       downloadFile(zipBlob, `${baseName}_gambar_ZIP.zip`, 'application/zip');
     }
 
-    showToast(`Berhasil mengekstrak ${images.length} gambar!`, 'success');
+    showToast(`t('tools.pdfToImage.extractSuccess', { count: images.length })`, 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal mengonversi ke gambar', 'error');
+    showToast(err.message || t('tools.pdfToImage.convertFailed'), 'error');
   } finally {
     isConverting.value = false;
   }
@@ -113,10 +114,10 @@ async function handleConvert() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        PDF ke Gambar
+        {{ t('tools.pdfToImage.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Ubah tiap halaman dokumen PDF menjadi berkas gambar PNG atau JPEG berkualitas tinggi.
+        {{ t('tools.pdfToImage.desc') }}
       </p>
     </div>
 
@@ -126,14 +127,14 @@ async function handleConvert() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ t('common.pagesCount', { count: totalPages }) }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
         >
-          Ganti File
+          {{ t('common.changeFile') }}
         </button>
       </BaseCard>
 
@@ -160,7 +161,7 @@ async function handleConvert() {
           :loading="isConverting"
           @click="handleConvert"
         >
-          Ekstrak Gambar Sekarang
+          {{ t('tools.pdfToImage.actionConvert') }}
         </BaseButton>
       </div>
     </div>

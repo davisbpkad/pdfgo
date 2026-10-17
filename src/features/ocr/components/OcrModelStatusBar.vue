@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { ref } from 'vue';
 import { saveTesseractModel } from '../../../core/assets.js';
 import { showToast } from '../../../app/providers/toast.js';
@@ -35,7 +36,7 @@ async function onFileSelected(e) {
     showToast(`Model ${langCode.toUpperCase()} berhasil diimpor ke IndexedDB lokal!`, 'success');
     emit('model-imported', langCode);
   } catch (err) {
-    showToast('Gagal mengimpor model: ' + (err.message || ''), 'error');
+    showToast(t('tools.ocr.modelImportFailed') + (err.message || ''), 'error');
   }
 }
 </script>
@@ -52,9 +53,7 @@ async function onFileSelected(e) {
           <template v-if="availableLangs.length > 0">
             Model OCR Siap: {{ availableLangs.join(', ').toUpperCase() }}
           </template>
-          <template v-else>
-            Model Bahasa Belum Diimpor
-          </template>
+          <template v-else>{{ t('tools.ocr.modelStatusMissing') }}</template>
         </div>
         <div class="text-[11px] text-ink/70 font-medium">
           {{ isFullVariant ? 'Varian Full (Model terpasang secara lokal bawaan)' : 'Varian Lite (Impor berkas .traineddata tanpa internet)' }}

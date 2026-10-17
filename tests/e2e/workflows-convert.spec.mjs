@@ -10,16 +10,35 @@ test.describe('conversion workflows', () => {
     await openTool(page, 'image-to-pdf');
     await upload(page, [imagePng], 'image/png');
 
-    const download = await clickAndDownload(page, /Buat PDF/i);
+    const download = await clickAndDownload(page, /Buat Dokumen PDF/i);
     expect(download.suggestedFilename()).toMatch(/^PDFToolkit_Images_\d+\.pdf$/);
     expect((await pdfInfo(await downloadBytes(download))).pages).toBe(1);
+  });
+
+  test('image to pdf: clicking while the image bytes are still loading does not fail', async ({ page }) => {
+    // Slow the browser's file read down so the click lands mid-load, the way it
+    // does with big phone photos.
+    await page.addInitScript(() => {
+      const original = File.prototype.arrayBuffer;
+      File.prototype.arrayBuffer = function () {
+        return new Promise((resolve) => setTimeout(() => resolve(original.call(this)), 400));
+      };
+    });
+
+    await openTool(page, 'image-to-pdf');
+    await upload(page, [imagePng], 'image/png');
+
+    // Click immediately instead of waiting for the read to finish.
+    const download = await clickAndDownload(page, /Buat Dokumen PDF/i);
+    expect((await pdfInfo(await downloadBytes(download))).pages).toBe(1);
+    await expect(page.getByText(/masih dimuat/)).toHaveCount(0);
   });
 
   test('pdf to image: two pages become a ZIP with two real PNGs', async ({ page }) => {
     await openTool(page, 'pdf-to-image');
     await upload(page, twoPagePdf);
 
-    const download = await clickAndDownload(page, /Ekstrak gambar sekarang/i);
+    const download = await clickAndDownload(page, /Konversi ke Gambar/i);
     expect(download.suggestedFilename()).toBe('pages2_gambar_ZIP.zip');
 
     const bytes = await downloadBytes(download);
@@ -119,6 +138,6 @@ test.describe('conversion workflows', () => {
     await upload(page, [textPdf], 'image/png');
 
     await expect(page.locator('main h1')).toHaveCount(1);
-    await expect(page.getByText(/Buat PDF/i)).toHaveCount(0);
+    await expect(page.getByText(/Buat Dokumen PDF/i)).toHaveCount(0);
   });
 });

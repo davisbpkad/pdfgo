@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { unwrapPdfProxy } from '../../../core/pdf.js';
 import { MIN_BOX_FRACTION, nudgeBox, moveBox, resizeBox } from '../logic/boxInteractions.js';
@@ -165,7 +166,7 @@ function onPointerUp(e) {
       <div
         v-if="b.id === selectedBoxId"
         class="resize-handle absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-red-500 border-2 border-white cursor-se-resize z-30"
-        title="Ubah ukuran kotak"
+        :title="t('tools.redact.resizeBoxTitle')"
         @pointerdown.stop="startBoxDrag($event, b, 'resize')"
       />
     </div>

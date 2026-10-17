@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 defineProps({
   image: {
     type: Object,
@@ -48,7 +49,7 @@ function onDrop(e, idx) {
         <button
           type="button"
           class="p-1 border border-ink bg-paper hover:bg-danger hover:text-white cursor-pointer transition-colors"
-          title="Hapus gambar"
+          :title="t('tools.imageToPdf.removeImageTitle')"
           @click="emit('remove', index)"
         >
           ✕

@@ -50,11 +50,11 @@ async function handleIncomingFiles(files) {
           item.isEncrypted = true;
           item.pageCount = '?';
         } else {
-          item.error = err.message || 'File PDF tidak valid';
+          item.error = err.message || t('tools.merge.invalidFile');
         }
       }
     } catch (e) {
-      item.error = 'Gagal membaca berkas';
+      item.error = t('tools.merge.readFailed');
     }
   }
 }
@@ -75,9 +75,9 @@ async function unlockFile({ index, password }) {
     item.password = password;
     item.isEncrypted = false;
     item.error = null;
-    showToast('Password cocok! Dokumen terbuka.', 'success');
+    showToast(t('tools.merge.unlockSuccess'), 'success');
   } catch (err) {
-    showToast('Password salah. Silakan coba lagi.', 'error');
+    showToast(t('tools.merge.unlockFailed'), 'error');
   }
 }
 
@@ -99,13 +99,13 @@ function clearAll() {
 
 async function handleMerge() {
   if (fileList.value.length < 2) {
-    showToast('Pilih minimal 2 file PDF untuk digabungkan.', 'error');
+    showToast(t('tools.merge.needMinFiles'), 'error');
     return;
   }
 
   const lockedItem = fileList.value.find(f => f.isEncrypted);
   if (lockedItem) {
-    showToast(`Berkas "${lockedItem.name}" masih terkunci password. Buka terlebih dahulu.`, 'error');
+    showToast(`t('tools.merge.stillLocked', { name: lockedItem.name })`, 'error');
     return;
   }
 
@@ -138,10 +138,10 @@ async function handleMerge() {
 
     isProcessing.value = false;
     downloadFile(blob, `PDFToolkit_Merged_${Date.now()}.pdf`);
-    showToast('Dokumen berhasil digabungkan!', 'success');
+    showToast(t('tools.merge.mergedToast'), 'success');
   } catch (err) {
     isProcessing.value = false;
-    showToast(err.message || 'Gagal menggabungkan PDF', 'error');
+    showToast(err.message || t('tools.merge.mergeFailed'), 'error');
   }
 }
 </script>
@@ -165,14 +165,14 @@ async function handleMerge() {
     <div v-if="fileList.length > 0" class="space-y-3">
       <div class="flex items-center justify-between">
         <span class="font-bold text-sm text-ink uppercase tracking-wider">
-          Urutan Dokumen ({{ fileList.length }} File)
+          {{ t('tools.merge.orderTitle', { count: fileList.length }) }}
         </span>
         <button
           type="button"
           class="text-xs font-bold text-danger hover:underline cursor-pointer"
           @click="clearAll"
         >
-          Kosongkan Semua
+          {{ t('tools.merge.clearAll') }}
         </button>
       </div>
 
@@ -195,7 +195,7 @@ async function handleMerge() {
       <BaseProgressBar
         v-if="isProcessing"
         :progress="progressValue"
-        label="Menggabungkan file PDF..."
+        :label="t('tools.merge.merging')"
       />
 
       <!-- Action Button -->
@@ -207,14 +207,14 @@ async function handleMerge() {
           :loading="isProcessing"
           @click="handleMerge"
         >
-          {{ `Gabungkan ${fileList.length} file jadi 1 PDF` }}
+          {{ t('tools.merge.actionButton', { count: fileList.length }) }}
         </BaseButton>
 
         <span
           v-if="fileList.length < 2"
           class="text-xs text-ink/70 flex items-center font-bold"
         >
-          Tambahkan minimal 2 file PDF untuk mulai menggabungkan.
+          {{ t('tools.merge.emptyPrompt') }}
         </span>
       </div>
     </div>
@@ -223,17 +223,17 @@ async function handleMerge() {
     <BaseCard v-if="mergedResult" class="bg-accent-2/30 border-3 border-ink space-y-3">
       <div class="flex items-center gap-2 font-display font-black text-lg text-ink uppercase">
         <span>✓</span>
-        <span>Penggabungan Berhasil!</span>
+        <span>{{ t('tools.merge.successTitle') }}</span>
       </div>
       <p class="text-sm font-medium text-ink">
-        File siap diunduh ({{ mergedResult.pageCount }} halaman • {{ mergedResult.size }}).
+        {{ t('tools.merge.successDesc', { pageCount: mergedResult.pageCount, fileSize: mergedResult.size }) }}
       </p>
       <div class="flex gap-2">
         <BaseButton
           variant="primary"
           @click="downloadFile(mergedResult.blob, `PDFToolkit_Merged_${Date.now()}.pdf`)"
         >
-          Unduh Lagi
+          {{ t('tools.merge.downloadAgain') }}
         </BaseButton>
       </div>
     </BaseCard>

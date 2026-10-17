@@ -48,7 +48,7 @@ async function loadDocument(file) {
     // clicked (and silently ignored) while the document is still loading.
     activeFile.value = file;
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     activeFile.value = null;
   }
 }
@@ -68,7 +68,7 @@ async function handleProcess() {
     const buffer = await activeFile.value.arrayBuffer();
     if (splitMode.value === 'range') {
       const pageNumbers = parsePageRange(rangeString.value, totalPages.value);
-      if (pageNumbers.length === 0) throw new Error(t('tools.split.invalidRange') || 'Pilihan halaman tidak valid');
+      if (pageNumbers.length === 0) throw new Error(t('tools.split.invalidRange') || t('tools.split.invalidSelection'));
 
       progressValue.value = 50;
       const resultBytes = await extractPages(buffer, pageNumbers);
@@ -77,7 +77,7 @@ async function handleProcess() {
       const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
       const rangeTag = rangeString.value.replace(/[^0-9a-zA-Z-]/g, '_');
       downloadFile(resultBytes, `${safeName}_hal_${rangeTag}.pdf`);
-      showToast(t('tools.split.successPdf') || 'Halaman terpilih berhasil diekstrak.', 'success');
+      showToast(t('tools.split.successPdf') || t('tools.split.extractSuccess'), 'success');
     } else {
       const n = Math.max(1, parseInt(nPages.value, 10) || 1);
       const chunks = await splitEveryN(buffer, n, '', (pct) => {
@@ -94,7 +94,7 @@ async function handleProcess() {
       showToast(t('tools.split.successZip', { count: chunks.length }) || `Berhasil memisahkan ${chunks.length} berkas.`, 'success');
     }
   } catch (err) {
-    showToast(err.message || 'Gagal memproses split', 'error');
+    showToast(err.message || t('tools.split.processFailed'), 'error');
   } finally {
     isProcessing.value = false;
   }
@@ -127,9 +127,7 @@ async function handleProcess() {
           </div>
           <div class="min-w-0">
             <h3 class="font-bold text-base text-ink truncate">{{ activeFile.name }}</h3>
-            <p class="text-xs text-ink/70 font-medium">
-              {{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB
-            </p>
+            <p class="text-xs text-ink/70 font-medium">{{ totalPages }} {{ t('common.pages') }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
           </div>
         </div>
 
@@ -137,9 +135,7 @@ async function handleProcess() {
           type="button"
           class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer whitespace-nowrap"
           @click="resetFile"
-        >
-          Ganti Dokumen
-        </button>
+        >{{ t('common.changeFile') }}</button>
       </BaseCard>
 
       <!-- Split Configuration -->
@@ -154,7 +150,7 @@ async function handleProcess() {
       <BaseProgressBar
         v-if="isProcessing"
         :progress="progressValue"
-        label="Memisahkan halaman dokumen..."
+        :label="t('tools.split.processing')"
       />
 
       <!-- Action Button -->
@@ -165,9 +161,7 @@ async function handleProcess() {
           :disabled="isProcessing"
           :loading="isProcessing"
           @click="handleProcess"
-        >
-          Pisahkan sekarang
-        </BaseButton>
+        >{{ t('tools.split.actionApply') }}</BaseButton>
       </div>
     </div>
   </div>

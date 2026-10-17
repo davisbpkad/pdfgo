@@ -1,5 +1,6 @@
 <script setup>
 import BaseButton from '../../../ui/BaseButton.vue';
+import { t } from '../../../app/providers/i18n.js';
 
 defineProps({
   canUndo: {
@@ -45,7 +46,7 @@ const emit = defineEmits([
         :disabled="!canUndo"
         @click="emit('undo')"
       >
-        ↶ Urungkan
+        ↶ {{ t('tools.organize.undo') }}
       </BaseButton>
 
       <BaseButton
@@ -54,7 +55,7 @@ const emit = defineEmits([
         :disabled="!canRedo"
         @click="emit('redo')"
       >
-        ↷ Ulangi
+        ↷ {{ t('tools.organize.redo') }}
       </BaseButton>
 
       <BaseButton
@@ -62,7 +63,7 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('rotate-all')"
       >
-        ↻ Putar Semua
+        ↻ {{ t('tools.organize.rotateAll') }}
       </BaseButton>
 
       <BaseButton
@@ -70,7 +71,7 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('select-all')"
       >
-        {{ selectedCount === totalCount && totalCount > 0 ? 'Batal Pilih' : 'Pilih Semua' }}
+        {{ selectedCount === totalCount && totalCount > 0 ? t('tools.organize.deselectAll') : t('tools.organize.selectAll') }}
       </BaseButton>
 
       <BaseButton
@@ -79,7 +80,7 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('delete-selected')"
       >
-        🗑 Hapus ({{ selectedCount }})
+        🗑 {{ t('tools.organize.deleteSelected') }} ({{ selectedCount }})
       </BaseButton>
     </div>
 
@@ -90,7 +91,7 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('reset-file')"
       >
-        📁 Ganti File
+        📁 {{ t('tools.organize.changeFile') }}
       </BaseButton>
 
       <BaseButton
@@ -100,7 +101,7 @@ const emit = defineEmits([
         :loading="isSaving"
         @click="emit('save')"
       >
-        Simpan Dokumen ({{ totalCount }})
+        {{ t('tools.organize.saveOrganized', { count: totalCount }) }}
       </BaseButton>
     </div>
   </div>

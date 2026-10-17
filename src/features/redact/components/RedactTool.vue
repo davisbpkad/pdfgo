@@ -3,6 +3,7 @@ import { ref, shallowRef, computed, watch, onMounted, onUnmounted } from 'vue';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { executeTrueRedaction } from '../logic/executeTrueRedaction.js';
 import { findTextRedactionBoxes } from '../logic/findTextRedactionBoxes.js';
@@ -117,7 +118,7 @@ async function loadDocument(file) {
     const vp = page.getViewport({ scale: 1.0 });
     pageDimensionsPt.value = { width: vp.width, height: vp.height };
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -185,7 +186,7 @@ function clearCurrentPage() {
     [pageIdx]: []
   };
   selectedBoxId.value = null;
-  showToast('Kotak sensor di halaman ini dihapus.', 'info');
+  showToast(t('tools.redact.boxRemoved'), 'info');
 }
 
 async function handleSearch() {
@@ -210,9 +211,9 @@ async function handleSearch() {
       ...boxesByPage.value,
       [pageIdx]: [...list, ...foundBoxes]
     };
-    showToast(`${foundBoxes.length} kata cocok ditemukan dan ditandai!`, 'success');
+    showToast(t('tools.redact.foundCount', { count: foundBoxes.length }), 'success');
   } catch (err) {
-    showToast('Gagal mencari teks: ' + (err.message || ''), 'error');
+    showToast(t('tools.redact.searchFailed') + (err.message || ''), 'error');
   }
 }
 
@@ -235,9 +236,9 @@ async function handleApply() {
 
     const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(resultBytes, `${safeName}_redacted.pdf`);
-    showToast('Dokumen berhasil disensor permanen!', 'success');
+    showToast(t('tools.redact.applySuccess'), 'success');
   } catch (err) {
-    showToast('Gagal menyensor dokumen: ' + (err.message || ''), 'error');
+    showToast(t('tools.redact.applyFailed') + (err.message || ''), 'error');
   } finally {
     isProcessing.value = false;
   }
@@ -248,10 +249,10 @@ async function handleApply() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Sensor Dokumen
+        {{ t('tools.redact.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Sensor permanen teks dan objek rahasia melalui rasterisasi piksel serta bersihkan metadata dokumen.
+        {{ t('tools.redact.desc') }}
       </p>
     </div>
 
@@ -261,20 +262,18 @@ async function handleApply() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ totalPages }} {{ t('common.pages') }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
-        >
-          Ganti File
-        </button>
+        >{{ t('common.changeFile') }}</button>
       </BaseCard>
 
       <RedactWarningBanner />
 
-      <BaseProgressBar v-if="isProcessing" :progress="progressValue" label="Menghancurkan piksel sensor..." />
+      <BaseProgressBar v-if="isProcessing" :progress="progressValue" :label="t('tools.redact.progressDestroying')" />
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <!-- Left Panel: Controls & Box List -->
@@ -307,9 +306,7 @@ async function handleApply() {
         <!-- Right Panel: Canvas Viewport -->
         <div class="lg:col-span-7 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-ink">
-              Halaman {{ currentPage }} dari {{ totalPages }}
-            </span>
+            <span class="text-xs font-bold text-ink">{{ t('common.page') }} {{ currentPage }} {{ t('common.of') }} {{ totalPages }}</span>
             <div class="flex items-center gap-1">
               <button
                 type="button"

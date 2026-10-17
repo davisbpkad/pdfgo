@@ -19,9 +19,7 @@ const emit = defineEmits(['reset', 'download']);
       <h3 class="font-display font-black text-base text-ink uppercase">
         ✓ {{ t('tools.unlock.successTitle') }}
       </h3>
-      <p class="text-xs text-ink/80 font-medium">
-        {{ t('tools.unlock.successDesc') }} ({{ result.pageCount }} halaman)
-      </p>
+      <p class="text-xs text-ink/80 font-medium">{{ t('tools.unlock.successDesc') }} ({{ result.pageCount }} {{ t('common.pages') }})</p>
     </div>
     <div class="flex justify-end gap-3 pt-2">
       <BaseButton variant="secondary" class="text-xs py-2 px-4 shadow-hard-sm" @click="emit('reset')">

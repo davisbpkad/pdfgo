@@ -9,7 +9,10 @@ export default defineConfig({
   reporter: [['list']],
   use: {
     baseURL: 'http://127.0.0.1:4173',
-    screenshot: 'only-on-failure'
+    screenshot: 'only-on-failure',
+    // Bounded, so a selector that matches nothing fails the test instead of
+    // waiting forever (Playwright's default action timeout is unlimited).
+    actionTimeout: 20000
   },
   webServer: {
     command: 'node scripts/serve.mjs',

@@ -26,7 +26,7 @@ async function copyMarkdown() {
       copied.value = false;
     }, 2000);
   } catch {
-    showToast('Gagal menyalin teks ke papan klip.', 'error');
+    showToast(t('tools.pdfToMarkdown.copyFailed'), 'error');
   }
 }
 </script>
@@ -36,9 +36,7 @@ async function copyMarkdown() {
     <div class="flex items-center justify-between border-b-2 border-ink pb-3 flex-wrap gap-2">
       <div>
         <h3 class="font-bold text-sm text-ink uppercase">{{ t('tools.pdfToMarkdown.previewTitle') }}</h3>
-        <p class="text-xs text-ink/70">
-          {{ result.pageCount }} halaman • {{ result.markdown.length }} karakter
-        </p>
+        <p class="text-xs text-ink/70">{{ result.pageCount }} {{ t('common.pages') }} • {{ result.markdown.length }} {{ t('common.characters') }}</p>
       </div>
       <BaseButton variant="secondary" class="text-xs font-bold" @click="copyMarkdown">
         {{ copied ? '✓ ' + t('tools.pdfToMarkdown.copiedBtn') : '📋 ' + t('tools.pdfToMarkdown.copyBtn') }}

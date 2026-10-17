@@ -49,7 +49,7 @@ function handleSubmit() {
     </div>
 
     <div class="flex items-center justify-between pt-2 border-t-2 border-ink">
-      <span class="text-xs text-ink/70 font-medium">Format Dokumen PDF (A4)</span>
+      <span class="text-xs text-ink/70 font-medium">{{ t('tools.excelToPdf.formatA4') }}</span>
       <BaseButton variant="primary" :loading="loading" class="px-6 py-2.5 font-black text-xs" @click="handleSubmit">
         📊 {{ t('tools.excelToPdf.actionBtn') }}
       </BaseButton>

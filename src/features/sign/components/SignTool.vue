@@ -3,6 +3,7 @@ import { ref, shallowRef, watch, onMounted } from 'vue';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { toPdfRect } from '../../../core/coordinates.js';
 import { applySignatures } from '../logic/applySignatures.js';
@@ -66,7 +67,7 @@ async function loadDocument(file) {
     const vp = page.getViewport({ scale: 1.0 });
     pageDimensionsPt.value = { width: vp.width, height: vp.height };
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -82,12 +83,12 @@ function resetFile() {
 
 function onSignatureSelected(dataUrl) {
   signatureUrl.value = dataUrl;
-  showToast('Tanda tangan siap ditempatkan pada dokumen.', 'info');
+  showToast(t('tools.sign.signatureReady'), 'info');
 }
 
 async function handleSave() {
   if (!activeBuffer || !signatureUrl.value) {
-    showToast('Pilih tanda tangan terlebih dahulu.', 'error');
+    showToast(t('tools.sign.selectSignatureFirst'), 'error');
     return;
   }
 
@@ -116,9 +117,9 @@ async function handleSave() {
     const resultBytes = await applySignatures(safeBytes, signBuffer, placements);
     const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(resultBytes, `${safeName}_signed.pdf`);
-    showToast('Dokumen berhasil ditandatangani!', 'success');
+    showToast(t('tools.sign.saveSuccess'), 'success');
   } catch (err) {
-    showToast('Gagal menandatangani PDF: ' + (err.message || ''), 'error');
+    showToast(t('tools.sign.saveFailed') + (err.message || ''), 'error');
   } finally {
     isSaving.value = false;
   }
@@ -129,10 +130,10 @@ async function handleSave() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Tanda Tangan Digital
+        {{ t('tools.sign.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Tambahkan tanda tangan gambar tangan, ketikan kursif, atau unggahan berkas ke halaman PDF secara presisi.
+        {{ t('tools.sign.desc') }}
       </p>
     </div>
 
@@ -142,14 +143,14 @@ async function handleSave() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ t('common.pagesCount', { count: totalPages }) }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
         >
-          Ganti File
+          {{ t('common.changeFile') }}
         </button>
       </BaseCard>
 
@@ -163,7 +164,7 @@ async function handleSave() {
               :class="activeTab === 'draw' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'draw'"
             >
-              ✏️ Gambar
+              ✏️ {{ t('tools.sign.tabDraw') }}
             </button>
             <button
               type="button"
@@ -171,7 +172,7 @@ async function handleSave() {
               :class="activeTab === 'type' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'type'"
             >
-              ⌨️ Ketik
+              ⌨️ {{ t('tools.sign.tabType') }}
             </button>
             <button
               type="button"
@@ -179,7 +180,7 @@ async function handleSave() {
               :class="activeTab === 'upload' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'upload'"
             >
-              📁 Unggah
+              📁 {{ t('tools.sign.tabUpload') }}
             </button>
           </div>
 
@@ -189,13 +190,13 @@ async function handleSave() {
 
           <div class="border-t-2 border-ink pt-4 space-y-3">
             <div class="space-y-1">
-              <label class="text-xs font-bold text-ink uppercase tracking-wider block">Terapkan Ke Halaman:</label>
+              <label class="text-xs font-bold text-ink uppercase tracking-wider block">{{ t('tools.sign.pageApplyLabel') }}</label>
               <select
                 v-model="applyTarget"
                 class="w-full text-xs font-bold p-2 border-2 border-ink bg-paper shadow-hard-sm cursor-pointer focus:outline-none"
               >
-                <option value="current">Halaman Ini Saja (Hal {{ currentPage }})</option>
-                <option value="all">Semua Halaman ({{ totalPages }} Halaman)</option>
+                <option value="current">{{ t('tools.sign.applyCurrent') }} (Hal {{ currentPage }})</option>
+                <option value="all">{{ t('tools.sign.applyAll') }} ({{ totalPages }} {{ t('common.pages') }})</option>
               </select>
             </div>
 
@@ -205,7 +206,7 @@ async function handleSave() {
               :disabled="!signatureUrl || isSaving"
               @click="handleSave"
             >
-              {{ isSaving ? 'Menyimpan PDF...' : '💾 Simpan PDF Bertanda Tangan' }}
+              {{ isSaving ? t('tools.sign.saving') : '💾 ' + t('tools.sign.saveSigned') }}
             </BaseButton>
           </div>
         </div>
@@ -214,7 +215,7 @@ async function handleSave() {
         <div class="lg:col-span-7 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-ink">
-              Pratinjau & Penempatan (Hal {{ currentPage }} dari {{ totalPages }})
+              {{ t('tools.sign.previewPlacement', { current: currentPage, total: totalPages }) }}
             </span>
             <div class="flex items-center gap-1">
               <button
@@ -260,7 +261,7 @@ async function handleSave() {
           />
 
           <p class="text-xs text-ink/70 text-center font-medium">
-            💡 Seret tanda tangan atau gunakan tombol panah (Shift untuk 10x). Nilai mm dapat diketik langsung untuk akurasi maksimal.
+            💡 {{ t('tools.sign.placementHint') }}
           </p>
         </div>
       </div>

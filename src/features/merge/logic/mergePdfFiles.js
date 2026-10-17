@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument } from 'pdf-lib';
 
 /**
@@ -8,7 +9,7 @@ import { PDFDocument } from 'pdf-lib';
  */
 export async function mergePdfFiles(entries, onProgress = null) {
   if (!entries || entries.length < 2) {
-    throw new Error('Minimal 2 file PDF dibutuhkan untuk penggabungan.');
+    throw new Error(t('tools.merge.minFiles'));
   }
 
   const mergedDoc = await PDFDocument.create();

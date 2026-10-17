@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { createWorker } from 'tesseract.js';
 import { getTesseractWorkerBlobUrl } from '../../../core/workers.js';
 import { ensureBuiltinModelsLoaded } from '../../../core/assets.js';
@@ -49,7 +50,7 @@ export async function getOcrWorker(lang, onProgress) {
     activeWorkerLang = null;
     const msg = String(err?.message || err || '');
     if (msg.includes('Content Security') || msg.includes('unsafe-eval') || msg.includes('WebAssembly')) {
-      throw new Error('Pelanggaran CSP: Browser masih memuat versi file lama dari cache. Silakan tutup tab ini dan buka ulang file "dist/PDF To Go.html", atau lakukan Hard Reload (Cmd + Shift + R).');
+      throw new Error(t('tools.ocr.cspWarning'));
     }
     throw err;
   }

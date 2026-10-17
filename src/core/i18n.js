@@ -9,10 +9,14 @@ const STORAGE_KEY = 'pdfgo_lang';
 const translations = {
   id: {
     app: {
+      notFoundTitle: 'Alat Tidak Ditemukan',
+      notFoundBody: 'Silakan pilih salah satu alat dari menu bilah samping.',
+      sidebarMenu: 'Menu Alat',
       name: 'PDF To Go',
       tagline: 'Manipulasi PDF 100% Offline & Privat',
       badge: 'Offline Total',
-      offlineBanner: '100% Offline • File tidak pernah meninggalkan perangkat Anda'
+      offlineBanner: '100% Offline • File tidak pernah meninggalkan perangkat Anda',
+      sidebarNote: '100% Lokal di peramban Anda. Bebas pelacak & tanpa server.'
     },
     nav: {
       categoryAll: 'Alat Dokumen',
@@ -28,6 +32,9 @@ const translations = {
         advanced: 'Alat Lanjutan'
       },
       unlock: {
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        notLocked: 'TIDAK TERKUNCI',
+        progressUnlock: 'Membuka kunci proteksi PDF...',
         title: 'Buka Kunci PDF',
         desc: 'Hapus proteksi password dari file PDF terenkripsi agar dapat dibuka bebas.',
         passwordLabel: 'Password Dokumen PDF:',
@@ -44,6 +51,10 @@ const translations = {
         failed: 'Gagal membuka kunci PDF: {reason}'
       },
       protect: {
+        progress: 'Menerapkan proteksi AES-256...',
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        emptyPassword: 'Password tidak boleh kosong.',
+        invalidFormat: 'Format tidak valid',
         title: 'Kunci dengan Password',
         desc: 'Lindungi dokumen PDF Anda dengan enkripsi standar AES-256 dan izin akses khusus.',
         passwordLabel: 'Password Dokumen:',
@@ -64,6 +75,9 @@ const translations = {
         failed: 'Gagal mengunci PDF: {reason}'
       },
       pdfToMarkdown: {
+        copyFailed: 'Gagal menyalin teks ke papan klip.',
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        progress: 'Mengekstrak tata letak & struktur dokumen...',
         title: 'PDF ke Markdown',
         desc: 'Ubah dokumen PDF menjadi format Markdown (.md) terstruktur dengan deteksi judul, daftar, tabel, dan gambar.',
         optionsTitle: 'Opsi Konversi:',
@@ -82,6 +96,11 @@ const translations = {
         failed: 'Gagal mengonversi ke Markdown: {reason}'
       },
       scanToPdf: {
+        invalidImageData: 'ImageData tidak valid.',
+        noPages: 'Tidak ada halaman yang dapat dipindai.',
+        cropPage: 'Potong Halaman',
+        pagesReady: '{count} halaman disiapkan',
+        progress: 'Memproses dan mengoptimalkan hasil pindai...',
         title: 'Pindai jadi PDF',
         desc: 'Ambil foto dokumen fisik dengan kamera atau unggah gambar, lalu potong, perjelas, dan gabungkan menjadi PDF rapi.',
         uploadTitle: 'Pindai atau Unggah Dokumen',
@@ -123,6 +142,8 @@ const translations = {
         printInstruction: 'Dialog cetak dibuka. Pilih "Simpan sebagai PDF" untuk mengunduh.'
       },
       pdfToWord: {
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        progress: 'Menyusun ulang tata letak dan membuat dokumen Word...',
         title: 'PDF ke Word',
         desc: 'Konversi dokumen PDF menjadi dokumen Microsoft Word (.docx) yang dapat diedit dengan mudah.',
         optionsTitle: 'Opsi Dokumen Word:',
@@ -136,6 +157,9 @@ const translations = {
         failed: 'Gagal mengonversi ke Word: {reason}'
       },
       pdfToPowerpoint: {
+        invalidPageCount: 'Jumlah halaman dokumen tidak valid.',
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        progress: 'Mengonversi halaman PDF menjadi slide presentasi...',
         title: 'PDF ke PowerPoint',
         desc: 'Konversi setiap halaman PDF menjadi slide presentasi Microsoft PowerPoint (.pptx) dengan tata letak presisi.',
         optionsTitle: 'Opsi Presentasi PowerPoint:',
@@ -154,6 +178,11 @@ const translations = {
         failed: 'Gagal mengonversi ke PowerPoint: {reason}'
       },
       excelToPdf: {
+        invalidSheet: 'Berkas spreadsheet kosong atau tidak valid.',
+        noRows: 'Tidak ada data baris yang ditemukan dalam berkas Excel.',
+        noTableRows: 'Tidak ada data baris yang dapat diubah menjadi tabel.',
+        formatA4: 'Format Dokumen PDF (A4)',
+        progress: 'Menyusun tabel grid dan menghasilkan halaman PDF...',
         title: 'Excel ke PDF',
         desc: 'Ubah lembar kerja Excel (.xlsx, .csv) menjadi dokumen PDF tabel rapi dan siap cetak.',
         optionsTitle: 'Opsi Tata Letak Halaman:',
@@ -169,6 +198,8 @@ const translations = {
         failed: 'Gagal mengonversi ke PDF: {reason}'
       },
       wordToPdf: {
+        invalidDocx: 'Berkas Word (.docx) kosong atau tidak valid.',
+        progress: 'Membaca format DOCX dan mengonversi ke HTML...',
         title: 'Word ke PDF',
         desc: 'Konversi dokumen Word (.docx) menjadi berkas PDF berkualitas cetak dengan cepat dan aman.',
         instructionText: 'Saat dialog cetak muncul, pilih tujuan "Simpan sebagai PDF" (Save as PDF) untuk menghasilkan berkas PDF vektor berkualitas tajam.',
@@ -180,6 +211,10 @@ const translations = {
         failed: 'Gagal memproses dokumen Word: {reason}'
       },
       editPdf: {
+        renderFailed: 'Gagal merender halaman edit: ',
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        readTextFailed: 'Gagal membaca teks halaman: ',
+        textAria: 'Teks dokumen',
         title: 'Edit Tulisan PDF',
         desc: 'Klik tulisan yang sudah ada di halaman, lalu ketik atau hapus seperti mengetik biasa. Tulisan lama ditutupi dan ditulis ulang memakai font bawaan.',
         saveBtn: 'Simpan PDF',
@@ -192,6 +227,10 @@ const translations = {
         textHint: 'Klik tulisan di halaman lalu ketik atau hapus seperti mengetik biasa. Tulisan lama ditutupi, lalu ditulis ulang. Tekan Tab atau klik di luar untuk lanjut ke tulisan lain.'
       },
       powerpointToPdf: {
+        invalidPptx: 'Berkas PowerPoint (.pptx) kosong atau tidak valid.',
+        noSlides: 'Tidak ada slide yang ditemukan dalam berkas PowerPoint.',
+        imageFailed: 'Gagal menempelkan gambar slide: ',
+        progress: 'Mengekstrak slide presentasi dan membuat halaman PDF...',
         title: 'PowerPoint ke PDF',
         desc: 'Ubah slide presentasi PowerPoint (.pptx) menjadi dokumen PDF dengan tata letak teks dan gambar yang rapi.',
         disclaimer: 'Tata letak teks, bentuk, dan gambar diekstraksi langsung dari OpenXML presentasi; transisi dan animasi PowerPoint tidak dimuat ke dalam PDF.',
@@ -203,6 +242,11 @@ const translations = {
         failed: 'Gagal mengonversi presentasi ke PDF: {reason}'
       },
       pdfToExcel: {
+        exportFailed: 'Gagal mengekspor berkas Excel.',
+        invalidPdf: 'Berkas PDF kosong atau tidak valid.',
+        noPagesMatched: 'Rentang halaman tidak valid: tidak ada halaman yang cocok.',
+        noTableText: '(Tidak ada teks tabel terdeteksi)',
+        progress: 'Mengekstrak layout & tabel ke lembar Excel...',
         title: 'PDF ke Excel',
         desc: 'Ekstrak tabel dan teks dari PDF ke lembar kerja spreadsheet Excel (.xlsx)',
         notice: 'Hasil deteksi tabel otomatis bergantung pada kerapian tata letak PDF dan perlu diperiksa kembali di Excel.',
@@ -222,6 +266,7 @@ const translations = {
         anotherFile: 'Pilih Berkas Lain'
       },
       merge: {
+        minFiles: 'Minimal 2 file PDF dibutuhkan untuk penggabungan.',
         title: 'Gabung PDF',
         desc: 'Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.',
         addFiles: 'Tambah PDF',
@@ -235,9 +280,29 @@ const translations = {
         successTitle: 'Penggabungan Berhasil!',
         successDesc: 'Dokumen berhasil digabung menjadi {pageCount} halaman ({fileSize}).',
         emptyPrompt: 'Pilih atau tarik beberapa file PDF ke area dropzone di atas untuk mulai menggabungkan.',
-        needMinFiles: 'Pilih minimal 2 file PDF untuk digabungkan.'
+        needMinFiles: 'Pilih minimal 2 file PDF untuk digabungkan.',
+        invalidFile: 'File PDF tidak valid',
+        readFailed: 'Gagal membaca berkas',
+        unlockSuccess: 'Password cocok! Dokumen terbuka.',
+        unlockFailed: 'Password salah. Silakan coba lagi.',
+        stillLocked: 'Berkas "{name}" masih terkunci password. Buka terlebih dahulu.',
+        mergedToast: 'Dokumen berhasil digabungkan!',
+        mergeFailed: 'Gagal menggabungkan PDF',
+        orderTitle: 'Urutan Dokumen ({count} File)',
+        downloadAgain: 'Unduh Lagi',
+        passwordPlaceholder: 'Password PDF...',
+        moveUp: 'Geser ke Atas',
+        moveDown: 'Geser ke Bawah'
       },
       split: {
+        invalidSelection: 'Pilihan halaman tidak valid',
+        extractSuccess: 'Halaman terpilih berhasil diekstrak.',
+        processFailed: 'Gagal memproses split',
+        noPagesSelected: 'Tidak ada halaman yang dipilih untuk diekstrak.',
+        exceedsPages: 'Halaman yang dipilih melebihi jumlah halaman dokumen.',
+        minN: 'N harus minimal 1',
+        processing: 'Memisahkan halaman dokumen...',
+        actionApply: 'Pisahkan sekarang',
         title: 'Pisah PDF',
         desc: 'Ekstrak rentang halaman tertentu atau pisah dokumen menjadi file terpisah.',
         modeRange: 'Ekstrak Rentang Halaman',
@@ -249,9 +314,14 @@ const translations = {
         invalidRange: 'Format rentang halaman tidak valid',
         successZip: 'Berhasil memisahkan dokumen menjadi {count} berkas.',
         successPdf: 'Halaman terpilih berhasil diekstrak.',
+        rangePlaceholder: 'Contoh: 1-3, 5',
+        selectedSummary: 'Terpilih: {selected} dari {total} halaman',
+        chunksSummary: 'Akan menghasilkan sekitar {count} file (dikemas dalam ZIP).',
         emptyPrompt: 'Pilih atau letakkan satu file PDF di area dropzone untuk mulai memisahkan.'
       },
       organize: {
+        saveFailed: 'Gagal menyimpan dokumen',
+        needPage: 'Dokumen harus memiliki minimal 1 halaman.',
         title: 'Atur Halaman',
         desc: 'Susun ulang, putar orientasi (90°, 180°, 270°), atau hapus halaman yang tidak diinginkan.',
         rotateAll: 'Putar Semua (+90°)',
@@ -271,6 +341,7 @@ const translations = {
         minPagesError: 'Dokumen harus memiliki minimal 1 halaman tersisa. Tidak bisa menghapus semua halaman.'
       },
       sign: {
+        renderFailed: 'Gagal merender halaman tanda tangan: ',
         title: 'Tanda Tangan Digital',
         desc: 'Buat tanda tangan langsung di layar, ketik nama dengan gaya elegan, atau unggah paraf.',
         tabDraw: 'Gambar Langsung',
@@ -296,9 +367,34 @@ const translations = {
         posX: 'Posisi X (mm)',
         posY: 'Posisi Y (mm)',
         widthMm: 'Lebar (mm)',
-        heightMm: 'Tinggi (mm)'
+        heightMm: 'Tinggi (mm)',
+        signatureReady: 'Tanda tangan siap ditempatkan pada dokumen.',
+        selectSignatureFirst: 'Pilih tanda tangan terlebih dahulu.',
+        saveSuccess: 'Dokumen berhasil ditandatangani!',
+        saveFailed: 'Gagal menandatangani PDF: ',
+        saving: 'Menyimpan PDF...',
+        previewPlacement: 'Pratinjau & Penempatan (Hal {current} dari {total})',
+        textLabel: 'Teks / Nama Paraf:',
+        previewPlaceholder: 'Contoh Tanda Tangan',
+        fontDancingScript: 'Dancing Script (Cursive Halus)',
+        fontCaveat: 'Caveat (Cursive Santai)',
+        previewAlt: 'Pratinjau Tanda Tangan',
+        signatureAlt: 'Paraf',
+        resizeHandle: 'Ubah ukuran paraf'
       },
       form: {
+        loadFailed: 'Gagal memuat formulir: ',
+        previewFailed: 'Gagal render preview: ',
+        saveSuccess: 'Formulir berhasil disimpan!',
+        saveFailed: 'Gagal menyimpan formulir: ',
+        emptyTitle: 'Tidak Ada Formulir Interaktif Terdeteksi',
+        emptyBody: 'Dokumen ini tidak memiliki bidang formulir AcroForm bawaan. Jika dokumen ini berupa pindaian atau lembar statis yang perlu ditandatangani atau diisi teks, silakan gunakan alat Tanda Tangan Digital.',
+        searchPlaceholder: 'Cari nama field...',
+        fieldPlaceholder: 'Isi data formulir...',
+        saveBtn: 'Simpan PDF Terisi',
+        saving: 'Menyimpan Formulir...',
+        fieldsDetected: '{count} Field Formulir Terdeteksi',
+        previewTitle: 'Pratinjau Dokumen',
         title: 'Isi Formulir',
         desc: 'Isi formulir PDF interaktif secara langsung dan ratakan (flatten) dokumen.',
         noFieldsTitle: 'Tidak Ada Formulir Interaktif',
@@ -310,6 +406,25 @@ const translations = {
         emptyPrompt: 'Pilih file PDF yang berisi formulir interaktif (AcroForm) untuk mulai mengisi.'
       },
       redact: {
+        renderFailed: 'Gagal merender halaman sensor: ',
+        previewFailed: 'Gagal merender pratinjau resolusi tinggi: ',
+        boxRemoved: 'Kotak sensor di halaman ini dihapus.',
+        searchFailed: 'Gagal mencari teks: ',
+        applySuccess: 'Dokumen berhasil disensor permanen!',
+        applyFailed: 'Gagal menyensor dokumen: ',
+        prevPage: '◀ Sebelumnya',
+        nextPage: 'Berikutnya ▶',
+        sharpeningPreview: 'Mempertajam pratinjau resolusi tinggi...',
+        doneInspecting: '✓ Selesai Memeriksa',
+        warningTitle: 'Peringatan Sensor Permanen:',
+        removeBoxTitle: 'Hapus kotak ini',
+        removeBoxAria: 'Hapus kotak sensor',
+        resizeBoxTitle: 'Ubah ukuran kotak',
+        undoTitle: 'Urungkan perubahan (Ctrl+Z)',
+        redoTitle: 'Ulangi perubahan (Ctrl+Shift+Z)',
+        progressDestroying: 'Menghancurkan piksel sensor...',
+        boxCount: '{count} kotak',
+        boxListHint: 'Tarik kursor di pratinjau untuk menandai.',
         title: 'Sensor Dokumen',
         desc: 'Hapus data sensitif secara permanen dengan rasterisasi canvas anti-bocor.',
         drawHint: 'Tarik mouse / pointer di atas pratinjau halaman untuk menggambar kotak sensor hitam solid.',
@@ -352,9 +467,31 @@ const translations = {
         compressedSize: 'Ukuran Hasil',
         reductionRate: 'Penghematan',
         warnLarger: 'Ukuran hasil kompresi tidak lebih kecil dari aslinya karena dokumen asli sudah sangat terkompresi.',
-        emptyPrompt: 'Pilih file PDF yang ingin Anda perkecil ukuran filenya.'
+        emptyPrompt: 'Pilih file PDF yang ingin Anda perkecil ukuran filenya.',
+        preparing: 'Mempersiapkan dokumen...',
+        compressingPage: 'Mengompresi halaman {current} dari {total}...',
+        successReduction: 'Berhasil dikompres! Penghematan {pct}%',
+        alreadyOptimal: 'Kompresi selesai (ukuran asli sudah sangat optimal).',
+        failed: 'Gagal mengompresi PDF',
+        presetLabel: 'Pilih Tingkat Kompresi',
+        badgeRecommended: 'REKOMENDASI',
+        completed: 'Kompresi Selesai!',
+        downloadAgain: 'Unduh Dokumen Lagi'
       },
       ocr: {
+        modelImportFailed: 'Gagal mengimpor model: ',
+        cancelled: 'Proses OCR dibatalkan.',
+        invalidRange: 'Pilihan rentang halaman tidak valid.',
+        failed: 'Gagal memproses OCR: ',
+        pdfDownloaded: 'PDF Searchable berhasil diunduh!',
+        txtDownloaded: 'File teks berhasil diunduh!',
+        cspWarning: 'Pelanggaran CSP: Browser masih memuat versi file lama dari cache. Silakan tutup tab ini dan buka ulang file "dist/PDF To Go.html", atau lakukan Hard Reload (Cmd + Shift + R).',
+        docLangLabel: 'Bahasa Dokumen:',
+        pageChoiceLabel: 'Pilihan Halaman:',
+        resolutionLabel: 'Resolusi Analisis:',
+        resultsTitle: 'Pengenalan Teks Selesai',
+        avgAccuracy: 'Rata-rata akurasi',
+        actionCancel: 'Batalkan Proses',
         title: 'Pengenalan Teks (OCR)',
         desc: 'Ubah PDF hasil scan menjadi dokumen yang teksnya bisa dicari dan disalin.',
         langLabel: 'Pilihan Bahasa OCR:',
@@ -400,6 +537,7 @@ const translations = {
         envBlockedHint: 'Pengenalan teks dinonaktifkan sampai masalah ini selesai.'
       },
       extractText: {
+        imageLoadFailed: 'Gagal memuat file gambar. Format tidak didukung atau file rusak.',
         title: 'Ekstrak Teks',
         desc: 'Ambil seluruh isi teks dari dokumen PDF ke dalam berkas teks (.txt).',
         includeSeparators: 'Sertakan pembatas per halaman (--- Halaman X ---)',
@@ -409,9 +547,46 @@ const translations = {
         stats: '{words} kata • {chars} karakter • {pages} halaman',
         scannedWarning: 'Teks tidak terdeteksi (dokumen hasil scan/gambar). Gunakan modul OCR untuk mengekstrak teks gambar.',
         openOcr: 'Buka Modul OCR',
-        emptyPrompt: 'Pilih file PDF untuk mengekstrak seluruh isi teksnya secara instan.'
+        emptyPrompt: 'Pilih file PDF untuk mengekstrak seluruh isi teksnya secara instan.',
+        extracting: 'Mengekstrak teks...',
+        recognizingImage: 'Mengenali teks dari gambar (OCR)...',
+        modelNotLoaded: 'Model OCR belum dimuat. Buka Pengenalan Teks (OCR) untuk mengimpor model.',
+        noTextInImage: 'Tidak ada teks yang dapat dikenali pada gambar.',
+        imageExtractSuccess: 'Teks berhasil diekstrak dari gambar!',
+        imageExtractFailed: 'Gagal mengekstrak teks gambar: ',
+        extractingPdf: 'Mengekstrak teks dokumen PDF...',
+        pdfExtractFailed: 'Gagal mengekstrak teks PDF: ',
+        recognizingPagesOcr: 'Mengenali teks gambar halaman dengan OCR...',
+        modelNotLoadedOcr: 'Model bahasa OCR belum dimuat. Buka menu Pengenalan Teks (OCR) untuk mengimpor model.',
+        recognizingPageProgress: 'Mengenali teks halaman {current} dari {total} ({pct}%)...',
+        docExtractSuccess: 'Teks berhasil diekstrak dari gambar dokumen!',
+        ocrFailed: 'Gagal OCR dokumen: ',
+        cancelled: 'Proses ekstraksi teks dibatalkan.',
+        downloadSuccess: 'File teks berhasil diunduh!',
+        imageBadge: 'GAMBAR',
+        editorPlaceholder: 'Hasil ekstraksi teks akan muncul di sini...',
+        scannedTitle: 'Dokumen Terdeteksi Sebagai Gambar / Hasil Scan',
+        scannedBody: 'Halaman dokumen ini tidak memiliki teks digital langsung (berupa gambar/hasil pemindaian). Ekstrak teks secara langsung menggunakan modul OCR lokal di bawah ini.',
+        ocrLangLabel: 'Bahasa OCR:',
+        langInd: '🇮🇩 Indonesia',
+        langEng: '🇬🇧 Inggris',
+        langBoth: '🇮🇩+🇬🇧 Keduanya',
+        startOcr: '⚡ Ekstrak Teks Gambar (OCR)',
+        wordsLabel: 'kata',
+        charsLabel: 'karakter',
+        pagesLabel: 'halaman'
       },
       watermark: {
+        applying: 'Menerapkan watermark...',
+        previewFailed: 'Gagal merender pratinjau watermark: ',
+        successTitle: 'Watermark berhasil diterapkan!',
+        failed: 'Gagal menerapkan watermark',
+        invalidRange: 'Rentang halaman kosong atau tidak valid.',
+        emptyText: 'Teks watermark kosong atau hanya berisi karakter yang tidak didukung font PDF.',
+        colorLabel: 'Warna',
+        pagesCustom: 'Rentang Halaman Kustom',
+        textPlaceholder: 'Masukkan teks watermark',
+        previewTitle: 'Pratinjau Watermark',
         title: 'Watermark',
         desc: 'Tambahkan cap teks kustom, diagonal, atau berulang dengan transparansi terkontrol.',
         textLabel: 'Teks Watermark:',
@@ -433,6 +608,8 @@ const translations = {
         emptyPrompt: 'Pilih file PDF untuk membubuhi watermark teks kustom.'
       },
       pageNumbers: {
+        previewFailed: 'Gagal merender pratinjau nomor halaman: ',
+        progress: 'Menambahkan nomor halaman...',
         title: 'Nomor Halaman',
         desc: 'Bubuhi nomor halaman otomatis dengan beragam format token dan penempatan.',
         formatLabel: 'Format Penomoran:',
@@ -441,7 +618,15 @@ const translations = {
         marginLabel: 'Jarak Margin dari Tepi:',
         skipFirstLabel: 'Lewati Halaman Pertama (Halaman Sampul / Cover)',
         actionApply: 'Terapkan Nomor Halaman ke PDF',
-        emptyPrompt: 'Pilih file PDF untuk menambahkan nomor halaman otomatis.'
+        emptyPrompt: 'Pilih file PDF untuk menambahkan nomor halaman otomatis.',
+        applySuccess: 'Nomor halaman berhasil diterapkan!',
+        applyFailed: 'Gagal menambahkan nomor halaman',
+        processing: 'Menambahkan nomor halaman...',
+        formatPlaceholder: 'Gunakan {n} dan {total}',
+        colorLabel: 'Warna',
+        presetPageOfTotal: 'Halaman {n} dari {total}',
+        previewTitle: 'Pratinjau Nomor Halaman',
+        coverSkipped: 'Cover Dilewati'
       },
       pdfToImage: {
         title: 'PDF ke Gambar',
@@ -456,9 +641,25 @@ const translations = {
         pagesAll: 'Semua Halaman',
         actionConvert: 'Konversi ke Gambar (ZIP)',
         converting: 'Mengonversi halaman {current} dari {total}...',
-        emptyPrompt: 'Pilih file PDF untuk mengonversi halaman-halamannya menjadi format gambar.'
+        emptyPrompt: 'Pilih file PDF untuk mengonversi halaman-halamannya menjadi format gambar.',
+        invalidRange: 'Rentang halaman tidak valid.',
+        preparing: 'Mempersiapkan ekstraksi gambar...',
+        extractSuccess: 'Berhasil mengekstrak {count} gambar!',
+        convertFailed: 'Gagal mengonversi ke gambar',
+        formatPng: 'PNG (Kualitas Paling Tajam / Lossless)',
+        formatJpeg: 'JPEG (Ukuran Berkas Lebih Ringan)',
+        pagesCustom: 'Pilih Rentang Halaman Kustom',
+        rangePlaceholder: 'Contoh: 1-3, 5'
       },
       imageToPdf: {
+        stillLoading: 'Beberapa gambar masih dimuat. Tunggu sebentar lalu coba lagi.',
+        createSuccess: 'Dokumen PDF dari gambar berhasil dibuat!',
+        createFailed: 'Gagal membuat PDF',
+        needImage: 'Pilih minimal 1 gambar untuk dibuat menjadi PDF.',
+        clearAll: 'Kosongkan Semua',
+        removeImageTitle: 'Hapus gambar',
+        progressConverting: 'Mengonversi gambar ke PDF...',
+        imageOrder: 'Urutan Gambar ({count} Berkas)',
         title: 'Gambar ke PDF',
         desc: 'Ubah koleksi foto PNG, JPG, dan WebP menjadi satu dokumen PDF rapi.',
         pageSizeLabel: 'Ukuran Kertas:',
@@ -475,16 +676,23 @@ const translations = {
         fitContain: 'Contain (Muat Utuh)',
         fitCover: 'Cover (Penuhi Halaman)',
         actionCreate: 'Buat Dokumen PDF ({count} Gambar)',
-        emptyPrompt: 'Pilih atau tarik beberapa berkas gambar (PNG, JPG, WebP) ke sini untuk dijadikan PDF.'
+        emptyPrompt: 'Pilih atau tarik beberapa berkas gambar (PNG, JPG, WebP) ke sini untuk dijadikan PDF.',
+        loadingImages: 'Beberapa gambar masih dimuat. Tunggu sebentar lalu coba lagi.'
       }
     },
     dropzone: {
       title: 'Tarik & lepas file di sini',
       subtitle: 'atau klik untuk memilih file dari komputer Anda',
+      pdfOrImage: 'Tarik file PDF atau Gambar (PNG, JPG, WebP) ke sini',
       button: 'Pilih File',
       hint: 'Mendukung pemrosesan batch banyak file sekaligus'
     },
     queue: {
+      zipFailed: 'Gagal membuat ZIP',
+      openTitle: 'Buka antrean berkas',
+      closeAria: 'Tutup antrean',
+      downloadItem: 'Unduh berkas ini',
+      removeItem: 'Hapus dari antrean',
       title: 'Antrean Dokumen',
       empty: 'Belum ada file dalam antrean',
       totalFiles: '{count} file',
@@ -503,6 +711,25 @@ const translations = {
       processingBatch: 'Memproses berkas {current} dari {total}...'
     },
     common: {
+      wasmUnavailable: 'WebAssembly tidak tersedia di browser ini.',
+      workerUnavailable: 'Web Worker tidak tersedia di browser ini.',
+      workerFailed: 'Gagal menjalankan worker.',
+      langTitle: 'Ganti Bahasa (ID / EN)',
+      themeTitle: 'Ganti Mode Terang / Gelap',
+      closeMenu: 'Tutup menu',
+      closeToast: 'Tutup notifikasi',
+      words: 'kata',
+      characters: 'karakter',
+      pages: 'halaman',
+      page: 'Halaman',
+      change: 'Ganti',
+      loadingThumb: 'Memuat...',
+      rangePlaceholder: 'Contoh: 1-3, 5',
+      zoomPreset: 'Pilih preset zoom',
+      zoomPercent: 'Pilih persentase zoom',
+      fitWidth: 'Sesuaikan lebar halaman dengan jendela',
+      centerPreview: 'Kembalikan posisi pratinjau ke tengah',
+      center: '⌖ Tengah',
       themeAuto: 'Tema: Otomatis',
       themeLight: 'Tema: Terang',
       themeDark: 'Tema: Gelap',
@@ -517,15 +744,24 @@ const translations = {
       processing: 'Sedang Memproses...',
       close: 'Tutup',
       preview: 'Pratinjau',
-      readyPlaceholder: 'Modul ini siap digunakan. Unggah file di atas untuk memulai.'
+      changeFile: 'Ganti File',
+      pagesCount: '{count} halaman',
+      loadFailed: 'Gagal memuat dokumen: ',
+      readyPlaceholder: 'Modul ini siap digunakan. Unggah file di atas untuk memulai.',
+      pageShort: 'Hal',
+      of: 'dari'
     }
   },
   en: {
     app: {
+      notFoundTitle: 'Tool Not Found',
+      notFoundBody: 'Choose a tool from the sidebar menu.',
+      sidebarMenu: 'Tools',
       name: 'PDF To Go',
       tagline: '100% Offline & Private PDF Manipulation',
       badge: 'Full Offline',
-      offlineBanner: '100% Offline • Your files never leave your device'
+      offlineBanner: '100% Offline • Your files never leave your device',
+      sidebarNote: '100% local in your browser. No trackers, no server.'
     },
     nav: {
       categoryAll: 'Document Tools',
@@ -541,6 +777,9 @@ const translations = {
         advanced: 'Advanced Tools'
       },
       unlock: {
+        invalidPdf: 'The PDF file is empty or not valid.',
+        notLocked: 'NOT LOCKED',
+        progressUnlock: 'Unlocking the PDF protection...',
         title: 'Unlock PDF',
         desc: 'Remove password protection from encrypted PDF files for unrestricted access.',
         passwordLabel: 'PDF Document Password:',
@@ -557,6 +796,10 @@ const translations = {
         failed: 'Failed to unlock PDF: {reason}'
       },
       protect: {
+        progress: 'Applying AES-256 protection...',
+        invalidPdf: 'The PDF file is empty or not valid.',
+        emptyPassword: 'The password must not be empty.',
+        invalidFormat: 'Not a valid format',
         title: 'Protect PDF',
         desc: 'Secure your PDF documents with industry-standard AES-256 encryption and custom permissions.',
         passwordLabel: 'Document Password:',
@@ -577,6 +820,9 @@ const translations = {
         failed: 'Failed to protect PDF: {reason}'
       },
       pdfToMarkdown: {
+        copyFailed: 'Failed to copy the text to the clipboard.',
+        invalidPdf: 'The PDF file is empty or not valid.',
+        progress: 'Extracting the document layout and structure...',
         title: 'PDF to Markdown',
         desc: 'Convert PDF documents into structured Markdown (.md) with headings, lists, tables, and image extraction.',
         optionsTitle: 'Conversion Options:',
@@ -595,6 +841,11 @@ const translations = {
         failed: 'Failed to convert to Markdown: {reason}'
       },
       scanToPdf: {
+        invalidImageData: 'Not valid image data.',
+        noPages: 'No page can be scanned.',
+        cropPage: 'Crop Page',
+        pagesReady: '{count} pages ready',
+        progress: 'Processing and optimising the scan...',
         title: 'Scan to PDF',
         desc: 'Capture physical documents with your camera or upload photos to crop, enhance, and combine into a clean PDF.',
         uploadTitle: 'Scan or Upload Document',
@@ -636,6 +887,8 @@ const translations = {
         printInstruction: 'Print dialog opened. Select "Save as PDF" to download.'
       },
       pdfToWord: {
+        invalidPdf: 'The PDF file is empty or not valid.',
+        progress: 'Rebuilding the layout and creating the Word document...',
         title: 'PDF to Word',
         desc: 'Convert PDF documents into editable Microsoft Word (.docx) files with ease.',
         optionsTitle: 'Word Document Options:',
@@ -649,6 +902,9 @@ const translations = {
         failed: 'Failed to convert to Word: {reason}'
       },
       pdfToPowerpoint: {
+        invalidPageCount: 'The document page count is not valid.',
+        invalidPdf: 'The PDF file is empty or not valid.',
+        progress: 'Converting PDF pages into presentation slides...',
         title: 'PDF to PowerPoint',
         desc: 'Convert every PDF page into Microsoft PowerPoint (.pptx) presentation slides with precision layout.',
         optionsTitle: 'PowerPoint Presentation Options:',
@@ -667,6 +923,11 @@ const translations = {
         failed: 'Failed to convert to PowerPoint: {reason}'
       },
       excelToPdf: {
+        invalidSheet: 'The spreadsheet file is empty or not valid.',
+        noRows: 'No data rows were found in the Excel file.',
+        noTableRows: 'No data rows can be turned into a table.',
+        formatA4: 'PDF Document Format (A4)',
+        progress: 'Building the grid table and producing PDF pages...',
         title: 'Excel to PDF',
         desc: 'Convert Excel spreadsheets (.xlsx, .csv) into clean, ready-to-print PDF tables.',
         optionsTitle: 'Page Layout Options:',
@@ -682,6 +943,8 @@ const translations = {
         failed: 'Failed to convert to PDF: {reason}'
       },
       wordToPdf: {
+        invalidDocx: 'The Word (.docx) file is empty or not valid.',
+        progress: 'Reading the DOCX format and converting it to HTML...',
         title: 'Word to PDF',
         desc: 'Convert Word documents (.docx) into crisp, print-ready PDF files safely and rapidly.',
         instructionText: 'When the print dialog opens, select "Save as PDF" destination for crisp, high-resolution vector output.',
@@ -693,6 +956,10 @@ const translations = {
         failed: 'Failed to process Word document: {reason}'
       },
       editPdf: {
+        renderFailed: 'Failed to render the edit page: ',
+        invalidPdf: 'The PDF file is empty or not valid.',
+        readTextFailed: 'Failed to read the page text: ',
+        textAria: 'Document text',
         title: 'Edit PDF Text',
         desc: 'Click text that already exists on the page, then type or delete as usual. The old text is covered and retyped using a built-in font.',
         saveBtn: 'Save PDF',
@@ -705,6 +972,10 @@ const translations = {
         textHint: 'Click any text on the page and type or delete as usual. The old text is covered and retyped. Press Tab or click outside to move to the next line.'
       },
       powerpointToPdf: {
+        invalidPptx: 'The PowerPoint (.pptx) file is empty or not valid.',
+        noSlides: 'No slides were found in the PowerPoint file.',
+        imageFailed: 'Failed to embed the slide image: ',
+        progress: 'Extracting the slides and creating PDF pages...',
         title: 'PowerPoint to PDF',
         desc: 'Convert PowerPoint presentation slides (.pptx) into clean PDF documents with preserved layout and graphics.',
         disclaimer: 'Text, shape, and image layouts are extracted directly from OpenXML presentation slides; transitions and animations are not included in the PDF.',
@@ -716,6 +987,11 @@ const translations = {
         failed: 'Failed to convert presentation to PDF: {reason}'
       },
       pdfToExcel: {
+        exportFailed: 'Failed to export the Excel file.',
+        invalidPdf: 'The PDF file is empty or not valid.',
+        noPagesMatched: 'Invalid page range: no page matched.',
+        noTableText: '(No table text detected)',
+        progress: 'Extracting the layout and tables into an Excel sheet...',
         title: 'PDF to Excel',
         desc: 'Extract tables and text from PDF into Excel spreadsheet (.xlsx)',
         notice: 'Automatic table detection depends on PDF text structure and should be reviewed in Excel.',
@@ -735,6 +1011,7 @@ const translations = {
         anotherFile: 'Choose Another File'
       },
       merge: {
+        minFiles: 'At least 2 PDF files are needed to merge.',
         title: 'Merge PDF',
         desc: 'Combine multiple PDF files into a single unified document with custom ordering.',
         addFiles: 'Add PDFs',
@@ -748,9 +1025,29 @@ const translations = {
         successTitle: 'Merge Successful!',
         successDesc: 'Document merged successfully into {pageCount} pages ({fileSize}).',
         emptyPrompt: 'Select or drop multiple PDF files into the dropzone above to begin merging.',
-        needMinFiles: 'Please select at least 2 PDF files to merge.'
+        needMinFiles: 'Please select at least 2 PDF files to merge.',
+        invalidFile: 'Invalid PDF file',
+        readFailed: 'Failed to read the file',
+        unlockSuccess: 'Password correct! Document unlocked.',
+        unlockFailed: 'Wrong password. Please try again.',
+        stillLocked: 'File "{name}" is still password protected. Unlock it first.',
+        mergedToast: 'Documents merged successfully!',
+        mergeFailed: 'Failed to merge the PDFs',
+        orderTitle: 'Document Order ({count} Files)',
+        downloadAgain: 'Download Again',
+        passwordPlaceholder: 'PDF password...',
+        moveUp: 'Move Up',
+        moveDown: 'Move Down'
       },
       split: {
+        invalidSelection: 'The page selection is not valid',
+        extractSuccess: 'The selected pages were extracted.',
+        processFailed: 'Failed to split the document',
+        noPagesSelected: 'No page was selected for extraction.',
+        exceedsPages: 'The selected pages exceed the document page count.',
+        minN: 'N must be at least 1',
+        processing: 'Splitting the document pages...',
+        actionApply: 'Split now',
         title: 'Split PDF',
         desc: 'Extract specific page ranges or split document into separate individual files.',
         modeRange: 'Extract Page Range',
@@ -762,9 +1059,14 @@ const translations = {
         invalidRange: 'Invalid page range format',
         successZip: 'Document successfully split into {count} files.',
         successPdf: 'Selected pages extracted successfully.',
+        rangePlaceholder: 'e.g. 1-3, 5',
+        selectedSummary: 'Selected: {selected} of {total} pages',
+        chunksSummary: 'This will produce about {count} files (packed into a ZIP).',
         emptyPrompt: 'Select or drop a single PDF file into the dropzone to begin splitting.'
       },
       organize: {
+        saveFailed: 'Failed to save the document',
+        needPage: 'The document must have at least 1 page.',
         title: 'Organize Pages',
         desc: 'Rearrange page order, rotate orientations (90°, 180°, 270°), or delete unwanted pages.',
         rotateAll: 'Rotate All (+90°)',
@@ -784,6 +1086,7 @@ const translations = {
         minPagesError: 'Document must have at least 1 page remaining. Cannot delete all pages.'
       },
       sign: {
+        renderFailed: 'Failed to render the signature page: ',
         title: 'Digital Signature',
         desc: 'Draw signatures on canvas, type with stylish script fonts, or upload signature images.',
         tabDraw: 'Draw Signature',
@@ -809,9 +1112,34 @@ const translations = {
         posX: 'Position X (mm)',
         posY: 'Position Y (mm)',
         widthMm: 'Width (mm)',
-        heightMm: 'Height (mm)'
+        heightMm: 'Height (mm)',
+        signatureReady: 'The signature is ready to be placed on the document.',
+        selectSignatureFirst: 'Choose a signature first.',
+        saveSuccess: 'The document was signed successfully!',
+        saveFailed: 'Failed to sign the PDF: ',
+        saving: 'Saving the PDF...',
+        previewPlacement: 'Preview & Placement (Page {current} of {total})',
+        textLabel: 'Text / Signature Name:',
+        previewPlaceholder: 'Signature Preview',
+        fontDancingScript: 'Dancing Script (Smooth Cursive)',
+        fontCaveat: 'Caveat (Casual Cursive)',
+        previewAlt: 'Signature Preview',
+        signatureAlt: 'Signature',
+        resizeHandle: 'Resize the signature'
       },
       form: {
+        loadFailed: 'Failed to load the form: ',
+        previewFailed: 'Failed to render the preview: ',
+        saveSuccess: 'The form was saved successfully!',
+        saveFailed: 'Failed to save the form: ',
+        emptyTitle: 'No Interactive Form Detected',
+        emptyBody: 'This document has no built-in AcroForm fields. If it is a scan or a static sheet that needs a signature or typed text, use the Digital Signature tool.',
+        searchPlaceholder: 'Search field names...',
+        fieldPlaceholder: 'Enter form data...',
+        saveBtn: 'Save Filled PDF',
+        saving: 'Saving the form...',
+        fieldsDetected: '{count} form fields detected',
+        previewTitle: 'Document Preview',
         title: 'Fill Form',
         desc: 'Fill interactive AcroForm fields directly and optionally flatten the document.',
         noFieldsTitle: 'No Interactive Form Fields',
@@ -823,6 +1151,25 @@ const translations = {
         emptyPrompt: 'Select a PDF document containing interactive AcroForms to begin filling.'
       },
       redact: {
+        renderFailed: 'Failed to render the redaction page: ',
+        previewFailed: 'Failed to render the high-resolution preview: ',
+        boxRemoved: 'The redaction boxes on this page were removed.',
+        searchFailed: 'Failed to search the text: ',
+        applySuccess: 'The document was permanently redacted!',
+        applyFailed: 'Failed to redact the document: ',
+        prevPage: '◀ Previous',
+        nextPage: 'Next ▶',
+        sharpeningPreview: 'Sharpening the high-resolution preview...',
+        doneInspecting: '✓ Done Inspecting',
+        warningTitle: 'Permanent Redaction Warning:',
+        removeBoxTitle: 'Remove this box',
+        removeBoxAria: 'Remove redaction box',
+        resizeBoxTitle: 'Resize the box',
+        undoTitle: 'Undo (Ctrl+Z)',
+        redoTitle: 'Redo (Ctrl+Shift+Z)',
+        progressDestroying: 'Destroying the redacted pixels...',
+        boxCount: '{count} boxes',
+        boxListHint: 'Drag on the preview to mark an area.',
         title: 'Redact Document',
         desc: 'Permanently remove sensitive information via leak-proof canvas rasterization.',
         drawHint: 'Drag mouse / pointer across page preview to draw solid black redaction boxes.',
@@ -865,9 +1212,31 @@ const translations = {
         compressedSize: 'Compressed Size',
         reductionRate: 'Reduction',
         warnLarger: 'Compressed result is not smaller because the original is already heavily compressed.',
-        emptyPrompt: 'Select a PDF file that you would like to compress.'
+        emptyPrompt: 'Select a PDF file that you would like to compress.',
+        preparing: 'Preparing the document...',
+        compressingPage: 'Compressing page {current} of {total}...',
+        successReduction: 'Compressed successfully! {pct}% saved',
+        alreadyOptimal: 'Compression complete (the original file was already well optimized).',
+        failed: 'Failed to compress the PDF',
+        presetLabel: 'Select Compression Level',
+        badgeRecommended: 'RECOMMENDED',
+        completed: 'Compression Complete!',
+        downloadAgain: 'Download the Document Again'
       },
       ocr: {
+        modelImportFailed: 'Failed to import the model: ',
+        cancelled: 'The OCR process was cancelled.',
+        invalidRange: 'The page range selection is not valid.',
+        failed: 'Failed to run OCR: ',
+        pdfDownloaded: 'The searchable PDF was downloaded!',
+        txtDownloaded: 'The text file was downloaded!',
+        cspWarning: 'CSP violation: the browser is still loading an old cached version. Close this tab and reopen "dist/PDF To Go.html", or do a hard reload (Cmd + Shift + R).',
+        docLangLabel: 'Document Language:',
+        pageChoiceLabel: 'Page Selection:',
+        resolutionLabel: 'Analysis Resolution:',
+        resultsTitle: 'Text Recognition Complete',
+        avgAccuracy: 'Average accuracy',
+        actionCancel: 'Cancel the process',
         title: 'Text Recognition (OCR)',
         desc: 'Transform scanned PDFs and images into searchable and selectable documents.',
         langLabel: 'OCR Language Selection:',
@@ -913,6 +1282,7 @@ const translations = {
         envBlockedHint: 'Text recognition is disabled until this is resolved.'
       },
       extractText: {
+        imageLoadFailed: 'Failed to load the image file. The format is unsupported or the file is damaged.',
         title: 'Extract Text',
         desc: 'Extract all readable text from your PDF into a clean plain text (.txt) file.',
         includeSeparators: 'Include page separators (--- Page X ---)',
@@ -922,9 +1292,46 @@ const translations = {
         stats: '{words} words • {chars} characters • {pages} pages',
         scannedWarning: 'No text detected (scanned document or image). Use the OCR module to recognize text.',
         openOcr: 'Open OCR Module',
-        emptyPrompt: 'Select a PDF file to extract all its readable text content instantly.'
+        emptyPrompt: 'Select a PDF file to extract all its readable text content instantly.',
+        extracting: 'Extracting text...',
+        recognizingImage: 'Recognizing text from the image (OCR)...',
+        modelNotLoaded: 'The OCR model is not loaded yet. Open Text Recognition (OCR) to import a model.',
+        noTextInImage: 'No text could be recognized in the image.',
+        imageExtractSuccess: 'Text extracted from the image successfully!',
+        imageExtractFailed: 'Failed to extract text from the image: ',
+        extractingPdf: 'Extracting text from the PDF document...',
+        pdfExtractFailed: 'Failed to extract text from the PDF: ',
+        recognizingPagesOcr: 'Recognizing the page image with OCR...',
+        modelNotLoadedOcr: 'The OCR language model is not loaded yet. Open the Text Recognition (OCR) menu to import a model.',
+        recognizingPageProgress: 'Recognizing text on page {current} of {total} ({pct}%)...',
+        docExtractSuccess: 'Text extracted from the document image successfully!',
+        ocrFailed: 'Document OCR failed: ',
+        cancelled: 'Text extraction cancelled.',
+        downloadSuccess: 'The text file was downloaded successfully!',
+        imageBadge: 'IMAGE',
+        editorPlaceholder: 'The extracted text will appear here...',
+        scannedTitle: 'Document Detected as an Image / Scan',
+        scannedBody: 'This page has no direct digital text (it is an image or a scan). Extract the text directly with the local OCR module below.',
+        ocrLangLabel: 'OCR Language:',
+        langInd: '🇮🇩 Indonesian',
+        langEng: '🇬🇧 English',
+        langBoth: '🇮🇩+🇬🇧 Both',
+        startOcr: '⚡ Extract Image Text (OCR)',
+        wordsLabel: 'words',
+        charsLabel: 'characters',
+        pagesLabel: 'pages'
       },
       watermark: {
+        applying: 'Applying the watermark...',
+        previewFailed: 'Failed to render the watermark preview: ',
+        successTitle: 'The watermark was applied successfully!',
+        failed: 'Failed to apply the watermark',
+        invalidRange: 'The page range is empty or not valid.',
+        emptyText: 'The watermark text is empty or only contains characters the PDF font does not support.',
+        colorLabel: 'Color',
+        pagesCustom: 'Custom Page Range',
+        textPlaceholder: 'Enter the watermark text',
+        previewTitle: 'Watermark Preview',
         title: 'Watermark',
         desc: 'Add custom text stamps, diagonal banners, or tiled patterns with adjustable opacity.',
         textLabel: 'Watermark Text:',
@@ -946,6 +1353,8 @@ const translations = {
         emptyPrompt: 'Select a PDF file to apply a custom text watermark.'
       },
       pageNumbers: {
+        previewFailed: 'Failed to render the page number preview: ',
+        progress: 'Adding page numbers...',
         title: 'Page Numbers',
         desc: 'Stamp automatic page numbers with flexible formatting tokens and alignments.',
         formatLabel: 'Numbering Format:',
@@ -954,7 +1363,15 @@ const translations = {
         marginLabel: 'Margin Distance:',
         skipFirstLabel: 'Skip First Page (Cover Page)',
         actionApply: 'Apply Page Numbers to PDF',
-        emptyPrompt: 'Select a PDF file to add automatic page numbers.'
+        emptyPrompt: 'Select a PDF file to add automatic page numbers.',
+        applySuccess: 'Page numbers applied successfully!',
+        applyFailed: 'Failed to add page numbers',
+        processing: 'Adding page numbers...',
+        formatPlaceholder: 'Use {n} and {total}',
+        colorLabel: 'Color',
+        presetPageOfTotal: 'Page {n} of {total}',
+        previewTitle: 'Page Numbers Preview',
+        coverSkipped: 'Cover Skipped'
       },
       pdfToImage: {
         title: 'PDF to Image',
@@ -969,9 +1386,25 @@ const translations = {
         pagesAll: 'All Pages',
         actionConvert: 'Convert to Images (ZIP)',
         converting: 'Converting page {current} of {total}...',
-        emptyPrompt: 'Select a PDF file to convert its pages into standalone image files.'
+        emptyPrompt: 'Select a PDF file to convert its pages into standalone image files.',
+        invalidRange: 'Invalid page range.',
+        preparing: 'Preparing image extraction...',
+        extractSuccess: 'Extracted {count} images successfully!',
+        convertFailed: 'Failed to convert to images',
+        formatPng: 'PNG (Sharpest Quality / Lossless)',
+        formatJpeg: 'JPEG (Smaller File Size)',
+        pagesCustom: 'Choose a Custom Page Range',
+        rangePlaceholder: 'e.g. 1-3, 5'
       },
       imageToPdf: {
+        stillLoading: 'Some images are still loading. Wait a moment and try again.',
+        createSuccess: 'The PDF document was created from the images!',
+        createFailed: 'Failed to create the PDF',
+        needImage: 'Select at least 1 image to create a PDF.',
+        clearAll: 'Clear All',
+        removeImageTitle: 'Remove image',
+        progressConverting: 'Converting the images to PDF...',
+        imageOrder: 'Image Order ({count} files)',
         title: 'Image to PDF',
         desc: 'Turn a collection of PNG, JPG, and WebP images into a single organized PDF.',
         pageSizeLabel: 'Page Size:',
@@ -988,16 +1421,23 @@ const translations = {
         fitContain: 'Contain (Full Image)',
         fitCover: 'Cover (Fill Page)',
         actionCreate: 'Create PDF Document ({count} Images)',
-        emptyPrompt: 'Select or drop image files (PNG, JPG, WebP) here to convert them into a single PDF.'
+        emptyPrompt: 'Select or drop image files (PNG, JPG, WebP) here to convert them into a single PDF.',
+        loadingImages: 'Some images are still loading. Please wait a moment and try again.'
       }
     },
     dropzone: {
       title: 'Drag & drop files here',
       subtitle: 'or click to browse files from your computer',
+      pdfOrImage: 'Drag a PDF or image file (PNG, JPG, WebP) here',
       button: 'Choose Files',
       hint: 'Supports multi-file batch processing'
     },
     queue: {
+      zipFailed: 'Failed to create the ZIP',
+      openTitle: 'Open the file queue',
+      closeAria: 'Close the queue',
+      downloadItem: 'Download this file',
+      removeItem: 'Remove from the queue',
       title: 'Document Queue',
       empty: 'No files in queue',
       totalFiles: '{count} files',
@@ -1016,6 +1456,25 @@ const translations = {
       processingBatch: 'Processing file {current} of {total}...'
     },
     common: {
+      wasmUnavailable: 'WebAssembly is not available in this browser.',
+      workerUnavailable: 'Web Worker is not available in this browser.',
+      workerFailed: 'Failed to run the worker.',
+      langTitle: 'Switch Language (ID / EN)',
+      themeTitle: 'Switch Light / Dark Mode',
+      closeMenu: 'Close menu',
+      closeToast: 'Close notification',
+      words: 'words',
+      characters: 'characters',
+      pages: 'pages',
+      page: 'Page',
+      change: 'Change',
+      loadingThumb: 'Loading...',
+      rangePlaceholder: 'Example: 1-3, 5',
+      zoomPreset: 'Choose a zoom preset',
+      zoomPercent: 'Choose a zoom percentage',
+      fitWidth: 'Fit the page width to the window',
+      centerPreview: 'Return the preview to the centre',
+      center: '⌖ Center',
       themeAuto: 'Theme: Auto',
       themeLight: 'Theme: Light',
       themeDark: 'Theme: Dark',
@@ -1030,7 +1489,12 @@ const translations = {
       processing: 'Processing...',
       close: 'Close',
       preview: 'Preview',
-      readyPlaceholder: 'This module is ready. Upload files above to begin.'
+      changeFile: 'Change File',
+      pagesCount: '{count} pages',
+      loadFailed: 'Failed to load the document: ',
+      readyPlaceholder: 'This module is ready. Upload files above to begin.',
+      pageShort: 'Page',
+      of: 'of'
     }
   }
 };

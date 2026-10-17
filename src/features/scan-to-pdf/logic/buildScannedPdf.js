@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { buildPdfFromImages } from '../../image-to-pdf/logic/buildPdfFromImages.js';
 import { processScanPage } from './processScanPage.js';
 
@@ -9,7 +10,7 @@ import { processScanPage } from './processScanPage.js';
  */
 export async function buildScannedPdf(pages, onProgress = null) {
   if (!Array.isArray(pages) || pages.length === 0) {
-    throw new Error('Tidak ada halaman yang dapat dipindai.');
+    throw new Error(t('tools.scanToPdf.noPages'));
   }
 
   const processedItems = [];

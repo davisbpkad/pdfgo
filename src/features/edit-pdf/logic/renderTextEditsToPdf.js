@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { toPdfRect } from '../../../core/coordinates.js';
 import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
@@ -13,7 +14,7 @@ import { fitFontSize, isChanged, isCleared, splitLines, TEXT_COVER_PADDING_PT } 
  */
 export async function renderTextEditsToPdf(pdfBuffer, editsByPage = {}) {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.editPdf.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(

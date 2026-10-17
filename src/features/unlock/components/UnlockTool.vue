@@ -93,13 +93,13 @@ function resetState() {
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
           <p class="text-xs text-ink/70">
             {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB
-            <span v-if="!isEncryptedDoc" class="ml-2 font-bold text-accent-2 bg-black px-1.5 py-0.5 rounded-xs">TIDAK TERKUNCI</span>
+            <span v-if="!isEncryptedDoc" class="ml-2 font-bold text-accent-2 bg-black px-1.5 py-0.5 rounded-xs">{{ t('tools.unlock.notLocked') }}</span>
           </p>
         </div>
-        <button type="button" class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer" @click="resetState">Ganti File</button>
+        <button type="button" class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer" @click="resetState">{{ t('common.changeFile') }}</button>
       </BaseCard>
 
-      <BaseProgressBar v-if="isProcessing" :progress="progressVal" label="Membuka kunci proteksi PDF..." />
+      <BaseProgressBar v-if="isProcessing" :progress="progressVal" :label="t('tools.unlock.progressUnlock')" />
 
       <BaseCard v-if="!unlockedResult" class="p-5 space-y-4">
         <div class="space-y-2">

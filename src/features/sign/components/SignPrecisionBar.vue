@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { t } from '../../../app/providers/i18n.js';
 
 const props = defineProps({
   placement: {
@@ -93,24 +94,24 @@ function resetOriginalSize() {
   <div class="border-2 border-ink bg-paper rounded-sm p-3 shadow-hard-sm space-y-3 select-none">
     <div class="flex items-center justify-between">
       <span class="text-xs font-bold text-ink uppercase tracking-wider">
-        Presisi Posisi & Ukuran (mm)
+        {{ t('tools.sign.precisionTitle') }}
       </span>
       <div class="flex items-center gap-1.5">
         <button
           type="button"
           class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
-          title="Pusatkan posisi tanda tangan"
+          :title="t('tools.sign.center')"
           @click="centerPlacement"
         >
-          🎯 Pusatkan
+          🎯 {{ t('tools.sign.center') }}
         </button>
         <button
           type="button"
           class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
-          title="Set ukuran standar paraf (50×22 mm)"
+          :title="t('tools.sign.resetOriginalSize')"
           @click="resetOriginalSize"
         >
-          🔄 Set Ukuran Asli
+          🔄 {{ t('tools.sign.resetOriginalSize') }}
         </button>
       </div>
     </div>
@@ -118,7 +119,7 @@ function resetOriginalSize() {
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
       <!-- Posisi X -->
       <div class="space-y-1">
-        <label class="text-[11px] font-bold text-ink/80 block">Posisi X (mm):</label>
+        <label class="text-[11px] font-bold text-ink/80 block">{{ t('tools.sign.posX') }}:</label>
         <input
           :value="xMm"
           type="number"
@@ -132,7 +133,7 @@ function resetOriginalSize() {
 
       <!-- Posisi Y -->
       <div class="space-y-1">
-        <label class="text-[11px] font-bold text-ink/80 block">Posisi Y (mm):</label>
+        <label class="text-[11px] font-bold text-ink/80 block">{{ t('tools.sign.posY') }}:</label>
         <input
           :value="yMm"
           type="number"
@@ -146,7 +147,7 @@ function resetOriginalSize() {
 
       <!-- Lebar -->
       <div class="space-y-1">
-        <label class="text-[11px] font-bold text-ink/80 block">Lebar (mm):</label>
+        <label class="text-[11px] font-bold text-ink/80 block">{{ t('tools.sign.widthMm') }}:</label>
         <input
           :value="widthMm"
           type="number"
@@ -160,7 +161,7 @@ function resetOriginalSize() {
 
       <!-- Tinggi -->
       <div class="space-y-1">
-        <label class="text-[11px] font-bold text-ink/80 block">Tinggi (mm):</label>
+        <label class="text-[11px] font-bold text-ink/80 block">{{ t('tools.sign.heightMm') }}:</label>
         <input
           :value="heightMm"
           type="number"

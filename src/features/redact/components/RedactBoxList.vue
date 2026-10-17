@@ -1,4 +1,6 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
+
 defineProps({
   boxes: { type: Array, default: () => [] },
   selectedBoxId: { type: String, default: null },
@@ -12,16 +14,12 @@ defineEmits(['select-box', 'remove-box']);
   <div class="space-y-2 border-2 border-ink bg-paper rounded-sm p-3 shadow-hard-sm select-none">
     <div class="flex items-center justify-between">
       <span class="text-xs font-bold text-ink uppercase tracking-wider">
-        Kotak Sensor (Halaman {{ currentPage }}):
+        {{ t('tools.redact.boxListTitle', { page: currentPage }) }}:
       </span>
-      <span class="text-xs font-bold px-2 py-0.5 border border-ink bg-paper-dark rounded-sm shadow-[1px_1px_0_0_#000000]">
-        {{ boxes.length }} kotak
-      </span>
+      <span class="text-xs font-bold px-2 py-0.5 border border-ink bg-paper-dark rounded-sm shadow-[1px_1px_0_0_#000000]">{{ t('tools.redact.boxCount', { count: boxes.length }) }}</span>
     </div>
 
-    <div v-if="boxes.length === 0" class="text-[11px] text-ink/70 italic py-2">
-      Belum ada kotak sensor pada halaman ini. Tarik kursor di pratinjau untuk menandai.
-    </div>
+    <div v-if="boxes.length === 0" class="text-[11px] text-ink/70 italic py-2">{{ t('tools.redact.boxListEmpty') }} {{ t('tools.redact.boxListHint') }}</div>
 
     <div v-else class="max-h-40 overflow-y-auto space-y-1.5 pr-1">
       <div
@@ -43,8 +41,8 @@ defineEmits(['select-box', 'remove-box']);
         <button
           type="button"
           class="min-h-[32px] min-w-[32px] px-2 text-xs font-bold border border-ink bg-danger text-black hover:opacity-90 rounded-sm cursor-pointer ml-2 flex items-center justify-center shadow-hard-sm active:translate-y-0.5 transition-all duration-150"
-          title="Hapus kotak ini"
-          aria-label="Hapus kotak sensor"
+          :title="t('tools.redact.removeBoxTitle')"
+          :aria-label="t('tools.redact.removeBoxAria')"
           @click.stop="$emit('remove-box', b.id)"
         >
           ✕

@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import mammoth from 'mammoth';
 import { sanitizeHtml } from '../../html-to-pdf/logic/sanitizeHtml.js';
 
@@ -9,7 +10,7 @@ import { sanitizeHtml } from '../../html-to-pdf/logic/sanitizeHtml.js';
  */
 export async function docxToHtml(docxBuffer, options = {}) {
   if (!docxBuffer || docxBuffer.byteLength === 0) {
-    throw new Error('Berkas Word (.docx) kosong atau tidak valid.');
+    throw new Error(t('tools.wordToPdf.invalidDocx'));
   }
 
   const safeArrayBuffer = docxBuffer instanceof Uint8Array

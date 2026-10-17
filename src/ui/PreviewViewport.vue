@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../app/providers/i18n.js';
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { renderScale } from '../core/coordinates.js';
 import { MIN_ZOOM, MAX_ZOOM, ZOOM_PRESETS, clampZoom, calculateFitWidthZoom } from './logic/viewportZoom.js';
@@ -187,8 +188,8 @@ function onTouchEnd() {
           <button
             type="button"
             class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer min-w-[58px] text-center transition-all duration-150"
-            title="Pilih preset zoom"
-            aria-label="Pilih persentase zoom"
+            :title="t('common.zoomPreset')"
+            :aria-label="t('common.zoomPercent')"
             @click="showPresetDropdown = !showPresetDropdown"
           >
             {{ Math.round(zoom * 100) }}%
@@ -227,7 +228,7 @@ function onTouchEnd() {
           type="button"
           class="px-2.5 py-1 border border-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150 ml-1"
           :class="isFitWidth ? 'bg-accent text-black font-black' : 'bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink'"
-          title="Sesuaikan lebar halaman dengan jendela"
+          :title="t('common.fitWidth')"
           @click="applyFitWidth"
         >
           Sesuaikan Lebar
@@ -254,11 +255,9 @@ function onTouchEnd() {
           v-if="zoom > 1.0"
           type="button"
           class="px-2 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer text-[11px] transition-all duration-150"
-          title="Kembalikan posisi pratinjau ke tengah"
+          :title="t('common.centerPreview')"
           @click="resetPan"
-        >
-          ⌖ Tengah
-        </button>
+        >{{ t('common.center') }}</button>
 
         <slot name="header-extra" />
       </div>

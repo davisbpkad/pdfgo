@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument } from '@cantoo/pdf-lib';
 
 /**
@@ -16,12 +17,12 @@ import { PDFDocument } from '@cantoo/pdf-lib';
  */
 export async function encryptPdf(pdfBuffer, options = {}) {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.protect.invalidPdf'));
   }
 
   const userPassword = String(options.userPassword || '').trim();
   if (!userPassword) {
-    throw new Error('Password tidak boleh kosong.');
+    throw new Error(t('tools.protect.emptyPassword'));
   }
 
   const ownerPassword = String(options.ownerPassword || '').trim() || userPassword;
@@ -37,7 +38,7 @@ export async function encryptPdf(pdfBuffer, options = {}) {
   try {
     doc = await PDFDocument.load(safeBytes);
   } catch (err) {
-    throw new Error(`Gagal membaca berkas PDF: ${err.message || 'Format tidak valid'}`);
+    throw new Error(`Gagal membaca berkas PDF: ${err.message || t('tools.protect.invalidFormat')}`);
   }
 
   const pageCount = doc.getPageCount();

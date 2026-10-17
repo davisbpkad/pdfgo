@@ -51,7 +51,7 @@ defineEmits(['toggle-sidebar']);
       <button
         class="relative border-2 border-ink bg-paper px-3 py-1.5 md:py-2 font-bold text-xs uppercase tracking-wider flex items-center gap-2 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000] cursor-pointer transition-all duration-150"
         @click="toggleQueueDrawer"
-        title="Buka antrean berkas"
+        :title="t('queue.openTitle')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -72,7 +72,8 @@ defineEmits(['toggle-sidebar']);
       <button
         class="border-2 border-ink bg-paper px-2.5 md:px-3 py-1.5 md:py-2 font-bold text-xs uppercase tracking-wider rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000] cursor-pointer transition-all duration-150 flex items-center gap-1.5"
         @click="toggleLang"
-        title="Ganti Bahasa (ID / EN)"
+        :title="t('common.langTitle')"
+        data-testid="lang-toggle"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <circle cx="12" cy="12" r="10" />
@@ -86,7 +87,7 @@ defineEmits(['toggle-sidebar']);
       <button
         class="w-9 h-9 md:w-10 md:h-10 border-2 border-ink bg-paper flex items-center justify-center rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000] cursor-pointer transition-all duration-150"
         @click="toggleTheme"
-        title="Ganti Mode Terang / Gelap"
+        :title="t('common.themeTitle')"
         aria-label="Toggle theme"
       >
         <svg v-if="theme === 'dark'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -1,4 +1,6 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
+
 defineProps({
   wordCount: {
     type: Number,
@@ -24,11 +26,11 @@ const emit = defineEmits(['update:includeSeparators']);
 <template>
   <div class="flex flex-wrap items-center justify-between gap-3 p-3 border-3 border-ink bg-paper shadow-hard-sm">
     <div class="flex items-center gap-4 text-xs font-bold text-ink">
-      <span><strong>{{ wordCount }}</strong> kata</span>
+      <span><strong>{{ wordCount }}</strong>{{ t('common.words') }}</span>
       <span>•</span>
-      <span><strong>{{ charCount }}</strong> karakter</span>
+      <span><strong>{{ charCount }}</strong>{{ t('common.characters') }}</span>
       <span>•</span>
-      <span><strong>{{ pageCount }}</strong> halaman</span>
+      <span><strong>{{ pageCount }}</strong>{{ t('common.pages') }}</span>
     </div>
 
     <label class="inline-flex items-center gap-2 cursor-pointer select-none">
@@ -38,7 +40,7 @@ const emit = defineEmits(['update:includeSeparators']);
         class="w-4 h-4 accent-ink cursor-pointer border-2 border-ink"
         @change="emit('update:includeSeparators', $event.target.checked)"
       />
-      <span class="text-xs font-bold text-ink">Sertakan pembatas halaman</span>
+      <span class="text-xs font-bold text-ink">{{ t('tools.extractText.includeSeparators') }}</span>
     </label>
   </div>
 </template>

@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument } from 'pdf-lib';
 
 /**
@@ -9,7 +10,7 @@ import { PDFDocument } from 'pdf-lib';
  * @returns {Promise<Array<{ name: string, data: Uint8Array }>>}
  */
 export async function splitEveryN(pdfBuffer, nPages = 1, password = '', onProgress = null) {
-  if (nPages < 1) throw new Error('N harus minimal 1');
+  if (nPages < 1) throw new Error(t('tools.split.minN'));
 
   let safeBuf;
   if (pdfBuffer instanceof Uint8Array) {

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
+import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { compressPdfDocument } from '../logic/compressPdfDocument.js';
@@ -45,7 +46,7 @@ async function loadDocument(file) {
     // clicked (and silently ignored) while the document is still loading.
     activeFile.value = file;
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -63,7 +64,7 @@ async function handleCompress() {
 
   isCompressing.value = true;
   progressValue.value = 5;
-  progressStatusText.value = 'Mempersiapkan dokumen...';
+  progressStatusText.value = t('tools.compress.preparing');
   compressionResult.value = null;
 
   let dpiScale = 1.5;
@@ -84,7 +85,7 @@ async function handleCompress() {
       { dpiScale, quality },
       (pct, cur, total) => {
         progressValue.value = pct;
-        progressStatusText.value = `Mengompresi halaman ${cur} dari ${total}...`;
+        progressStatusText.value = t('tools.compress.compressingPage', { current: cur, total });
       }
     );
 
@@ -93,12 +94,12 @@ async function handleCompress() {
     downloadFile(result.bytes, `${safeName}_compressed.pdf`);
 
     if (result.reductionRate > 0) {
-      showToast(`Berhasil dikompres! Penghematan ${result.reductionRate}%`, 'success');
+      showToast(`t('tools.compress.successReduction', { pct: result.reductionRate })`, 'success');
     } else {
-      showToast('Kompresi selesai (ukuran asli sudah sangat optimal).', 'info');
+      showToast(t('tools.compress.alreadyOptimal'), 'info');
     }
   } catch (err) {
-    showToast(err.message || 'Gagal mengompresi PDF', 'error');
+    showToast(err.message || t('tools.compress.failed'), 'error');
   } finally {
     isCompressing.value = false;
   }
@@ -116,10 +117,10 @@ function downloadAgain() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Kompres PDF
+        {{ t('tools.compress.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Kecilkan ukuran file PDF Anda langsung di peramban tanpa mengorbankan keterbacaan teks.
+        {{ t('tools.compress.desc') }}
       </p>
     </div>
 
@@ -129,14 +130,14 @@ function downloadAgain() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ t('common.pagesCount', { count: totalPages }) }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
         >
-          Ganti File
+          {{ t('common.changeFile') }}
         </button>
       </BaseCard>
 
@@ -162,7 +163,7 @@ function downloadAgain() {
           :loading="isCompressing"
           @click="handleCompress"
         >
-          Kompres Sekarang
+          {{ t('tools.compress.actionCompress') }}
         </BaseButton>
       </div>
     </div>

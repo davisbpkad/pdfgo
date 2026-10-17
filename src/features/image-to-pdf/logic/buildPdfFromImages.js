@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument, PageSizes } from 'pdf-lib';
 
 /**
@@ -9,7 +10,7 @@ import { PDFDocument, PageSizes } from 'pdf-lib';
  */
 export async function buildPdfFromImages(imageItems, options, onProgress = null) {
   if (!imageItems || imageItems.length === 0) {
-    throw new Error('Pilih minimal 1 gambar untuk dibuat menjadi PDF.');
+    throw new Error(t('tools.imageToPdf.needImage'));
   }
 
   const { pageSize = 'A4', orientation = 'auto', margin = 20, fitMode = 'contain' } = options || {};

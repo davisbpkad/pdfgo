@@ -1,5 +1,6 @@
 <script setup>
 import BaseInput from '../../../ui/BaseInput.vue';
+import { t } from '../../../app/providers/i18n.js';
 
 defineProps({
   format: {
@@ -43,31 +44,31 @@ const emit = defineEmits([
       <!-- Format -->
       <div class="space-y-1.5">
         <label class="block text-xs font-black uppercase tracking-wider text-ink">
-          Format Gambar
+          {{ t('tools.pdfToImage.formatLabel') }}
         </label>
         <select
           :value="format"
           class="w-full px-3 py-2 border-2 border-ink bg-paper text-ink font-bold text-xs focus:outline-none"
           @change="emit('update:format', $event.target.value)"
         >
-          <option value="png">PNG (Kualitas Paling Tajam / Lossless)</option>
-          <option value="jpeg">JPEG (Ukuran Berkas Lebih Ringan)</option>
+          <option value="png">{{ t('tools.pdfToImage.formatPng') }}</option>
+          <option value="jpeg">{{ t('tools.pdfToImage.formatJpeg') }}</option>
         </select>
       </div>
 
       <!-- DPI Resolution -->
       <div class="space-y-1.5">
         <label class="block text-xs font-black uppercase tracking-wider text-ink">
-          Resolusi / Ketajaman
+          {{ t('tools.pdfToImage.dpiLabel') }}
         </label>
         <select
           :value="dpiScale"
           class="w-full px-3 py-2 border-2 border-ink bg-paper text-ink font-bold text-xs focus:outline-none"
           @change="emit('update:dpiScale', Number($event.target.value))"
         >
-          <option :value="1.0">Standar Web (~72 DPI)</option>
-          <option :value="2.08">Menengah (~150 DPI - Rekomendasi)</option>
-          <option :value="4.16">Tinggi / Cetak (~300 DPI)</option>
+          <option :value="1.0">{{ t('tools.pdfToImage.dpiStandard') }}</option>
+          <option :value="2.08">{{ t('tools.pdfToImage.dpiMedium') }}</option>
+          <option :value="4.16">{{ t('tools.pdfToImage.dpiHigh') }}</option>
         </select>
       </div>
     </div>
@@ -75,7 +76,7 @@ const emit = defineEmits([
     <!-- JPEG Quality (if JPEG selected) -->
     <div v-if="format === 'jpeg'" class="space-y-1.5">
       <label class="block text-xs font-black uppercase tracking-wider text-ink">
-        Kualitas JPEG ({{ quality }}%)
+        {{ t('tools.pdfToImage.qualityLabel') }} ({{ quality }}%)
       </label>
       <input
         type="range"
@@ -90,21 +91,21 @@ const emit = defineEmits([
     <!-- Page Range Choice -->
     <div class="space-y-1.5">
       <label class="block text-xs font-black uppercase tracking-wider text-ink">
-        Halaman yang Diekstrak
+        {{ t('tools.pdfToImage.pagesLabel') }}
       </label>
       <select
         :value="pageRangeChoice"
         class="w-full px-3 py-2 border-2 border-ink bg-paper text-ink font-bold text-xs focus:outline-none"
         @change="emit('update:pageRangeChoice', $event.target.value)"
       >
-        <option value="all">Semua Halaman ({{ totalPages }} halaman)</option>
-        <option value="custom">Pilih Rentang Halaman Kustom</option>
+        <option value="all">{{ t('tools.pdfToImage.pagesAll') }} ({{ totalPages }} {{ t('tools.pdfToImage.pagesLabel') }})</option>
+        <option value="custom">{{ t('tools.pdfToImage.pagesCustom') }}</option>
       </select>
 
       <div v-if="pageRangeChoice === 'custom'" class="pt-1">
         <BaseInput
           :model-value="customRange"
-          placeholder="Contoh: 1-3, 5"
+          :placeholder="t('tools.pdfToImage.rangePlaceholder')"
           @update:model-value="emit('update:customRange', $event)"
         />
       </div>

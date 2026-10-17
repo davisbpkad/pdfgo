@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { ref, computed, watch, onMounted } from 'vue';
 import { renderPageToCanvas, unwrapPdfProxy } from '../../../core/pdf.js';
 import PreviewViewport from '../../../ui/PreviewViewport.vue';
@@ -106,7 +107,7 @@ onMounted(() => {
     <!-- Header with Page Navigation -->
     <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-ink pb-2">
       <div class="text-xs font-black uppercase tracking-tight text-ink flex items-center gap-1.5">
-        <span>Pratinjau Watermark</span>
+        <span>{{ t('tools.watermark.previewTitle') }}</span>
       </div>
 
       <!-- Page Selector -->
@@ -128,7 +129,7 @@ onMounted(() => {
             :max="totalPages"
             class="w-12 p-1 text-center font-mono border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none"
           />
-          <span>dari {{ totalPages }}</span>
+          <span>{{ t('common.of') }} {{ totalPages }}</span>
         </span>
         <button
           type="button"

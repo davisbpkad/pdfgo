@@ -78,7 +78,7 @@ const filterOptions = [
         <button
           type="button"
           class="px-2 py-1 border-2 border-ink bg-paper text-xs font-bold hover:bg-paper-dark cursor-pointer"
-          title="Potong Halaman"
+          :title="t('tools.scanToPdf.cropPage')"
           @click="$emit('crop', page.id)"
         >✂</button>
       </div>

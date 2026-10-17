@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import ExcelJS from 'exceljs';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { extractLayoutItems } from '../../pdf-to-markdown/logic/extractLayoutItems.js';
@@ -17,7 +18,7 @@ import { detectRows } from './detectRows.js';
 export async function convertPdfToExcel(pdfBuffer, options = {}) {
   const { mode = 'table', pageRange = '', onProgress = null } = options;
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.pdfToExcel.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(
@@ -34,7 +35,7 @@ export async function convertPdfToExcel(pdfBuffer, options = {}) {
   if (pageRange && pageRange.trim()) {
     pagesToProcess = parsePageRange(pageRange, totalPages);
     if (pagesToProcess.length === 0) {
-      throw new Error('Rentang halaman tidak valid: tidak ada halaman yang cocok.');
+      throw new Error(t('tools.pdfToExcel.noPagesMatched'));
     }
   }
   if (pagesToProcess.length === 0) {
@@ -78,7 +79,7 @@ export async function convertPdfToExcel(pdfBuffer, options = {}) {
           totalRows++;
         }
       } else {
-        sheet.addRow(['(Tidak ada teks tabel terdeteksi)']);
+        sheet.addRow([t('tools.pdfToExcel.noTableText')]);
         totalRows++;
       }
     }

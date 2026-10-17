@@ -46,7 +46,7 @@ async function handleConvert() {
     });
     showToast(t('pdfToExcel.successTitle'), 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal mengekspor berkas Excel.', 'error');
+    showToast(err.message || t('tools.pdfToExcel.exportFailed'), 'error');
   } finally {
     isProcessing.value = false;
   }
@@ -83,10 +83,10 @@ function resetState() {
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
           <p class="text-xs text-ink/70">{{ (activeFile.size / 1024).toFixed(1) }} KB</p>
         </div>
-        <button type="button" class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer" @click="resetState">Ganti File</button>
+        <button type="button" class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer" @click="resetState">{{ t('common.changeFile') }}</button>
       </BaseCard>
 
-      <BaseProgressBar v-if="isProcessing" :progress="progressVal" label="Mengekstrak layout & tabel ke lembar Excel..." />
+      <BaseProgressBar v-if="isProcessing" :progress="progressVal" :label="t('tools.pdfToExcel.progress')" />
 
       <ExcelExportConfigCard
         v-if="!excelResult"

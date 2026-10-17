@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { getOcrWorker } from '../../ocr/logic/ocrWorkerManager.js';
 
 export { extractTextFromScannedPdf } from './extractTextFromScannedPdf.js';
@@ -42,7 +43,7 @@ export async function imageFileToCanvas(fileOrBlob) {
     };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error('Gagal memuat file gambar. Format tidak didukung atau file rusak.'));
+      reject(new Error(t('tools.extractText.imageLoadFailed')));
     };
     img.src = url;
   });

@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument } from 'pdf-lib';
 
 /**
@@ -9,7 +10,7 @@ import { PDFDocument } from 'pdf-lib';
  */
 export async function extractPages(pdfBuffer, pageNumbers, password = '') {
   if (!pageNumbers || pageNumbers.length === 0) {
-    throw new Error('Tidak ada halaman yang dipilih untuk diekstrak.');
+    throw new Error(t('tools.split.noPagesSelected'));
   }
 
   let safeBuf;
@@ -32,7 +33,7 @@ export async function extractPages(pdfBuffer, pageNumbers, password = '') {
     .map(p => p - 1);
 
   if (validZeroIndices.length === 0) {
-    throw new Error('Halaman yang dipilih melebihi jumlah halaman dokumen.');
+    throw new Error(t('tools.split.exceedsPages'));
   }
 
   const newDoc = await PDFDocument.create();

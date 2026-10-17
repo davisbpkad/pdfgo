@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { t } from '../../../app/providers/i18n.js';
 
 const emit = defineEmits(['use-signature']);
 
@@ -8,8 +9,8 @@ const font = ref('Dancing Script');
 const inkColor = ref('#000000');
 
 const fonts = [
-  { id: 'Dancing Script', label: 'Dancing Script (Cursive Halus)' },
-  { id: 'Caveat', label: 'Caveat (Cursive Santai)' }
+  { id: 'Dancing Script', labelKey: 'tools.sign.fontDancingScript' },
+  { id: 'Caveat', labelKey: 'tools.sign.fontCaveat' }
 ];
 
 const colors = [
@@ -40,17 +41,17 @@ function apply() {
 <template>
   <div class="space-y-3">
     <div class="space-y-1">
-      <label class="text-xs font-bold text-ink uppercase tracking-wider block">Font Cursive:</label>
+      <label class="text-xs font-bold text-ink uppercase tracking-wider block">{{ t('tools.sign.fontLabel') }}</label>
       <select
         v-model="font"
         class="w-full text-xs font-bold p-2 border-2 border-ink bg-paper shadow-hard-sm cursor-pointer focus:outline-none"
       >
-        <option v-for="f in fonts" :key="f.id" :value="f.id">{{ f.label }}</option>
+        <option v-for="f in fonts" :key="f.id" :value="f.id">{{ t(f.labelKey) }}</option>
       </select>
     </div>
 
     <div class="flex items-center gap-2">
-      <span class="text-xs font-bold text-ink">Warna Tinta:</span>
+      <span class="text-xs font-bold text-ink">{{ t('tools.sign.colorLabel') }}</span>
       <button
         v-for="c in colors"
         :key="c.id"
@@ -63,11 +64,11 @@ function apply() {
     </div>
 
     <div class="space-y-1">
-      <label class="text-xs font-bold text-ink uppercase tracking-wider block">Teks / Nama Paraf:</label>
+      <label class="text-xs font-bold text-ink uppercase tracking-wider block">{{ t('tools.sign.textLabel') }}</label>
       <input
         v-model="text"
         type="text"
-        placeholder="Ketik nama atau paraf..."
+        :placeholder="t('tools.sign.typePlaceholder')"
         class="w-full text-xs font-medium p-2 border-2 border-ink bg-paper shadow-hard-sm focus:outline-none"
         @keyup.enter="apply"
       />
@@ -77,7 +78,7 @@ function apply() {
       class="border-3 border-ink bg-paper shadow-hard-sm p-4 text-center min-h-[100px] flex items-center justify-center text-3xl select-none overflow-hidden"
       :style="{ fontFamily: `'${font}', cursive`, color: inkColor }"
     >
-      {{ text.trim() || 'Contoh Tanda Tangan' }}
+      {{ text.trim() || t('tools.sign.previewPlaceholder') }}
     </div>
 
     <button
@@ -87,7 +88,7 @@ function apply() {
       :class="text.trim() ? 'bg-accent hover:shadow-hard text-ink' : 'bg-paper-dark text-ink/60'"
       @click="apply"
     >
-      Gunakan Tanda Tangan Ini
+      {{ t('tools.sign.useSignature') }}
     </button>
   </div>
 </template>

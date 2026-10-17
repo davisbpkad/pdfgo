@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import * as fflate from 'fflate';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { parsePresentationDimensions, parseSlideElements, parseSlideRels } from './parseSlideXml.js';
@@ -7,7 +8,7 @@ import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 export async function convertPptxToPdf(pptxBuffer, options = {}) {
   const { onProgress = null } = options;
   if (!pptxBuffer || pptxBuffer.byteLength === 0) {
-    throw new Error('Berkas PowerPoint (.pptx) kosong atau tidak valid.');
+    throw new Error(t('tools.powerpointToPdf.invalidPptx'));
   }
 
   const safeBytes = new Uint8Array(
@@ -31,7 +32,7 @@ export async function convertPptxToPdf(pptxBuffer, options = {}) {
     });
 
   if (slideKeys.length === 0) {
-    throw new Error('Tidak ada slide yang ditemukan dalam berkas PowerPoint.');
+    throw new Error(t('tools.powerpointToPdf.noSlides'));
   }
 
   const pdfDoc = await PDFDocument.create();

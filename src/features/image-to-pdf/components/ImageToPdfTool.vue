@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { convertImageToPngBuffer } from '../logic/convertImageToPngBuffer.js';
 import { buildPdfFromImages } from '../logic/buildPdfFromImages.js';
@@ -18,6 +19,8 @@ const margin = ref(20);
 const fitMode = ref('contain');
 
 const isConverting = ref(false);
+const isReading = ref(false);
+let pendingRead = Promise.resolve();
 const progressValue = ref(0);
 let draggedIdx = null;
 
@@ -34,29 +37,38 @@ async function handleIncomingFiles(files) {
   const validFiles = Array.from(files).filter(f => /\.(png|jpe?g|webp)$/i.test(f.name));
   if (validFiles.length === 0) return;
 
-  for (const file of validFiles) {
-    const item = {
-      id: `img_${Math.random().toString(36).substring(2, 8)}`,
-      file,
-      name: file.name,
-      size: file.size,
-      type: file.type || 'image/png',
-      buffer: null,
-      thumbUrl: URL.createObjectURL(file)
-    };
+  isReading.value = true;
+  // Kept so a click that lands mid-load can wait instead of failing.
+  pendingRead = (async () => {
+    for (const file of validFiles) {
+      const item = {
+        id: `img_${Math.random().toString(36).substring(2, 8)}`,
+        file,
+        name: file.name,
+        size: file.size,
+        type: file.type || 'image/png',
+        buffer: null,
+        thumbUrl: URL.createObjectURL(file)
+      };
 
-    imageList.value.push(item);
+      imageList.value.push(item);
 
-    try {
-      if (file.type.includes('webp') || file.name.toLowerCase().endsWith('.webp')) {
-        item.buffer = await convertImageToPngBuffer(file);
-        item.type = 'image/png';
-      } else {
-        item.buffer = await file.arrayBuffer();
+      try {
+        if (file.type.includes('webp') || file.name.toLowerCase().endsWith('.webp')) {
+          item.buffer = await convertImageToPngBuffer(file);
+          item.type = 'image/png';
+        } else {
+          item.buffer = await file.arrayBuffer();
+        }
+      } catch (e) {
+        // Buffer load error
       }
-    } catch (e) {
-      // Buffer load error
     }
+  })();
+  try {
+    await pendingRead;
+  } finally {
+    isReading.value = false;
   }
 }
 
@@ -92,6 +104,13 @@ function onDrop(targetIdx) {
 
 async function handleGenerate() {
   if (imageList.value.length === 0) return;
+  // A click can land before Vue re-renders the disabled state, so wait for any
+  // read that is still in flight instead of dropping the click.
+  await pendingRead;
+  if (imageList.value.some(item => !item.buffer)) {
+    showToast(t('tools.imageToPdf.stillLoading'), 'warning');
+    return;
+  }
   isConverting.value = true;
   progressValue.value = 10;
 
@@ -112,9 +131,9 @@ async function handleGenerate() {
 
     const filename = `PDFToolkit_Images_${Date.now()}.pdf`;
     downloadFile(pdfBytes, filename);
-    showToast('Dokumen PDF dari gambar berhasil dibuat!', 'success');
+    showToast(t('tools.imageToPdf.createSuccess'), 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal membuat PDF', 'error');
+    showToast(err.message || t('tools.imageToPdf.createFailed'), 'error');
   } finally {
     isConverting.value = false;
   }
@@ -125,16 +144,16 @@ async function handleGenerate() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Gambar ke PDF
+        {{ t('tools.imageToPdf.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Ubah koleksi foto, tangkapan layar, atau scan gambar menjadi dokumen PDF terstruktur rapi.
+        {{ t('tools.imageToPdf.desc') }}
       </p>
     </div>
 
     <DropZone
       accept="image/png,image/jpeg,image/webp"
-      label="Tarik & lepas file gambar (PNG, JPG, WebP) ke sini"
+      :label="t('tools.imageToPdf.emptyPrompt')"
       @files="handleIncomingFiles"
     />
 
@@ -147,16 +166,12 @@ async function handleGenerate() {
       />
 
       <div class="flex items-center justify-between">
-        <span class="font-bold text-sm text-ink uppercase tracking-wider">
-          Urutan Gambar ({{ imageList.length }} Berkas)
-        </span>
+        <span class="font-bold text-sm text-ink uppercase tracking-wider">{{ t('tools.imageToPdf.imageOrder', { count: imageList.length }) }}</span>
         <button
           type="button"
           class="text-xs font-bold text-danger hover:underline cursor-pointer"
           @click="clearAll"
-        >
-          Kosongkan Semua
-        </button>
+        >{{ t('tools.imageToPdf.clearAll') }}</button>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -171,7 +186,7 @@ async function handleGenerate() {
         />
       </div>
 
-      <BaseProgressBar v-if="isConverting" :progress="progressValue" label="Mengonversi gambar ke PDF..." />
+      <BaseProgressBar v-if="isConverting" :progress="progressValue" :label="t('tools.imageToPdf.progressConverting')" />
 
       <div class="flex justify-end pt-2">
         <BaseButton
@@ -181,7 +196,7 @@ async function handleGenerate() {
           :loading="isConverting"
           @click="handleGenerate"
         >
-          {{ `Buat PDF (${imageList.length} Gambar)` }}
+          {{ t('tools.imageToPdf.actionCreate', { count: imageList.length }) }}
         </BaseButton>
       </div>
     </div>

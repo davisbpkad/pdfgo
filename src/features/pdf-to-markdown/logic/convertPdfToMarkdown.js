@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { loadPdfJsDocument, renderPageToCanvas, unwrapPdfProxy } from '../../../core/pdf.js';
 import { createZipArchive } from '../../../core/zip.js';
 import { extractLayoutItems } from './extractLayoutItems.js';
@@ -16,7 +17,7 @@ import { linesToMarkdown } from './toMarkdown.js';
 export async function convertPdfToMarkdown(pdfBuffer, options = {}) {
   const { separatePages = false, includeImages = false, onProgress = null } = options;
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.pdfToMarkdown.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(

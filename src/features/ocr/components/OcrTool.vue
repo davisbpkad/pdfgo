@@ -4,7 +4,7 @@ import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { t } from '../../../app/providers/i18n.js';
-import { queueState } from '../../../app/providers/queue.js';
+import { queueState, publishQueueResult } from '../../../app/providers/queue.js';
 import { ensureBuiltinModelsLoaded, getAvailableOcrLangs } from '../../../core/assets.js';
 import { parsePageRange } from '../logic/parsePageRange.js';
 import { runOcrPipeline } from '../logic/runOcrPipeline.js';
@@ -116,7 +116,7 @@ async function loadDocument(file) {
     // clicked (and silently ignored) while the document is still loading.
     activeFile.value = file;
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -134,7 +134,7 @@ function cancelOcr() {
   cancelRef.value.value = true;
   isProcessing.value = false;
   terminateOcrWorker();
-  showToast('Proses OCR dibatalkan.', 'info');
+  showToast(t('tools.ocr.cancelled'), 'info');
 }
 
 async function handleStartOcr() {
@@ -150,7 +150,7 @@ async function handleStartOcr() {
     : parsePageRange(customRange.value, totalPages.value);
 
   if (targetPages.length === 0) {
-    showToast('Pilihan rentang halaman tidak valid.', 'error');
+    showToast(t('tools.ocr.invalidRange'), 'error');
     return;
   }
 
@@ -175,10 +175,12 @@ async function handleStartOcr() {
 
     lastOcrResults.value = textReport;
     lastSearchablePdfBytes = searchablePdfBytes;
-    showToast('Pengenalan teks selesai!', 'success');
+    // Hand the result back to the queue so its download buttons become usable.
+    publishQueueResult(activeFile.value, searchablePdfBytes);
+    showToast(t('tools.ocr.completed'), 'success');
   } catch (err) {
     if (!cancelRef.value.value) {
-      showToast('Gagal memproses OCR: ' + (err.message || ''), 'error');
+      showToast(t('tools.ocr.failed') + (err.message || ''), 'error');
     }
   } finally {
     isProcessing.value = false;
@@ -191,7 +193,7 @@ function handleDownloadPdf() {
   // producing names like "scan.png_searchable.pdf".
   const safeName = activeFile.value.name.replace(/\.(pdf|png|jpe?g|webp|bmp)$/i, '');
   downloadFile(lastSearchablePdfBytes, `${safeName}_searchable.pdf`, 'application/pdf');
-  showToast('PDF Searchable berhasil diunduh!', 'success');
+  showToast(t('tools.ocr.pdfDownloaded'), 'success');
 }
 
 function handleDownloadTxt() {
@@ -201,13 +203,13 @@ function handleDownloadTxt() {
   const safeName = activeFile.value.name.replace(/\.(pdf|png|jpe?g|webp|bmp)$/i, '');
   const blob = new Blob([lastOcrResults.value.fullText], { type: 'text/plain;charset=utf-8' });
   downloadFile(blob, `${safeName}_ocr.txt`, 'text/plain');
-  showToast('File teks berhasil diunduh!', 'success');
+  showToast(t('tools.ocr.txtDownloaded'), 'success');
 }
 
 function handleCopyText() {
   if (!lastOcrResults.value?.fullText) return;
   navigator.clipboard.writeText(lastOcrResults.value.fullText).then(() => {
-    showToast('Teks berhasil disalin ke clipboard!', 'success');
+    showToast(t('tools.ocr.copied'), 'success');
   });
 }
 </script>
@@ -216,10 +218,10 @@ function handleCopyText() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Pengenalan Teks (OCR)
+        {{ t('tools.ocr.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Ubah dokumen hasil scan atau gambar menjadi PDF yang dapat dicari (Searchable PDF) serta ekspor teks murni secara 100% luring.
+        {{ t('tools.ocr.desc') }}
       </p>
     </div>
 
@@ -239,9 +241,9 @@ function handleCopyText() {
     >
       <div class="space-y-1">
         <span class="font-bold text-base md:text-lg text-ink">
-          Tarik file PDF atau Gambar (PNG, JPG, WebP) ke sini
+          {{ t('dropzone.pdfOrImage') }}
         </span>
-        <p class="text-xs text-ink/70 font-medium">atau klik untuk memilih berkas dari komputer Anda</p>
+        <p class="text-xs text-ink/70 font-medium">{{ t('dropzone.subtitle') }}</p>
       </div>
     </DropZone>
 
@@ -249,15 +251,13 @@ function handleCopyText() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ totalPages }} {{ t('common.pages') }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
-        >
-          Ganti File
-        </button>
+        >{{ t('common.changeFile') }}</button>
       </BaseCard>
 
       <div v-if="isProcessing" class="space-y-2">
@@ -267,9 +267,7 @@ function handleCopyText() {
             type="button"
             class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
             @click="cancelOcr"
-          >
-            Batalkan Proses
-          </button>
+          >{{ t('tools.ocr.actionCancel') }}</button>
         </div>
       </div>
 

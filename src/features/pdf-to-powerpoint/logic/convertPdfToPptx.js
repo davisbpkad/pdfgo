@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import pptxgen from 'pptxgenjs';
 import { loadPdfJsDocument, renderPageToCanvas, unwrapPdfProxy } from '../../../core/pdf.js';
 import { ptToInches } from './ptToEmu.js';
@@ -15,7 +16,7 @@ import { buildSlidePlan } from './buildSlidePlan.js';
 export async function convertPdfToPptx(pdfBuffer, options = {}) {
   const { pageSelection = 'all', quality = 'normal', onProgress = null } = options;
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.pdfToPowerpoint.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(

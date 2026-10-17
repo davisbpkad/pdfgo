@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { renderPageToCanvas } from '../../../core/pdf.js';
 import { renderRedactionBoxes } from '../logic/renderRedactionBoxes.js';
+import { t } from '../../../app/providers/i18n.js';
 
 const props = defineProps({
   show: { type: Boolean, default: false },
@@ -73,49 +74,41 @@ async function renderHighResPreview() {
         <div>
           <h2 class="font-display font-extrabold text-lg md:text-xl uppercase tracking-tight text-ink flex items-center gap-2">
             <span>🛡️</span>
-            <span>Periksa Hasil Sensor (Resolusi Tinggi)</span>
+            <span>{{ t('tools.redact.inspectPreview') }}</span>
           </h2>
           <p class="text-xs text-ink/80 font-medium">
-            Pratinjau raster murni. Pastikan seluruh teks dan data sensitif tertutup sempurna sebelum menerapkan sensor permanen.
+            {{ t('tools.redact.inspectDesc') }}
           </p>
         </div>
         <button
           type="button"
           class="px-3.5 py-1.5 text-xs font-bold border-2 border-ink bg-paper hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           @click="$emit('close')"
-        >
-          ✕ Tutup
-        </button>
+        >✕ {{ t('common.close') }}</button>
       </div>
 
       <!-- Navigation & Page Status -->
       <div class="flex items-center justify-between text-xs font-bold bg-paper-dark p-2 border border-ink rounded-sm shadow-[1px_1px_0_0_#000000]">
-        <span>Halaman {{ currentPage }} dari {{ totalPages }}</span>
+        <span>{{ t('common.page') }} {{ currentPage }} {{ t('common.of') }} {{ totalPages }}</span>
         <div class="flex items-center gap-2">
           <button
             type="button"
             :disabled="currentPage <= 1 || isLoading"
             class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
             @click="$emit('update:currentPage', currentPage - 1)"
-          >
-            ◀ Sebelumnya
-          </button>
+          >{{ t('tools.redact.prevPage') }}</button>
           <button
             type="button"
             :disabled="currentPage >= totalPages || isLoading"
             class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
             @click="$emit('update:currentPage', currentPage + 1)"
-          >
-            Berikutnya ▶
-          </button>
+          >{{ t('tools.redact.nextPage') }}</button>
         </div>
       </div>
 
       <!-- High-res Canvas Area -->
       <div class="flex-1 overflow-auto border-2 border-ink bg-paper-dark rounded-sm p-4 flex items-center justify-center min-h-[300px]">
-        <div v-if="isLoading" class="text-sm font-bold text-ink">
-          Mempertajam pratinjau resolusi tinggi...
-        </div>
+        <div v-if="isLoading" class="text-sm font-bold text-ink">{{ t('tools.redact.sharpeningPreview') }}</div>
         <canvas
           v-show="!isLoading"
           ref="previewCanvasRef"
@@ -129,9 +122,7 @@ async function renderHighResPreview() {
           type="button"
           class="px-4 py-2 text-xs font-bold border-2 border-ink bg-accent text-black hover:bg-accent-strong rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
           @click="$emit('close')"
-        >
-          ✓ Selesai Memeriksa
-        </button>
+        >{{ t('tools.redact.doneInspecting') }}</button>
       </div>
     </div>
   </div>

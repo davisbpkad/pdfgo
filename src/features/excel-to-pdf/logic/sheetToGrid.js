@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 /**
  * Transform raw 2D sheet rows into paginated layout grid models for PDF rendering
  * @param {Array<Array<string>>} rawRows
@@ -8,7 +9,7 @@
  */
 export function sheetToGrid(rawRows, options = {}) {
   if (!Array.isArray(rawRows) || rawRows.length === 0) {
-    throw new Error('Tidak ada data baris yang dapat diubah menjadi tabel.');
+    throw new Error(t('tools.excelToPdf.noTableRows'));
   }
 
   const { orientation = 'landscape', margin = 36 } = options;

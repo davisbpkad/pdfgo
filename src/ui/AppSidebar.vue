@@ -72,12 +72,12 @@ function selectTool(id) {
       <div class="shrink-0 p-4 border-b-2 border-ink flex items-center justify-between lg:hidden bg-paper-dark">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-accent border border-ink"></span>
-          <span class="font-display font-extrabold text-base text-ink uppercase tracking-tight">Menu Alat</span>
+          <span class="font-display font-extrabold text-base text-ink uppercase tracking-tight">{{ t('app.sidebarMenu') }}</span>
         </div>
         <button
           class="w-8 h-8 border-2 border-ink bg-paper rounded-sm flex items-center justify-center font-black text-lg leading-none shadow-hard-sm hover:bg-accent active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
           @click="$emit('close')"
-          aria-label="Tutup menu"
+          :aria-label="t('common.closeMenu')"
         >
           &times;
         </button>
@@ -131,7 +131,7 @@ function selectTool(id) {
             <span class="text-[11px] font-extrabold uppercase tracking-wider text-ink">Zero-Network</span>
           </div>
           <p class="text-[10px] text-ink/70 leading-snug">
-            100% Lokal di peramban Anda. Bebas pelacak & tanpa server.
+            {{ t('app.sidebarNote') }}
           </p>
         </div>
       </div>

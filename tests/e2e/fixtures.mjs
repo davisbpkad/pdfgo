@@ -24,6 +24,7 @@ export const xlsxFile = path.join(DIR, 'tabel.xlsx');
 export const htmlFile = path.join(DIR, 'halaman.html');
 export const lockedPdf = path.join(DIR, 'terkunci.pdf');
 export const formPdf = path.join(DIR, 'formulir.pdf');
+export const scannedPdf = path.join(DIR, 'scan.pdf');
 
 export const LOCKED_PASSWORD = 'rahasia123';
 
@@ -60,6 +61,15 @@ async function makeFormPdf() {
   return doc.save();
 }
 
+async function makeScannedPdf() {
+  const doc = await PDFDocument.create();
+  const png = await doc.embedPng(fs.readFileSync(imagePng));
+  const page = doc.addPage([595.28, 841.89]);
+  // Image only, no text layer: this is what makes the tool call it a scan.
+  page.drawImage(png, { x: 40, y: 300, width: 500, height: 280 });
+  return doc.save();
+}
+
 export async function writeFixtures() {
   fs.mkdirSync(DIR, { recursive: true });
   fs.writeFileSync(notAPdf, 'ini bukan pdf, hanya teks biasa\n');
@@ -69,6 +79,7 @@ export async function writeFixtures() {
   fs.copyFileSync(path.join(ROOT, 'dist/screenshots/screenshot-mobile-id.png'), imagePng);
 
   fs.writeFileSync(textPdf, await makeTextPdf());
+  fs.writeFileSync(scannedPdf, await makeScannedPdf());
   fs.writeFileSync(twoPagePdf, await makeTwoPagePdf());
   fs.writeFileSync(formPdf, await makeFormPdf());
 

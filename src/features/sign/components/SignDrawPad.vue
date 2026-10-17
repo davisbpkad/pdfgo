@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { t } from '../../../app/providers/i18n.js';
 
 const emit = defineEmits(['use-signature']);
 
@@ -81,7 +82,7 @@ function apply() {
   <div class="space-y-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <span class="text-xs font-bold text-ink">Tinta:</span>
+        <span class="text-xs font-bold text-ink">{{ t('tools.sign.colorLabel') }}</span>
         <button
           v-for="c in colors"
           :key="c.id"
@@ -98,7 +99,7 @@ function apply() {
         class="text-xs font-bold px-2 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
         @click="clear"
       >
-        Hapus Coretan
+        {{ t('tools.sign.clearCanvas') }}
       </button>
     </div>
 
@@ -119,7 +120,7 @@ function apply() {
       class="w-full py-2 px-4 border-2 border-ink bg-accent text-ink font-bold text-xs uppercase tracking-wider shadow-hard-sm hover:shadow-hard transition-all cursor-pointer"
       @click="apply"
     >
-      Gunakan Tanda Tangan Ini
+      {{ t('tools.sign.useSignature') }}
     </button>
   </div>
 </template>

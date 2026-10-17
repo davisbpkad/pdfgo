@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument } from '@cantoo/pdf-lib';
 
 /**
@@ -7,7 +8,7 @@ import { PDFDocument } from '@cantoo/pdf-lib';
  */
 export async function isPdfEncrypted(pdfBuffer) {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.unlock.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(
@@ -36,7 +37,7 @@ export async function isPdfEncrypted(pdfBuffer) {
  */
 export async function removePassword(pdfBuffer, password = '') {
   if (!pdfBuffer || pdfBuffer.byteLength === 0) {
-    throw new Error('Berkas PDF kosong atau tidak valid.');
+    throw new Error(t('tools.unlock.invalidPdf'));
   }
 
   const safeBytes = new Uint8Array(
@@ -53,7 +54,7 @@ export async function removePassword(pdfBuffer, password = '') {
   } catch (err) {
     const msg = String(err?.message || '');
     if (msg.toLowerCase().includes('password incorrect') || msg.toLowerCase().includes('password')) {
-      const error = new Error('Password salah. Silakan coba lagi.');
+      const error = new Error(t('tools.unlock.wrongPassword'));
       error.code = 'WRONG_PASSWORD';
       throw error;
     }

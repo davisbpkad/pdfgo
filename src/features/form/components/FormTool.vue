@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { ref, shallowRef, onMounted, watch } from 'vue';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
@@ -61,7 +62,7 @@ async function loadDocument(file) {
     }
     fieldValues.value = values;
   } catch (err) {
-    showToast('Gagal memuat formulir: ' + (err.message || ''), 'error');
+    showToast(t('tools.form.loadFailed') + (err.message || ''), 'error');
     resetFile();
   } finally {
     isProcessing.value = false;
@@ -109,9 +110,9 @@ async function handleSave() {
     const resultBytes = await fillAcroForm(safeBuffer, fieldValues.value, shouldFlatten.value);
     const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(resultBytes, `${safeName}_filled.pdf`);
-    showToast('Formulir berhasil disimpan!', 'success');
+    showToast(t('tools.form.saveSuccess'), 'success');
   } catch (err) {
-    showToast('Gagal menyimpan formulir: ' + (err.message || ''), 'error');
+    showToast(t('tools.form.saveFailed') + (err.message || ''), 'error');
   } finally {
     isProcessing.value = false;
   }
@@ -122,10 +123,10 @@ async function handleSave() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Isi Formulir
+        {{ t('tools.form.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Deteksi dan isi bidang formulir AcroForm interaktif (teks, centang, pilihan) dengan opsi mengunci data (flattening).
+        {{ t('tools.form.desc') }}
       </p>
     </div>
 
@@ -135,15 +136,13 @@ async function handleSave() {
       <BaseCard class="p-3 flex items-center justify-between">
         <div class="min-w-0">
           <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
-          <p class="text-xs text-ink/70">{{ totalPages }} halaman • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+          <p class="text-xs text-ink/70">{{ totalPages }} {{ t('common.pages') }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>
         </div>
         <button
           type="button"
           class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
           @click="resetFile"
-        >
-          Ganti File
-        </button>
+        >{{ t('common.changeFile') }}</button>
       </BaseCard>
 
       <!-- If no fields detected -->
@@ -154,14 +153,12 @@ async function handleSave() {
         <!-- Left Column: Form Inputs -->
         <div class="lg:col-span-7 space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-ink">
-              {{ detectedFields.length }} Field Formulir Terdeteksi
-            </span>
+            <span class="text-xs font-bold uppercase tracking-wider text-ink">{{ t('tools.form.fieldsDetected', { count: detectedFields.length }) }}</span>
             <input
               v-if="detectedFields.length > 4"
               v-model="searchQuery"
               type="text"
-              placeholder="Cari nama field..."
+              :placeholder="t('tools.form.searchPlaceholder')"
               class="text-xs font-medium px-2 py-1 border-2 border-ink bg-paper shadow-hard-sm w-44 focus:outline-none"
             />
           </div>
@@ -183,7 +180,7 @@ async function handleSave() {
                 type="checkbox"
                 class="w-4 h-4 border-2 border-ink rounded accent-accent cursor-pointer"
               />
-              <span>Ratakan formulir (Flatten: kunci isian agar tidak dapat diedit lagi)</span>
+              <span>{{ t('tools.form.flattenLabel') }}</span>
             </label>
 
             <BaseButton
@@ -192,7 +189,7 @@ async function handleSave() {
               :disabled="isProcessing"
               @click="handleSave"
             >
-              {{ isProcessing ? 'Menyimpan Formulir...' : '💾 Simpan PDF Terisi' }}
+              {{ isProcessing ? t('tools.form.saving') : '💾 ' + t('tools.form.saveBtn') }}
             </BaseButton>
           </div>
         </div>
@@ -200,9 +197,7 @@ async function handleSave() {
         <!-- Right Column: Page Preview -->
         <div class="lg:col-span-5 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-ink">
-              Pratinjau Dokumen (Hal {{ currentPage }} dari {{ totalPages }})
-            </span>
+            <span class="text-xs font-bold text-ink">{{ t('tools.form.previewTitle') }} ({{ t('common.pageShort') }} {{ currentPage }} {{ t('common.of') }} {{ totalPages }})</span>
             <div class="flex items-center gap-1">
               <button
                 type="button"

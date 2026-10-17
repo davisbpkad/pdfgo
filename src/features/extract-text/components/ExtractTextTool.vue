@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
+import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queue, queueState } from '../../../app/providers/queue.js';
 import { activeToolId } from '../../../app/router.js';
@@ -29,7 +30,7 @@ const includeSeparators = ref(true);
 
 const isExtracting = ref(false);
 const progressValue = ref(0);
-const progressLabel = ref('Mengekstrak teks...');
+const progressLabel = ref(t('tools.extractText.extracting'));
 const cancelRef = ref({ value: false });
 
 const availableLangs = ref(['ind']);
@@ -85,14 +86,14 @@ async function loadDocument(file) {
     // Process image file directly via OCR
     totalPages.value = 1;
     imagePreviewUrl.value = URL.createObjectURL(file);
-    progressLabel.value = 'Mengenali teks dari gambar (OCR)...';
+    progressLabel.value = t('tools.extractText.recognizingImage');
 
     try {
       await ensureBuiltinModelsLoaded();
       await refreshAvailableLangs();
 
       if (availableLangs.value.length === 0) {
-        showToast('Model OCR belum dimuat. Buka Pengenalan Teks (OCR) untuk mengimpor model.', 'warning');
+        showToast(t('tools.extractText.modelNotLoaded'), 'warning');
         isExtracting.value = false;
         return;
       }
@@ -119,20 +120,20 @@ async function loadDocument(file) {
       progressValue.value = 100;
 
       if (!fullText) {
-        showToast('Tidak ada teks yang dapat dikenali pada gambar.', 'info');
+        showToast(t('tools.extractText.noTextInImage'), 'info');
       } else {
-        showToast('Teks berhasil diekstrak dari gambar!', 'success');
+        showToast(t('tools.extractText.imageExtractSuccess'), 'success');
       }
     } catch (err) {
       if (!cancelRef.value.value) {
-        showToast('Gagal mengekstrak teks gambar: ' + (err.message || ''), 'error');
+        showToast(t('tools.extractText.imageExtractFailed') + (err.message || ''), 'error');
       }
     } finally {
       isExtracting.value = false;
     }
   } else {
     // Process PDF document
-    progressLabel.value = 'Mengekstrak teks dokumen PDF...';
+    progressLabel.value = t('tools.extractText.extractingPdf');
     try {
       const buffer = await file.arrayBuffer();
       pdfDocProxy = await loadPdfJsDocument(buffer);
@@ -147,10 +148,10 @@ async function loadDocument(file) {
       progressValue.value = 100;
 
       if (data.isScanned) {
-        showToast('Dokumen terdeteksi sebagai scan/gambar. Gunakan OCR untuk membaca teks gambar.', 'info');
+        showToast(t('tools.extractText.scannedWarning'), 'info');
       }
     } catch (err) {
-      showToast('Gagal mengekstrak teks PDF: ' + (err.message || ''), 'error');
+      showToast(t('tools.extractText.pdfExtractFailed') + (err.message || ''), 'error');
       resetFile();
     } finally {
       isExtracting.value = false;
@@ -163,7 +164,7 @@ async function handleExtractScannedWithOcr() {
 
   isExtracting.value = true;
   progressValue.value = 5;
-  progressLabel.value = 'Mengenali teks gambar halaman dengan OCR...';
+  progressLabel.value = t('tools.extractText.recognizingPagesOcr');
   cancelRef.value.value = false;
 
   try {
@@ -171,7 +172,7 @@ async function handleExtractScannedWithOcr() {
     await refreshAvailableLangs();
 
     if (availableLangs.value.length === 0) {
-      showToast('Model bahasa OCR belum dimuat. Buka menu Pengenalan Teks (OCR) untuk mengimpor model.', 'warning');
+      showToast(t('tools.extractText.modelNotLoadedOcr'), 'warning');
       return;
     }
 
@@ -180,17 +181,17 @@ async function handleExtractScannedWithOcr() {
       includeSeparators: includeSeparators.value,
       onProgress: (current, total, pct) => {
         progressValue.value = pct;
-        progressLabel.value = `Mengenali teks halaman ${current} dari ${total} (${pct}%)...`;
+        progressLabel.value = t('tools.extractText.recognizingPageProgress', { current, total, pct });
       },
       cancelRef: cancelRef.value
     });
 
     extractedData.value = ocrData;
     editableText.value = ocrData.fullText;
-    showToast('Teks berhasil diekstrak dari gambar dokumen!', 'success');
+    showToast(t('tools.extractText.docExtractSuccess'), 'success');
   } catch (err) {
     if (!cancelRef.value.value) {
-      showToast('Gagal OCR dokumen: ' + (err.message || ''), 'error');
+      showToast(t('tools.extractText.ocrFailed') + (err.message || ''), 'error');
     }
   } finally {
     isExtracting.value = false;
@@ -206,7 +207,7 @@ function cancelExtraction() {
   cancelRef.value.value = true;
   isExtracting.value = false;
   terminateOcrWorker();
-  showToast('Proses ekstraksi teks dibatalkan.', 'info');
+  showToast(t('tools.extractText.cancelled'), 'info');
 }
 
 async function onSeparatorsChange(val) {
@@ -237,7 +238,7 @@ function handleCopy() {
   if (!editableText.value) return;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(editableText.value).then(() => {
-      showToast('Teks berhasil disalin ke clipboard!', 'success');
+      showToast(t('tools.extractText.copied'), 'success');
     });
   }
 }
@@ -247,7 +248,7 @@ function handleDownloadTxt() {
   const blob = new Blob([editableText.value], { type: 'text/plain;charset=utf-8' });
   const safeName = activeFile.value.name.replace(/\.[^.]+$/i, '');
   downloadFile(blob, `${safeName}_teks.txt`, 'text/plain');
-  showToast('File teks berhasil diunduh!', 'success');
+  showToast(t('tools.extractText.downloadSuccess'), 'success');
 }
 
 function openOcr() {
@@ -262,10 +263,10 @@ function openOcr() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Ekstrak Teks
+        {{ t('tools.extractText.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Ekstrak isi teks dari dokumen PDF maupun berkas gambar (PNG, JPG, WebP) secara instan ke format teks murni (.TXT) yang dapat disalin dan diedit.
+        {{ t('tools.extractText.desc') }}
       </p>
     </div>
 
@@ -276,9 +277,9 @@ function openOcr() {
     >
       <div class="space-y-1">
         <span class="font-bold text-base md:text-lg text-ink">
-          Tarik file PDF atau Gambar (PNG, JPG, WebP) ke sini
+          {{ t('dropzone.pdfOrImage') }}
         </span>
-        <p class="text-xs text-ink/70 font-medium">atau klik untuk memilih berkas dari komputer Anda</p>
+        <p class="text-xs text-ink/70 font-medium">{{ t('dropzone.subtitle') }}</p>
       </div>
     </DropZone>
 
@@ -302,8 +303,8 @@ function openOcr() {
           <div class="min-w-0">
             <h3 class="font-bold text-sm text-ink truncate">{{ activeFile.name }}</h3>
             <p class="text-xs text-ink/70">
-              <span v-if="isImage" class="inline-flex items-center gap-1 font-bold text-accent-2 bg-black px-1.5 py-0.2 rounded-xs">GAMBAR</span>
-              <span v-else>{{ totalPages }} halaman</span>
+              <span v-if="isImage" class="inline-flex items-center gap-1 font-bold text-accent-2 bg-black px-1.5 py-0.2 rounded-xs">{{ t('tools.extractText.imageBadge') }}</span>
+              <span v-else>{{ t('common.pagesCount', { count: totalPages }) }}</span>
               • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB
             </p>
           </div>
@@ -344,7 +345,7 @@ function openOcr() {
             class="text-xs font-bold px-3 py-1.5 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
             @click="resetFile"
           >
-            Ganti File
+            {{ t('common.changeFile') }}
           </button>
         </div>
       </BaseCard>
@@ -357,9 +358,7 @@ function openOcr() {
             type="button"
             class="text-xs font-bold px-3 py-1 border-2 border-ink bg-paper hover:bg-paper-dark shadow-hard-sm cursor-pointer"
             @click="cancelExtraction"
-          >
-            Batal
-          </button>
+          >{{ t('common.cancel') }}</button>
         </div>
       </div>
 
@@ -389,16 +388,16 @@ function openOcr() {
           rows="14"
           spellcheck="false"
           class="w-full p-4 border-3 border-ink bg-paper text-ink font-mono text-xs leading-relaxed focus:outline-none shadow-hard-sm"
-          placeholder="Hasil ekstraksi teks akan muncul di sini..."
+          :placeholder="t('tools.extractText.editorPlaceholder')"
         />
 
         <div class="flex justify-end gap-3 pt-1">
           <BaseButton variant="secondary" class="text-xs py-2 px-4 shadow-hard-sm" @click="handleCopy">
-            📋 Salin Teks
+            📋 {{ t('tools.extractText.copyText') }}
           </BaseButton>
 
           <BaseButton variant="primary" class="text-xs py-2 px-6 shadow-hard-sm" @click="handleDownloadTxt">
-            💾 Unduh Berkas .TXT
+            💾 {{ t('tools.extractText.downloadTxt') }}
           </BaseButton>
         </div>
       </template>

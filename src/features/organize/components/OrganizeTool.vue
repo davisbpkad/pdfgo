@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { loadPdfJsDocument, renderPageToCanvas } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
 import { showToast } from '../../../app/providers/toast.js';
+import { t } from '../../../app/providers/i18n.js';
 import { queueState } from '../../../app/providers/queue.js';
 import { reorganizePdfPages } from '../logic/reorganizePdfPages.js';
 import DropZone from '../../../ui/DropZone.vue';
@@ -58,7 +59,7 @@ async function loadDocument(file) {
 
     loadThumbnails();
   } catch (err) {
-    showToast('Gagal memuat dokumen: ' + (err.message || ''), 'error');
+    showToast(t('common.loadFailed') + (err.message || ''), 'error');
     resetFile();
   }
 }
@@ -111,7 +112,7 @@ function rotateAll() {
 
 function deletePage(idx) {
   if (pages.value.length <= 1) {
-    showToast('Dokumen harus memiliki minimal 1 halaman tersisa.', 'error');
+    showToast(t('tools.organize.minPagesError'), 'error');
     return;
   }
   pages.value.splice(idx, 1);
@@ -121,7 +122,7 @@ function deletePage(idx) {
 function deleteSelected() {
   const remaining = pages.value.filter(p => !p.isSelected);
   if (remaining.length === 0) {
-    showToast('Tidak bisa menghapus semua halaman.', 'error');
+    showToast(t('tools.organize.minPagesError'), 'error');
     return;
   }
   pages.value = remaining;
@@ -169,9 +170,9 @@ async function handleSave() {
     const resultBytes = await reorganizePdfPages(activeBuffer, configs);
     const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
     downloadFile(resultBytes, `${safeName}_organized.pdf`);
-    showToast('Perubahan halaman berhasil disimpan!', 'success');
+    showToast(t('tools.organize.successSaved'), 'success');
   } catch (err) {
-    showToast(err.message || 'Gagal menyimpan dokumen', 'error');
+    showToast(err.message || t('tools.organize.saveFailed'), 'error');
   } finally {
     isSaving.value = false;
   }
@@ -182,10 +183,10 @@ async function handleSave() {
   <div class="space-y-6">
     <div class="space-y-1">
       <h1 class="font-display font-black text-2xl md:text-3xl text-ink uppercase tracking-tight">
-        Atur Halaman
+        {{ t('tools.organize.title') }}
       </h1>
       <p class="text-sm text-ink/80 max-w-2xl font-medium">
-        Susun ulang dengan seret-lepas, putar sudut orientasi, atau hapus halaman PDF yang tidak diinginkan.
+        {{ t('tools.organize.desc') }}
       </p>
     </div>
 

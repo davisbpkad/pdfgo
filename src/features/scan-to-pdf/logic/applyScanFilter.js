@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 /**
  * Apply scanning enhancement filters to an ImageData buffer
  * @param {{ data: Uint8ClampedArray | Uint8Array, width: number, height: number }} imageData
@@ -6,7 +7,7 @@
  */
 export function applyScanFilter(imageData, filterType = 'original') {
   if (!imageData || !imageData.data) {
-    throw new Error('ImageData tidak valid.');
+    throw new Error(t('tools.scanToPdf.invalidImageData'));
   }
 
   if (filterType === 'original') {

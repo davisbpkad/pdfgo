@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { activeToolId } from '../../../app/router.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 
@@ -12,16 +13,10 @@ function goToSign() {
     <div class="w-12 h-12 mx-auto rounded-full border-2 border-ink bg-accent/20 flex items-center justify-center text-xl">
       📋
     </div>
-    <h3 class="font-display font-black text-lg text-ink uppercase tracking-tight">
-      Tidak Ada Formulir Interaktif Terdeteksi
-    </h3>
-    <p class="text-xs text-ink/80 max-w-md mx-auto leading-relaxed font-medium">
-      Dokumen ini tidak memiliki bidang formulir AcroForm bawaan. Jika dokumen ini berupa pindaian atau lembar statis yang perlu ditandatangani atau diisi teks, silakan gunakan alat Tanda Tangan Digital.
-    </p>
+    <h3 class="font-display font-black text-lg text-ink uppercase tracking-tight">{{ t('tools.form.emptyTitle') }}</h3>
+    <p class="text-xs text-ink/80 max-w-md mx-auto leading-relaxed font-medium">{{ t('tools.form.emptyBody') }}</p>
     <div class="pt-2">
-      <BaseButton variant="primary" class="text-xs py-2 px-6" @click="goToSign">
-        ✍️ Buka Tanda Tangan Digital
-      </BaseButton>
+      <BaseButton variant="primary" class="text-xs py-2 px-6" @click="goToSign">{{ t('tools.form.openSign') }}</BaseButton>
     </div>
   </div>
 </template>

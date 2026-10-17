@@ -10,7 +10,7 @@ test.describe('layout workflows', () => {
     await openTool(page, 'merge');
     await upload(page, [twoPagePdf, textPdf]);
 
-    const download = await clickAndDownload(page, /Gabungkan 2 file/i);
+    const download = await clickAndDownload(page, /Gabung 2 file/i);
     expect(download.suggestedFilename()).toMatch(/^PDFToolkit_Merged_\d+\.pdf$/);
 
     const info = await pdfInfo(await downloadBytes(download));
@@ -45,7 +45,7 @@ test.describe('layout workflows', () => {
   test('organize: a rotated page keeps its rotation in the saved file', async ({ page }) => {
     await openTool(page, 'organize');
     await upload(page, twoPagePdf);
-    await mainButton(page, /90°/).click();
+    await mainButton(page, /↻ 90°/).click();
 
     const download = await clickAndDownload(page, /Simpan dokumen/i);
     expect(download.suggestedFilename()).toBe('pages2_organized.pdf');
@@ -96,7 +96,7 @@ test.describe('layout workflows', () => {
     await upload(page, twoPagePdf);
     await page.getByText('Seimbang').first().click();
 
-    const download = await clickAndDownload(page, /Kompres sekarang/i);
+    const download = await clickAndDownload(page, /Kompres .*sekarang/i);
     expect(download.suggestedFilename()).toBe('pages2_compressed.pdf');
 
     // Compression re-encodes each page as an image, so the page count and the

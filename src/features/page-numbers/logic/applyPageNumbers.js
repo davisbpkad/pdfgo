@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
 import { hexToRgb } from '../../edit-pdf/logic/hexColor.js';
@@ -11,7 +12,7 @@ import { hexToRgb } from '../../edit-pdf/logic/hexColor.js';
  */
 export async function applyPageNumbers(srcBuffer, options, onProgress = null) {
   const {
-    format = 'Halaman {n} dari {total}',
+    format = t('tools.pageNumbers.presetPageOfTotal'),
     startNumber = 1,
     position = 'bottom-center',
     margin = 30,

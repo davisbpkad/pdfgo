@@ -54,7 +54,7 @@ function submitUnlock() {
           <span>{{ (item.size / 1024 / 1024).toFixed(2) }} MB</span>
           <span>•</span>
           <span :class="item.isEncrypted ? 'text-danger font-black' : 'text-accent-strong font-bold'">
-            {{ item.isEncrypted ? 'Terkunci Password' : `${item.pageCount} hal` }}
+            {{ item.isEncrypted ? t('tools.merge.encryptedWarning') : t('tools.merge.pagesLabel', { count: item.pageCount }) }}
           </span>
         </div>
 
@@ -63,7 +63,7 @@ function submitUnlock() {
           <input
             v-model="passwordInput"
             type="password"
-            placeholder="Password PDF..."
+            :placeholder="t('tools.merge.passwordPlaceholder')"
             class="px-2.5 py-1 text-xs border-2 border-ink bg-paper rounded-sm w-36 shadow-hard-sm focus:outline-none"
             @keydown.enter="submitUnlock"
           />
@@ -72,7 +72,7 @@ function submitUnlock() {
             class="px-2.5 py-1 text-xs font-bold bg-accent text-black border-2 border-ink rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
             @click="submitUnlock"
           >
-            Buka
+            {{ t('tools.merge.unlockBtn') }}
           </button>
         </div>
       </div>
@@ -84,7 +84,7 @@ function submitUnlock() {
         type="button"
         class="w-8 h-8 rounded-sm border-2 border-ink bg-paper flex items-center justify-center text-xs font-bold shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
         :disabled="isFirst"
-        title="Geser ke Atas"
+        :title="t('tools.merge.moveUp')"
         @click="$emit('move-up', index)"
       >
         ▲
@@ -93,7 +93,7 @@ function submitUnlock() {
         type="button"
         class="w-8 h-8 rounded-sm border-2 border-ink bg-paper flex items-center justify-center text-xs font-bold shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none cursor-pointer transition-all duration-150"
         :disabled="isLast"
-        title="Geser ke Bawah"
+        :title="t('tools.merge.moveDown')"
         @click="$emit('move-down', index)"
       >
         ▼
@@ -101,7 +101,7 @@ function submitUnlock() {
       <button
         type="button"
         class="w-8 h-8 rounded-sm border-2 border-ink bg-danger text-black flex items-center justify-center text-xs font-bold shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150 ml-0.5"
-        title="Hapus"
+        :title="t('common.remove')"
         @click="$emit('remove', index)"
       >
         &times;

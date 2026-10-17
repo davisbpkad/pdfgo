@@ -156,12 +156,12 @@ function onPointerUp(e) {
       }"
       @pointerdown="onDragStart"
     >
-      <img :src="signatureUrl" alt="Paraf" class="w-full h-full object-contain pointer-events-none select-none" />
+      <img :src="signatureUrl" :alt="t('tools.sign.signatureAlt')" class="w-full h-full object-contain pointer-events-none select-none" />
 
       <!-- Resize Handle with >= 24px touch target -->
       <div
         class="sign-resize-handle absolute -right-2 -bottom-2 w-4 h-4 bg-ink border-2 border-paper cursor-nwse-resize shadow-hard-sm z-20"
-        title="Ubah ukuran paraf"
+        :title="t('tools.sign.resizeHandle')"
         @pointerdown.stop="onResizeStart"
       />
     </div>

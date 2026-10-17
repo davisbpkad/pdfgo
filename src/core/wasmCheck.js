@@ -1,3 +1,4 @@
+import { t } from './i18n.js';
 /**
  * wasmCheck.js - WebAssembly capability preflight and diagnosis
  * OCR runs WASM inside a Blob worker. A stale local server or an old deploy can keep sending an
@@ -60,7 +61,7 @@ export function getServedFrom() {
  */
 export async function checkWasmSupport() {
   if (typeof WebAssembly === 'undefined') {
-    return { ok: false, reason: 'unsupported', message: 'WebAssembly tidak tersedia di browser ini.' };
+    return { ok: false, reason: 'unsupported', message: t('common.wasmUnavailable') };
   }
   try {
     await WebAssembly.compile(MINIMAL_WASM);
@@ -88,7 +89,7 @@ self.onmessage = async () => {
  */
 export function checkWorkerWasmSupport(timeoutMs = 4000) {
   if (typeof Worker === 'undefined' || typeof URL === 'undefined' || !URL.createObjectURL) {
-    return Promise.resolve({ ok: false, reason: 'unsupported', message: 'Web Worker tidak tersedia di browser ini.' });
+    return Promise.resolve({ ok: false, reason: 'unsupported', message: t('common.workerUnavailable') });
   }
 
   return new Promise((resolve) => {
@@ -120,7 +121,7 @@ export function checkWorkerWasmSupport(timeoutMs = 4000) {
       };
       worker.onerror = (e) => {
         clearTimeout(timer);
-        const message = String((e && e.message) || 'Gagal menjalankan worker.');
+        const message = String((e && e.message) || t('common.workerFailed'));
         finish({ ok: false, reason: classifyWasmError(message) === 'unknown' ? 'worker' : classifyWasmError(message), message });
       };
       worker.postMessage('probe');

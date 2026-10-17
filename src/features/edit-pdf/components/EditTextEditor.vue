@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 defineProps({
   edit: { type: Object, required: true },
   scale: { type: Number, default: 1 },
@@ -13,7 +14,7 @@ const emit = defineEmits(['update-text', 'start-edit']);
     :value="edit.text"
     spellcheck="false"
     rows="1"
-    :aria-label="edit.text || 'Teks dokumen'"
+    ::aria-label="edit.text || t('tools.editPdf.textAria')"
     :style="{
       left: `${edit.x * 100}%`,
       top: `${edit.y * 100}%`,

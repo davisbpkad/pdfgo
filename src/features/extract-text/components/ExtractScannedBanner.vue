@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 
 defineProps({
@@ -31,15 +32,15 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
     <div class="space-y-1.5 flex-1">
       <div class="flex items-center gap-2 font-display font-black text-sm text-ink uppercase tracking-tight">
         <span class="text-base">⚠️</span>
-        <span>Dokumen Terdeteksi Sebagai Gambar / Hasil Scan</span>
+        <span>{{ t('tools.extractText.scannedTitle') }}</span>
       </div>
       <p class="text-xs font-medium text-ink/80 leading-relaxed max-w-xl">
-        Halaman dokumen ini tidak memiliki teks digital langsung (berupa gambar/hasil pemindaian). Ekstrak teks secara langsung menggunakan modul OCR lokal di bawah ini.
+        {{ t('tools.extractText.scannedBody') }}
       </p>
 
       <!-- Language selector pill bar -->
       <div class="flex items-center gap-2 pt-1">
-        <span class="text-[11px] font-bold text-ink uppercase">Bahasa OCR:</span>
+        <span class="text-[11px] font-bold text-ink uppercase">{{ t('tools.extractText.ocrLangLabel') }}</span>
         <div class="inline-flex border-2 border-ink bg-paper divide-x-2 divide-ink shadow-[1px_1px_0_0_#000000]">
           <button
             type="button"
@@ -47,7 +48,7 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
             :class="selectedLang === 'ind' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
             @click="emit('update:selectedLang', 'ind')"
           >
-            🇮🇩 Indonesia
+            {{ t('tools.extractText.langInd') }}
           </button>
           <button
             type="button"
@@ -55,7 +56,7 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
             :class="selectedLang === 'eng' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
             @click="emit('update:selectedLang', 'eng')"
           >
-            🇬🇧 Inggris
+            {{ t('tools.extractText.langEng') }}
           </button>
           <button
             v-if="availableLangs.includes('ind') && availableLangs.includes('eng')"
@@ -64,7 +65,7 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
             :class="selectedLang === 'ind+eng' ? 'bg-accent text-black' : 'bg-paper text-ink hover:bg-paper-dark'"
             @click="emit('update:selectedLang', 'ind+eng')"
           >
-            🇮🇩+🇬🇧 Keduanya
+            {{ t('tools.extractText.langBoth') }}
           </button>
         </div>
       </div>
@@ -77,7 +78,7 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
         :disabled="isExtracting"
         @click="emit('start-ocr')"
       >
-        ⚡ Ekstrak Teks Gambar (OCR)
+        ⚡ {{ t('tools.extractText.startOcr') }}
       </BaseButton>
 
       <BaseButton
@@ -85,7 +86,7 @@ const emit = defineEmits(['open-ocr', 'start-ocr', 'update:selectedLang']);
         class="text-xs py-2 px-3 whitespace-nowrap w-full sm:w-auto"
         @click="emit('open-ocr')"
       >
-        Buka di Alat OCR ➔
+        {{ t('tools.extractText.openOcr') }} ➔
       </BaseButton>
     </div>
   </div>

@@ -98,7 +98,7 @@ onUnmounted(() => {
 
     <ScanUploadBar @files="handleFiles" />
 
-    <BaseProgressBar v-if="isProcessing" :progress="progressVal" label="Memproses dan mengoptimalkan hasil pindai..." />
+    <BaseProgressBar v-if="isProcessing" :progress="progressVal" :label="t('tools.scanToPdf.progress')" />
 
     <ScanPagesGrid
       v-if="pages.length > 0 && !scanResult"

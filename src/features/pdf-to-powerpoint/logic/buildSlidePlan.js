@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 /**
  * Build structured slide conversion plan from page selection and quality settings
  * @param {number} totalPages
@@ -10,7 +11,7 @@ export function buildSlidePlan(totalPages, options = {}) {
   const { pageSelection = 'all', quality = 'normal' } = options;
 
   if (typeof totalPages !== 'number' || totalPages <= 0) {
-    throw new Error('Jumlah halaman dokumen tidak valid.');
+    throw new Error(t('tools.pdfToPowerpoint.invalidPageCount'));
   }
 
   // Quality to scale mapping

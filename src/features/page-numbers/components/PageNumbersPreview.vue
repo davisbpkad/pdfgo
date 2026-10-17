@@ -1,11 +1,12 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import { ref, computed, watch, onMounted } from 'vue';
 import { renderPageToCanvas, unwrapPdfProxy } from '../../../core/pdf.js';
 import PreviewViewport from '../../../ui/PreviewViewport.vue';
 
 const props = defineProps({
   pdfDocProxy: { type: Object, default: null },
-  format: { type: String, default: 'Halaman {n} dari {total}' },
+  format: { type: String, default: () => t('tools.pageNumbers.presetPageOfTotal') },
   position: { type: String, default: 'bottom-center' },
   startNumber: { type: Number, default: 1 },
   margin: { type: Number, default: 25 },
@@ -125,9 +126,9 @@ onMounted(() => {
     <!-- Header with Page Navigation -->
     <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-ink pb-2">
       <div class="text-xs font-black uppercase tracking-tight text-ink flex items-center gap-1.5">
-        <span>Pratinjau Nomor Halaman</span>
+        <span>{{ t('tools.pageNumbers.previewTitle') }}</span>
         <span v-if="skipFirstPage && previewPage === 1" class="text-[10px] font-bold px-2 py-0.5 bg-warning text-black border border-ink rounded-sm shadow-[1px_1px_0_0_#000000]">
-          Cover Dilewati
+          {{ t('tools.pageNumbers.coverSkipped') }}
         </span>
       </div>
 
@@ -150,7 +151,7 @@ onMounted(() => {
             :max="totalPagesCount"
             class="w-12 p-1 text-center font-mono border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm focus:outline-none"
           />
-          <span>dari {{ totalPagesCount }}</span>
+          <span>{{ t('common.of') }} {{ totalPagesCount }}</span>
         </span>
         <button
           type="button"

@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 
 defineProps({
@@ -25,9 +26,7 @@ defineEmits([
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Language Selection -->
       <div class="space-y-2">
-        <label class="text-xs font-bold uppercase tracking-wider text-ink block">
-          Bahasa Dokumen:
-        </label>
+        <label class="text-xs font-bold uppercase tracking-wider text-ink block">{{ t('tools.ocr.docLangLabel') }}</label>
         <div class="space-y-1.5">
           <label class="flex items-center gap-2 text-xs font-bold text-ink cursor-pointer select-none">
             <input
@@ -78,9 +77,7 @@ defineEmits([
 
       <!-- Page Target -->
       <div class="space-y-2">
-        <label class="text-xs font-bold uppercase tracking-wider text-ink block">
-          Pilihan Halaman:
-        </label>
+        <label class="text-xs font-bold uppercase tracking-wider text-ink block">{{ t('tools.ocr.pageChoiceLabel') }}</label>
         <div class="space-y-1.5">
           <label class="flex items-center gap-2 text-xs font-bold text-ink cursor-pointer select-none">
             <input
@@ -91,7 +88,7 @@ defineEmits([
               class="w-4 h-4 border-2 border-ink accent-accent cursor-pointer"
               @change="$emit('update:pageMode', 'all')"
             />
-            <span>Semua Halaman ({{ totalPages }} Hal)</span>
+            <span>{{ t('tools.ocr.pagesAll') }} ({{ totalPages }} {{ t('common.pageShort') }})</span>
           </label>
 
           <label class="flex items-center gap-2 text-xs font-bold text-ink cursor-pointer select-none">
@@ -103,14 +100,14 @@ defineEmits([
               class="w-4 h-4 border-2 border-ink accent-accent cursor-pointer"
               @change="$emit('update:pageMode', 'range')"
             />
-            <span>Rentang Halaman Tertentu</span>
+            <span>{{ t('tools.ocr.pagesRange') }}</span>
           </label>
 
           <input
             v-if="pageMode === 'range'"
             :value="customRange"
             type="text"
-            placeholder="Contoh: 1-3, 5"
+            :placeholder="t('common.rangePlaceholder')"
             class="w-full text-xs font-medium p-1.5 border-2 border-ink bg-paper shadow-hard-sm focus:outline-none"
             @input="$emit('update:customRange', $event.target.value)"
           />
@@ -119,15 +116,13 @@ defineEmits([
 
       <!-- Resolution / DPI -->
       <div class="space-y-2">
-        <label class="text-xs font-bold uppercase tracking-wider text-ink block">
-          Resolusi Analisis:
-        </label>
+        <label class="text-xs font-bold uppercase tracking-wider text-ink block">{{ t('tools.ocr.resolutionLabel') }}</label>
         <select
           :value="targetDpi"
           class="w-full text-xs font-bold p-2 border-2 border-ink bg-paper shadow-hard-sm cursor-pointer focus:outline-none"
           @change="$emit('update:targetDpi', Number($event.target.value))"
         >
-          <option :value="300">300 DPI (Akurasi Tinggi / Standar Dokumen)</option>
+          <option :value="300">{{ t('tools.ocr.dpi300') }}</option>
           <option :value="150">150 DPI (Eksekusi Cepat)</option>
         </select>
       </div>
@@ -139,9 +134,7 @@ defineEmits([
         class="w-full py-2.5 text-xs tracking-wider"
         :disabled="availableLangs.length === 0 || isProcessing"
         @click="$emit('start')"
-      >
-        🔍 Mulai Proses Pengenalan Teks (OCR)
-      </BaseButton>
+      >🔍 {{ t('tools.ocr.actionStart') }}</BaseButton>
     </div>
   </div>
 </template>

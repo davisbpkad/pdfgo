@@ -1,4 +1,5 @@
 <script setup>
+import { t } from '../../../app/providers/i18n.js';
 defineProps({
   field: {
     type: Object,
@@ -55,7 +56,7 @@ defineEmits(['update:modelValue']);
       <input
         type="text"
         :value="modelValue"
-        placeholder="Isi data formulir..."
+        :placeholder="t('tools.form.fieldPlaceholder')"
         class="w-full text-xs font-medium p-2 border-2 border-ink bg-paper shadow-hard-sm focus:outline-none"
         @input="$emit('update:modelValue', $event.target.value)"
       />

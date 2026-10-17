@@ -1,3 +1,4 @@
+import { t } from '../../../core/i18n.js';
 import { PDFDocument, StandardFonts, degrees } from 'pdf-lib';
 import { parsePageRange } from '../../split/logic/parsePageRange.js';
 import { sanitizeTextForPdf } from '../../ocr/logic/sanitizeTextForPdf.js';
@@ -40,7 +41,7 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
   if (pageFilter === 'custom') {
     customPages = parsePageRange(customRange, totalPages);
     if (customPages.length === 0) {
-      throw new Error('Rentang halaman kosong atau tidak valid.');
+      throw new Error(t('tools.watermark.invalidRange'));
     }
   }
 
@@ -54,7 +55,7 @@ export async function applyWatermark(srcBuffer, options, onProgress = null) {
 
   const safeText = sanitizeTextForPdf(text);
   if (!safeText) {
-    throw new Error('Teks watermark kosong atau hanya berisi karakter yang tidak didukung font PDF.');
+    throw new Error(t('tools.watermark.emptyText'));
   }
 
   const textWidth = font.widthOfTextAtSize(safeText, fontSize);
