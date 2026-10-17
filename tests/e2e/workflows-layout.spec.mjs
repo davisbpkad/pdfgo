@@ -99,6 +99,11 @@ test.describe('layout workflows', () => {
     const download = await clickAndDownload(page, /Kompres .*sekarang/i);
     expect(download.suggestedFilename()).toBe('pages2_compressed.pdf');
 
+    // The toast shows a real message, never a raw t('...') call.
+    const toast = page.getByRole('status').first();
+    await expect(toast).toBeVisible();
+    await expect(toast).not.toContainText("t('");
+
     // Compression re-encodes each page as an image, so the page count and the
     // embedded images are what prove the content survived.
     const bytes = await downloadBytes(download);

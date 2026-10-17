@@ -410,6 +410,7 @@ const translations = {
         renderFailed: 'Gagal merender halaman sensor: ',
         previewFailed: 'Gagal merender pratinjau resolusi tinggi: ',
         boxRemoved: 'Kotak sensor di halaman ini dihapus.',
+        notFound: 'Kata "{term}" tidak ditemukan pada halaman ini.',
         searchFailed: 'Gagal mencari teks: ',
         applySuccess: 'Dokumen berhasil disensor permanen!',
         applyFailed: 'Gagal menyensor dokumen: ',
@@ -481,6 +482,7 @@ const translations = {
       },
       ocr: {
         modelImportFailed: 'Gagal mengimpor model: ',
+        modelImported: 'Model {lang} berhasil diimpor ke penyimpanan lokal!',
         cancelled: 'Proses OCR dibatalkan.',
         invalidRange: 'Pilihan rentang halaman tidak valid.',
         failed: 'Gagal memproses OCR: ',
@@ -1156,6 +1158,7 @@ const translations = {
         renderFailed: 'Failed to render the redaction page: ',
         previewFailed: 'Failed to render the high-resolution preview: ',
         boxRemoved: 'The redaction boxes on this page were removed.',
+        notFound: '"{term}" was not found on this page.',
         searchFailed: 'Failed to search the text: ',
         applySuccess: 'The document was permanently redacted!',
         applyFailed: 'Failed to redact the document: ',
@@ -1227,6 +1230,7 @@ const translations = {
       },
       ocr: {
         modelImportFailed: 'Failed to import the model: ',
+        modelImported: 'Model {lang} imported to local storage!',
         cancelled: 'The OCR process was cancelled.',
         invalidRange: 'The page range selection is not valid.',
         failed: 'Failed to run OCR: ',

@@ -94,7 +94,7 @@ async function handleCompress() {
     downloadFile(result.bytes, `${safeName}_compressed.pdf`);
 
     if (result.reductionRate > 0) {
-      showToast(`t('tools.compress.successReduction', { pct: result.reductionRate })`, 'success');
+      showToast(t('tools.compress.successReduction', { pct: result.reductionRate }), 'success');
     } else {
       showToast(t('tools.compress.alreadyOptimal'), 'info');
     }

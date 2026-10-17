@@ -41,6 +41,9 @@ test.describe('conversion workflows', () => {
     const download = await clickAndDownload(page, /Konversi ke Gambar/i);
     expect(download.suggestedFilename()).toBe('pages2_gambar_ZIP.zip');
 
+    // The toast shows the message itself, never a raw t('...') call.
+    await expect(page.getByRole('status')).toContainText('Berhasil mengekstrak 2 gambar!');
+
     const bytes = await downloadBytes(download);
     const entries = zipEntries(bytes).filter((n) => n.endsWith('.png'));
     expect(entries).toHaveLength(2);

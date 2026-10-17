@@ -105,7 +105,7 @@ async function handleMerge() {
 
   const lockedItem = fileList.value.find(f => f.isEncrypted);
   if (lockedItem) {
-    showToast(`t('tools.merge.stillLocked', { name: lockedItem.name })`, 'error');
+    showToast(t('tools.merge.stillLocked', { name: lockedItem.name }), 'error');
     return;
   }
 

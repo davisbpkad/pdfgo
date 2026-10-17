@@ -146,6 +146,15 @@ Perbaikan yang dikerjakan:
 - Ditambahkan tes penjaga baru: mode Inggris tidak boleh menampilkan satu pun kata
   Indonesia di 25 rute. Tes ini yang menjadi ukuran diterimanya perbaikan ini.
 
+Temuan lanjutan saat peninjauan ulang: tiga notifikasi (kompres selesai, berkas terkunci
+pada Gabung, dan hasil Konversi ke Gambar) sempat menampilkan **teks mentah**
+`t('...')` di layar. Penyebabnya penggantian otomatis pada commit sebelumnya mengubah
+string biasa/template menjadi template literal yang membungkus panggilan `t()`.
+Ketiganya sudah diperbaiki, dan dua tes browser sekarang memastikan notifikasi
+menampilkan pesan asli, bukan panggilan `t(...)` mentah. Dua notifikasi lain (impor
+model OCR dan kata kunci tidak ditemukan pada Sensor) memang belum pernah
+diterjemahkan; keduanya kini memakai kunci terjemahan juga.
+
 Contoh dokumen pada HTML→PDF (tombol "Contoh") kini juga mengikuti bahasa aktif:
 isinya disimpan sebagai kunci `tools.htmlToPdf.sampleDoc` (id + en), dan ada tes baru
 yang menekan tombol itu dalam mode Inggris lalu memastikan isi editor berbahasa Inggris.
@@ -183,3 +192,7 @@ tidak ada kunci yang tidak ditemukan. Hanya 5 nilai yang memang identik di kedua
 - Tes memakai kata Indonesia sebagai penanda: kalau mode Inggris masih menampilkan kata
   dari daftar itu, tes gagal. Daftar kata ini sengaja diisi kata yang tidak mungkin
   muncul dalam kalimat Inggris biasa.
+- `src/core/i18n.js` kini memuat 680 kunci per bahasa. Sekitar 56 kunci tidak lagi
+  dirujuk kode mana pun (sisa refactor lama, mis. `nav.category*`, `queue.status*`,
+  `tools.ocr.lang*`). Nilainya tidak berbahaya, hanya menambah berat berkas; bisa
+  dibersihkan kapan saja dengan hati-hati karena sebagian kunci dirujuk secara dinamis.

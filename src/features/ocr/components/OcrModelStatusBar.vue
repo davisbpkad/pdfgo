@@ -33,7 +33,7 @@ async function onFileSelected(e) {
     const arrayBuf = await file.arrayBuffer();
     const uint8 = new Uint8Array(arrayBuf);
     await saveTesseractModel(langCode, uint8);
-    showToast(`Model ${langCode.toUpperCase()} berhasil diimpor ke IndexedDB lokal!`, 'success');
+    showToast(t('tools.ocr.modelImported', { lang: langCode.toUpperCase() }), 'success');
     emit('model-imported', langCode);
   } catch (err) {
     showToast(t('tools.ocr.modelImportFailed') + (err.message || ''), 'error');

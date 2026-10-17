@@ -101,7 +101,7 @@ async function handleConvert() {
       downloadFile(zipBlob, `${baseName}_gambar_ZIP.zip`, 'application/zip');
     }
 
-    showToast(`t('tools.pdfToImage.extractSuccess', { count: images.length })`, 'success');
+    showToast(t('tools.pdfToImage.extractSuccess', { count: images.length }), 'success');
   } catch (err) {
     showToast(err.message || t('tools.pdfToImage.convertFailed'), 'error');
   } finally {

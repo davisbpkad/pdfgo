@@ -200,7 +200,7 @@ async function handleSearch() {
     );
 
     if (foundBoxes.length === 0) {
-      showToast(`Kata "${searchTerm.value}" tidak ditemukan pada halaman ini.`, 'info');
+      showToast(t('tools.redact.notFound', { term: searchTerm.value }), 'info');
       return;
     }
 
