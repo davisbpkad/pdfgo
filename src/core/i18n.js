@@ -139,7 +139,8 @@ const translations = {
         instructionText: 'Saat dialog cetak muncul, pilih tujuan "Simpan sebagai PDF" (Save as PDF) untuk menghasilkan berkas PDF vektor berkualitas tajam.',
         actionBtn: 'Cetak jadi PDF',
         emptyWarning: 'Harap masukkan kode HTML terlebih dahulu sebelum mencetak.',
-        printInstruction: 'Dialog cetak dibuka. Pilih "Simpan sebagai PDF" untuk mengunduh.'
+        printInstruction: 'Dialog cetak dibuka. Pilih "Simpan sebagai PDF" untuk mengunduh.',
+        sampleDoc: '<h1>Laporan Ringkasan Dokumen</h1><p>Dokumen ini dibuat secara lokal dan offline menggunakan <strong>PDF To Go</strong>.</p><table><thead><tr><th>Item</th><th>Kategori</th><th>Status</th></tr></thead><tbody><tr><td>Desain Brutalist</td><td>Antarmuka</td><td>Selesai</td></tr><tr><td>Zero Network</td><td>Keamanan</td><td>Terverifikasi</td></tr></tbody></table><p><em>Catatan: Gunakan dialog cetak browser untuk menyimpan sebagai PDF berkualitas vektor.</em></p>'
       },
       pdfToWord: {
         invalidPdf: 'Berkas PDF kosong atau tidak valid.',
@@ -884,7 +885,8 @@ const translations = {
         instructionText: 'When the print dialog opens, select "Save as PDF" destination for crisp, high-resolution vector output.',
         actionBtn: 'Print to PDF',
         emptyWarning: 'Please provide HTML markup before printing.',
-        printInstruction: 'Print dialog opened. Select "Save as PDF" to download.'
+        printInstruction: 'Print dialog opened. Select "Save as PDF" to download.',
+        sampleDoc: '<h1>Document Summary Report</h1><p>This document was created locally and offline using <strong>PDF To Go</strong>.</p><table><thead><tr><th>Item</th><th>Category</th><th>Status</th></tr></thead><tbody><tr><td>Brutalist Design</td><td>Interface</td><td>Done</td></tr><tr><td>Zero Network</td><td>Security</td><td>Verified</td></tr></tbody></table><p><em>Note: Use the browser print dialog to save as a vector-quality PDF.</em></p>'
       },
       pdfToWord: {
         invalidPdf: 'The PDF file is empty or not valid.',

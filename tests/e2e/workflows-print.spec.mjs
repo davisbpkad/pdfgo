@@ -50,4 +50,12 @@ test.describe('print workflows', () => {
     await expect(mainButton(page, /Cetak jadi pdf/i)).toBeDisabled();
     expect(await printCalls(page)).toBe(0);
   });
+
+  test('html to pdf: the sample document follows the interface language', async ({ page }) => {
+    await openTool(page, 'html-to-pdf');
+    await page.getByTestId('lang-toggle').click();
+    await mainButton(page, /Sample/i).click();
+
+    await expect(page.locator('main textarea').first()).toHaveValue(/Document Summary Report/);
+  });
 });

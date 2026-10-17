@@ -21,20 +21,9 @@ function handleFileSelect(e) {
   e.target.value = '';
 }
 
+// Demo document; the markup lives in the translation so it follows the interface language.
 function loadSample() {
-  const sample = `<h1>Laporan Ringkasan Dokumen</h1>
-<p>Dokumen ini dibuat secara lokal dan offline menggunakan <strong>PDF To Go</strong>.</p>
-<table>
-  <thead>
-    <tr><th>Item</th><th>Kategori</th><th>Status</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Desain Brutalist</td><td>Antarmuka</td><td>Selesai</td></tr>
-    <tr><td>Zero Network</td><td>Keamanan</td><td>Terverifikasi</td></tr>
-  </tbody>
-</table>
-<p><em>Catatan: Gunakan dialog cetak browser untuk menyimpan sebagai PDF berkualitas vektor.</em></p>`;
-  emit('update:modelValue', sample);
+  emit('update:modelValue', t('tools.htmlToPdf.sampleDoc'));
 }
 </script>
 

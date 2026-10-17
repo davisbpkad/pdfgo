@@ -9,7 +9,7 @@ kembali dan diperiksa isinya.
 
 ```bash
 npm test        # 129 unit test
-npm run test:e2e # build ulang + 52 tes browser
+npm run test:e2e # build ulang + 53 tes browser
 ```
 
 `npm run test:e2e` membangun ulang `dist/` lebih dulu supaya yang diuji bukan hasil
@@ -28,7 +28,7 @@ build lama.
 | `tests/e2e/workflows-security.spec.mjs` | 7 | Tanda Tangan, Sensor, Buka Kunci, Kunci PDF |
 | `tests/e2e/ocr.spec.mjs` | 3 | OCR, termasuk serah-terima Ekstrak Teks → OCR lewat Antrean |
 
-Status akhir: **129/129 unit test lulus, 52/52 tes browser lulus** (≈49 detik).
+Status akhir: **129/129 unit test lulus, 53/53 tes browser lulus** (≈49 detik).
 
 Tes tidak hanya memeriksa "ada berkas terunduh". Hasilnya dibaca kembali dan diperiksa:
 
@@ -146,10 +146,19 @@ Perbaikan yang dikerjakan:
 - Ditambahkan tes penjaga baru: mode Inggris tidak boleh menampilkan satu pun kata
   Indonesia di 25 rute. Tes ini yang menjadi ukuran diterimanya perbaikan ini.
 
-Yang **tidak** diterjemahkan: 9 pesan `console.warn` di dalam kanvas editor dan
-pratinjau (hanya untuk pengembang, tidak pernah terlihat pengguna). Isi contoh dokumen
-di HTML→PDF juga tetap Indonesia karena itu contoh konten yang boleh diubah pengguna,
-bukan teks antarmuka.
+Contoh dokumen pada HTML→PDF (tombol "Contoh") kini juga mengikuti bahasa aktif:
+isinya disimpan sebagai kunci `tools.htmlToPdf.sampleDoc` (id + en), dan ada tes baru
+yang menekan tombol itu dalam mode Inggris lalu memastikan isi editor berbahasa Inggris.
+
+Yang **tidak** diterjemahkan: 12 pesan `console.warn` di dalam kanvas editor dan
+pratinjau (hanya untuk pengembang, tidak pernah terlihat pengguna; sebagian memang sudah
+berbahasa Inggris). Menggantinya tidak mengubah perilaku aplikasi sama sekali, jadi
+sengaja dibiarkan agar tidak menambah riak perubahan.
+
+Terjemahan Inggris lapisan logika sudah diperiksa: 678 kunci ada di kedua bahasa, tidak
+ada placeholder (`{count}`, `{pages}`, `{size}`, ...) yang hilang di versi Inggris, dan
+tidak ada kunci yang tidak ditemukan. Hanya 5 nilai yang memang identik di kedua bahasa
+(nama bahasa, "Watermark", "Margin:").
 
 ## Yang belum diuji lewat browser
 
