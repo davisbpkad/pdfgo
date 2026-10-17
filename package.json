@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "dev": "node scripts/serve.mjs",
     "build": "node build.mjs",
     "build:full": "node build.mjs --variant=full",
     "build:lite": "node build.mjs --variant=lite",
