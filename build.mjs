@@ -315,13 +315,11 @@ ${minifiedJs}
   if (isFull) {
     filesToWrite.push(
       path.join(DIST_DIR, 'index.html'),
-      path.join(DIST_DIR, 'PDF To Go.html'),
-      path.join(DIST_DIR, 'PDF Toolkit.html')
+      path.join(DIST_DIR, 'PDF To Go.html')
     );
   } else {
     filesToWrite.push(
-      path.join(DIST_DIR, 'PDF To Go Lite.html'),
-      path.join(DIST_DIR, 'PDF Toolkit Lite.html')
+      path.join(DIST_DIR, 'PDF To Go Lite.html')
     );
   }
 

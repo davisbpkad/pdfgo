@@ -73,32 +73,32 @@ const chromeBinary = findChromeBinary();
 const screenshotsToCapture = [
   {
     name: 'screenshot-light-id.png',
-    file: 'dist/PDF Toolkit.html',
+    file: 'dist/PDF To Go.html',
     params: '?theme=light&lang=id',
     label: 'Full Edition - Mode Terang (ID)'
   },
   {
     name: 'screenshot-dark-id.png',
-    file: 'dist/PDF Toolkit.html',
+    file: 'dist/PDF To Go.html',
     params: '?theme=dark&lang=id',
     label: 'Full Edition - Mode Gelap (ID)'
   },
   {
     name: 'screenshot-light-en.png',
-    file: 'dist/PDF Toolkit.html',
+    file: 'dist/PDF To Go.html',
     params: '?theme=light&lang=en',
     label: 'Full Edition - Light Mode (EN)'
   },
   {
     name: 'screenshot-lite-id.png',
-    file: 'dist/PDF Toolkit Lite.html',
+    file: 'dist/PDF To Go Lite.html',
     params: '?theme=light&lang=id',
     windowSize: '1280,800',
     label: 'Lite Edition - Mode Terang (ID)'
   },
   {
     name: 'screenshot-mobile-id.png',
-    file: 'dist/PDF Toolkit.html',
+    file: 'dist/PDF To Go.html',
     params: '?theme=light&lang=id',
     windowSize: '500,800',
     label: 'Mobile Edition - Mode Terang (ID)'
@@ -134,8 +134,8 @@ if (!fs.existsSync(RELEASE_DIR)) {
 const zipPayload = {};
 
 // 4a. Standalone HTML files
-const fullHtmlPath = path.join(DIST_DIR, 'PDF Toolkit.html');
-const liteHtmlPath = path.join(DIST_DIR, 'PDF Toolkit Lite.html');
+const fullHtmlPath = path.join(DIST_DIR, 'PDF To Go.html');
+const liteHtmlPath = path.join(DIST_DIR, 'PDF To Go Lite.html');
 const readmePath = path.resolve('README.md');
 
 if (!fs.existsSync(fullHtmlPath) || !fs.existsSync(liteHtmlPath)) {

@@ -60,7 +60,7 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 
 PDF Toolkit is distributed in two self-contained editions:
 
-| Feature | Full Edition (`PDF Toolkit.html` / `PDF To Go.html`) | Lite Edition (`PDF Toolkit Lite.html` / `PDF To Go Lite.html`) |
+| Feature | Full Edition (`PDF To Go.html`) | Lite Edition (`PDF To Go Lite.html`) |
 | :--- | :--- | :--- |
 | **Total HTML Size** | **~10.0 MB** | **~6.7 MB** |
 | **All 26 Tools Pre-loaded** | ✅ Ready out-of-the-box | ✅ Ready out-of-the-box |
