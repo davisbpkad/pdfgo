@@ -6,13 +6,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { CONTENT_SECURITY_POLICY, allowsWebAssembly } from '../../scripts/csp.mjs';
+import { CONTENT_SECURITY_POLICY, allowsWebAssembly, rejectsEval } from '../../scripts/csp.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 
 test('csp: shared policy allows WebAssembly (required by OCR)', () => {
   assert.equal(allowsWebAssembly(CONTENT_SECURITY_POLICY), true);
-  assert.match(CONTENT_SECURITY_POLICY, /script-src[^;]*'unsafe-eval'/);
+  // CVE-2024-4367 mitigasi: glyph interpreter non-eval dipakai (isEvalSupported:false),
+  // jadi stand-alone 'unsafe-eval' harus hilang; hanya 'wasm-unsafe-eval' yang boleh.
+  assert.equal(rejectsEval(CONTENT_SECURITY_POLICY), true);
   assert.match(CONTENT_SECURITY_POLICY, /worker-src blob:/);
 });
 

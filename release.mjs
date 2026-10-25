@@ -184,3 +184,5 @@ for (const f of archivedFiles) {
 }
 
 console.log(`\nRelease is 100% offline-ready for direct user deployment!\n`);
+console.log(`Distribusi: upload ZIP ke GitHub Releases (repo tidak menyimpan dist/), contoh:`);
+console.log(`  gh release create v${VERSION} "dist/release/${RELEASE_ZIP_NAME}#PDF Toolkit v${VERSION} (Full & Lite)" --title "PDF Toolkit v${VERSION}"\n`);

@@ -365,6 +365,7 @@ async function run() {
   // Generate Netlify _headers and _redirects in publish directory (dist/) for direct CDN priority
   const netlifyHeaders = `/*\n` +
     `  Content-Security-Policy: ${CONTENT_SECURITY_POLICY}\n` +
+    `  Strict-Transport-Security: max-age=31536000; includeSubDomains\n` +
     `  X-Frame-Options: DENY\n` +
     `  X-Content-Type-Options: nosniff\n` +
     `  Referrer-Policy: no-referrer\n` +

@@ -8,7 +8,7 @@ A high-performance, private, and 100% offline-first PDF manipulation suite with 
 
 - **100% Client-Side & Offline:** Works natively over `file://` protocol or any static file server without network connectivity.
 - **Neo-Brutalist Design System:** Striking visual hierarchy featuring high-contrast hard borders (`border-2 border-ink`), tactile hard drop shadows (`shadow-hard`), vivid accents, physical button press micro-interactions, and independent isolated scrolling (`overscroll-contain`) between sidebar and workspace.
-- **Strict Content Security Policy (CSP):** Hardware-enforced isolation (`default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'unsafe-eval' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;`).
+- **Strict Content Security Policy (CSP):** Hardware-enforced isolation (`default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; worker-src blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src blob: data:;`).
 - **All-in-One Standalone Single File:** Fonts, WebAssembly engines, PDF.js & Tesseract workers, and conversion parsers are compressed and embedded into a single portable `.html` file.
 - **26 Complete Offline Tools:** From document manipulation, digital signatures, AcroForms, OCR, and document redaction, to full multi-format Office conversions (Word, Excel, PowerPoint, Markdown, HTML, Scans) and zero-network AI preparation.
 - **Direct Image & Scanned PDF OCR:** Extract text directly from image files (`PNG`, `JPG`, `JPEG`, `WebP`, `BMP`) and scanned documents without leaving the interface.

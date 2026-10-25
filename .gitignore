@@ -2,6 +2,13 @@ node_modules/
 .DS_Store
 graphify-out/
 
+# Build artifacts: dibangun ulang via npm run build; distribusi via GitHub Releases
+dist/
+
+# Environment configuration
+.env
+.env.*
+
 test-results/
 playwright-report/
 blob-report/

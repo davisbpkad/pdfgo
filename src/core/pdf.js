@@ -38,7 +38,11 @@ export async function loadPdfJsDocument(data, password = '') {
     password,
     cMapUrl: undefined,
     cMapPacked: true,
-    standardFontDataUrl: undefined
+    standardFontDataUrl: undefined,
+    // Mitigasi CVE-2024-4367: IKP disisipkan lewat glyph font compiler berbasis
+    // eval. false = pakai interpreter glyph non-eval (juga menghapus kebutuhan
+    // 'unsafe-eval' di CSP).
+    isEvalSupported: false
   });
   return loadingTask.promise;
 }
