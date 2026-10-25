@@ -90,7 +90,7 @@ function getEmbeddedFontsCss() {
 
 // 2. Prepare Compressed PDF.js Worker
 function getEmbeddedPdfWorker() {
-  const workerPath = path.resolve('node_modules/pdfjs-dist/build/pdf.worker.min.js');
+  const workerPath = path.resolve('node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs');
   if (!fs.existsSync(workerPath)) {
     throw new Error(`PDF.js worker not found at ${workerPath}`);
   }
@@ -215,6 +215,9 @@ function verifyZeroNetwork(htmlContent, filePath) {
   allowedPatterns.push(/https?:\/\/gitbrent\.github\.io\/[^\s"'`<>)]*/gi, /https?:\/\/github\.com[^\s"'`<>)]*/gi);
   allowedPatterns.push(/https?:\/\/(?:www\.)?feross\.org[^\s"'`<>)]*/gi, /https?:\/\/(?:www\.)?stuartk\.com\/[^\s"'`<>)]*/gi);
   allowedPatterns.push(/https?:\/\/purl\.oclc\.org\/[^\s"'`<>)]*/gi, /https?:\/\/schemas\.zwobble\.org\/[^\s"'`<>)]*/gi);
+  // core-js URL-polyfill feature-test literals (bundled via pdfjs 6 legacy build):
+  // inert string constants used to probe WHATWG URL behavior — never fetched.
+  allowedPatterns.push(/https?:\/\/a(?![a-zA-Z0-9.-])[^\s"'`<>]*/gi, /https?:\/\/x(?![a-zA-Z0-9.-])/gi, /https?:\/\/foo\.bar[^\s"'`<>]*/gi, /http:\/\/example\.com/gi, /https:\/\/(?:\\u0442\\u0435\\u0441\\u0442|\u0442\u0435\u0441\u0442)/g);
 
   let sanitized = htmlContent;
   for (const pattern of allowedPatterns) {

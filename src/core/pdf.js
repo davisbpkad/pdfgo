@@ -3,7 +3,7 @@
  * Coordinates loading, rendering, thumbnail generation, and coordinate transforms.
  */
 
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { PDFDocument } from 'pdf-lib';
 import { initPdfJsWorker } from './workers.js';
 
@@ -44,7 +44,10 @@ export async function loadPdfJsDocument(data, password = '') {
     // 'unsafe-eval' di CSP).
     isEvalSupported: false
   });
-  return loadingTask.promise;
+  const doc = await loadingTask.promise;
+  // pdfjs 6+: destroy() lives on the loadingTask, not PDFDocumentProxy — keep the old call surface alive.
+  doc.destroy = () => loadingTask.destroy();
+  return doc;
 }
 
 /**
