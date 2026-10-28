@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { unwrapPdfProxy } from '../../../core/pdf.js';
+import { t } from '../../../app/providers/i18n.js';
 
 const props = defineProps({
   pdfDocProxy: { type: Object, default: null },
