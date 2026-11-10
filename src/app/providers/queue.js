@@ -26,15 +26,16 @@ export function closeQueueDrawer() {
  * @param {File} file source file that was loaded from the queue
  * @param {Uint8Array|Blob} result processed output
  * @param {string} [mime]
+ * @param {string} [resultName] filename matching the tool's own download
  */
-export function publishQueueResult(file, result, mime = 'application/pdf') {
+export function publishQueueResult(file, result, mime = 'application/pdf', resultName = file?.name) {
   if (!file || !result) return;
   const item = coreQueue.getItems().find(
     (i) => i.file === file || (i.name === file.name && i.size === file.size)
   );
   if (!item) return;
   const blob = result instanceof Blob ? result : new Blob([result], { type: mime });
-  coreQueue.updateItem(item.id, { status: 'done', progress: 100, result: blob });
+  coreQueue.updateItem(item.id, { status: 'done', progress: 100, result: blob, resultName });
 }
 
 export { coreQueue as queue };

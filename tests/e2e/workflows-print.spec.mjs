@@ -12,6 +12,7 @@ async function stubPrint(page) {
     window.__printCalls = 0;
     const self = window;
     self.print = () => {
+      self.top.__printTitle = self.document.title;
       self.top.__printCalls = (self.top.__printCalls || 0) + 1;
     };
   });
@@ -30,6 +31,7 @@ test.describe('print workflows', () => {
     await mainButton(page, /Cetak jadi pdf/i).click();
 
     await expect.poll(() => printCalls(page), { timeout: 15000 }).toBe(1);
+    expect(await page.evaluate(() => window.__printTitle)).toBe('html-ke-pdf');
   });
 
   test('word to pdf: the docx is converted to a preview and sent to print', async ({ page }) => {
@@ -41,6 +43,7 @@ test.describe('print workflows', () => {
     await mainButton(page, /Cetak jadi pdf/i).click();
 
     await expect.poll(() => printCalls(page), { timeout: 15000 }).toBe(1);
+    expect(await page.evaluate(() => window.__printTitle)).toBe('word-ke-pdf');
   });
 
   test('negative: html to pdf refuses an empty document', async ({ page }) => {

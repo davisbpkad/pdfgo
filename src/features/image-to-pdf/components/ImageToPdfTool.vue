@@ -129,7 +129,7 @@ async function handleGenerate() {
       progressValue.value = pct;
     });
 
-    const filename = `PDFToolkit_Images_${Date.now()}.pdf`;
+    const filename = 'gambar-ke-pdf.pdf';
     downloadFile(pdfBytes, filename);
     showToast(t('tools.imageToPdf.createSuccess'), 'success');
   } catch (err) {

@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { renderPageToCanvas } from '../../../core/pdf.js';
 import { renderRedactionBoxes } from '../logic/renderRedactionBoxes.js';
@@ -19,7 +20,7 @@ const isLoading = ref(false);
 
 watch(() => [props.show, props.currentPage, props.boxesByPage], () => {
   if (props.show) renderHighResPreview();
-});
+}, { flush: 'post' });
 
 onMounted(() => {
   window.addEventListener('keydown', handleKey);
@@ -107,7 +108,8 @@ async function renderHighResPreview() {
       </div>
 
       <!-- High-res Canvas Area -->
-      <div class="flex-1 overflow-auto border-2 border-ink bg-paper-dark rounded-sm p-4 flex items-center justify-center min-h-[300px]">
+      <ZoomPreview>
+      <div class="border-2 border-ink bg-paper-dark rounded-sm p-4 min-h-[300px]">
         <div v-if="isLoading" class="text-sm font-bold text-ink">{{ t('tools.redact.sharpeningPreview') }}</div>
         <canvas
           v-show="!isLoading"
@@ -115,6 +117,7 @@ async function renderHighResPreview() {
           class="border border-ink shadow-hard rounded-xs max-w-full h-auto bg-white"
         />
       </div>
+      </ZoomPreview>
 
       <!-- Footer Buttons -->
       <div class="flex justify-end gap-2 pt-2 border-t border-ink">

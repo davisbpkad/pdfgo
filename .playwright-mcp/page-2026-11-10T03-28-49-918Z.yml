@@ -1,0 +1,624 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e91]:
+      - complementary [ref=e93]:
+        - generic [ref=e73]:
+          - img "Lambang Jawa Barat" [ref=e75]
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - generic [ref=e78]: SIPD-AKLAP
+              - generic [ref=e79]: JABAR
+            - generic [ref=e80]: Akuntansi & Pelaporan
+        - navigation [ref=e97]:
+          - link "Dashboard" [ref=e98] [cursor=pointer]:
+            - /url: /home
+          - button "Pengaturan" [ref=e107] [cursor=pointer]
+          - link "Transaksi Non Anggaran" [ref=e115] [cursor=pointer]:
+            - /url: /input-transaksi-non-anggaran
+          - link "Jurnal Umum" [ref=e121] [cursor=pointer]:
+            - /url: /jurnalUmum
+          - button "Jurnal Persetujuan" [ref=e127] [cursor=pointer]
+          - link "Buku Jurnal" [ref=e135] [cursor=pointer]:
+            - /url: /buku-jurnal
+          - link "Buku Besar" [ref=e141] [cursor=pointer]:
+            - /url: /buku-besar
+          - link "Laporan Mutasi Rekening" [ref=e147] [cursor=pointer]:
+            - /url: /mutasi-rekening
+          - link "Buku Besar Pembantu Bank" [ref=e155] [cursor=pointer]:
+            - /url: /buku-besar-pembantu-bank
+          - link "Neraca Saldo" [ref=e160] [cursor=pointer]:
+            - /url: /neraca-saldo
+          - link "Kertas Kerja Konsolidasi" [ref=e167] [cursor=pointer]:
+            - /url: /kertas-kerja-konsolidasi
+          - button "Laporan Keuangan SAP" [ref=e175] [cursor=pointer]
+          - button "Data Integrasi SIKD" [ref=e184] [cursor=pointer]
+          - button "Belanja Wajib P. Sosial" [ref=e195] [cursor=pointer]
+          - link "LKPD" [ref=e203] [cursor=pointer]:
+            - /url: /lkpd
+          - link "LPPD" [ref=e209] [cursor=pointer]:
+            - /url: /lppd
+          - link "Kunci Laporan Keuangan" [ref=e216] [cursor=pointer]:
+            - /url: /lock-jurnal
+          - button "AI Analysis" [ref=e223] [cursor=pointer]
+        - generic [ref=e231]:
+          - generic [ref=e232]: v1.0.0
+          - generic [ref=e236]: Jawa Barat
+      - generic [ref=e237]:
+        - banner [ref=e238]:
+          - generic [ref=e240]:
+            - heading "Dashboard" [level=1] [ref=e241]
+            - generic [ref=e242]:
+              - generic [ref=e243]: Provinsi Jawa Barat
+              - generic [ref=e244]: •
+              - generic [ref=e245]: Tahun Anggaran 2026
+          - generic [ref=e246]:
+            - combobox [ref=e249] [cursor=pointer]:
+              - generic [ref=e250]: "2026"
+            - button "AK aklapjabar1 Admin SKPKD" [ref=e255] [cursor=pointer]:
+              - generic [ref=e256]: AK
+              - generic [ref=e257]:
+                - generic [ref=e258]: aklapjabar1
+                - generic [ref=e259]: Admin SKPKD
+        - main [ref=e260]:
+          - generic [ref=e262]:
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - generic [ref=e266]:
+                  - generic [ref=e267]: Portal Akuntansi & Pelaporan Daerah (BUD / SKPKD)
+                  - generic [ref=e268]: T.A. 2026
+                - heading "Selamat Datang, Bid.AKLAP" [level=1] [ref=e269]
+                - paragraph [ref=e270]: "NIP: 190010102000121009 • Peran: Admin SKPKD • Konsolidasi Akuntansi Pemda & Otorisasi Jurnal"
+              - generic [ref=e271]:
+                - generic [ref=e272]: Pemerintah Daerah Provinsi Jawa Barat
+                - button "Sinkronkan Metrik" [ref=e277] [cursor=pointer]
+            - generic [ref=e279]:
+              - generic [ref=e281]:
+                - heading "Total Jurnal Akuntansi" [level=2] [ref=e282]
+                - generic [ref=e283]: 6 Klaster Transaksi
+              - generic [ref=e284]:
+                - generic [ref=e287]:
+                  - generic [ref=e288]: Jadwal
+                  - generic [ref=e294]:
+                    - generic [ref=e295]: Anggaran
+                    - generic [ref=e296]:
+                      - generic [ref=e297]: "8"
+                      - generic [ref=e298]: Jadwal
+                - generic [ref=e301]:
+                  - generic [ref=e302]: STS / TBP
+                  - generic [ref=e308]:
+                    - generic [ref=e309]: Pendapatan
+                    - generic [ref=e310]:
+                      - generic [ref=e311]: "4.596"
+                      - generic [ref=e312]: Jurnal
+                - generic [ref=e315]:
+                  - generic [ref=e316]: SP2D / TBP
+                  - generic [ref=e322]:
+                    - generic [ref=e323]: Belanja
+                    - generic [ref=e324]:
+                      - generic [ref=e325]: "154.469"
+                      - generic [ref=e326]: Jurnal
+                - generic [ref=e329]:
+                  - button "total" [ref=e335] [cursor=pointer]
+                  - generic [ref=e339]:
+                    - generic "Total Pembiayaan" [ref=e340]
+                    - generic [ref=e341]:
+                      - generic [ref=e342]: "3"
+                      - generic [ref=e343]: Jurnal
+                - generic [ref=e346]:
+                  - generic [ref=e347]: PFK / Titipan
+                  - generic [ref=e354]:
+                    - generic "Transaksi Non Anggaran" [ref=e355]: TNA
+                    - generic [ref=e356]:
+                      - generic [ref=e357]: "576"
+                      - generic [ref=e358]: Jurnal
+                - generic [ref=e361]:
+                  - generic [ref=e362]: Memorial
+                  - generic [ref=e367]:
+                    - generic [ref=e368]: Jurnal Umum
+                    - generic [ref=e369]:
+                      - generic [ref=e370]: "119"
+                      - generic [ref=e371]: Jurnal
+            - generic [ref=e372]:
+              - generic [ref=e374]:
+                - generic [ref=e375]:
+                  - heading "Pengawasan & Status Approval Anggaran SKPD" [level=3] [ref=e376]
+                  - paragraph [ref=e378]: Rekapitulasi persetujuan jadwal penetapan DPA / Anggaran tingkat unit kerja se-Jawa Barat
+                - generic [ref=e379]:
+                  - generic [ref=e380]: "Total: 236 SKPD"
+                  - button "Muat ulang daftar SKPD" [ref=e381] [cursor=pointer]
+              - generic [ref=e383]:
+                - generic [ref=e385]:
+                  - generic [ref=e386]:
+                    - generic:
+                      - generic: Total SKPD
+                      - generic: "236"
+                      - generic: Jurnal Anggaran
+                  - generic [ref=e392]:
+                    - generic [ref=e393]:
+                      - generic [ref=e394]: SKPD Approved
+                      - generic [ref=e397]:
+                        - generic [ref=e398]: "236"
+                        - generic [ref=e399]: SKPD
+                    - generic [ref=e400]:
+                      - generic [ref=e401]: Belum Approve Terbaru
+                      - generic [ref=e404]:
+                        - generic [ref=e405]: "0"
+                        - generic [ref=e406]: SKPD
+                    - generic [ref=e407]:
+                      - generic [ref=e408]: Belum Approve
+                      - generic [ref=e411]:
+                        - generic [ref=e412]: "0"
+                        - generic [ref=e413]: SKPD
+                - generic [ref=e415]:
+                  - tablist [ref=e416]:
+                    - tab "Belum Approve 0" [ref=e417] [cursor=pointer]:
+                      - generic [ref=e418]: Belum Approve
+                      - generic [ref=e419]: "0"
+                    - tab "Belum Approve Terbaru 0" [ref=e420] [cursor=pointer]:
+                      - generic [ref=e421]: Belum Approve Terbaru
+                      - generic [ref=e422]: "0"
+                    - tab "Approved 236" [selected] [ref=e423] [cursor=pointer]:
+                      - generic [ref=e424]: Approved
+                      - generic [ref=e425]: "236"
+                  - tabpanel "Approved 236" [ref=e426]:
+                    - generic [ref=e427]:
+                      - generic [ref=e428]:
+                        - heading "SKPD yang Sudah Approve Anggaran Terbaru" [level=3] [ref=e433]
+                        - generic [ref=e434]: 236 SKPD Tercatat
+                      - generic [ref=e436]:
+                        - generic [ref=e437]:
+                          - generic [ref=e438]:
+                            - generic [ref=e439]: "1."
+                            - generic [ref=e440]: Unit Pelaksana Teknis Daerah Perlindungan Perempuan dan Anak pada DP3AKB Provinsi Jawa Barat (Dinas Pemberdayaan Perempuan, Perlindungan Anak, dan Keluarga Berencana)
+                          - generic [ref=e441]: Disetujui
+                        - generic [ref=e442]:
+                          - generic [ref=e443]:
+                            - generic [ref=e444]: "2."
+                            - generic [ref=e445]: UPTD Teknologi Informasi dan Komunikasi Pendidikan (Dinas Pendidikan)
+                          - generic [ref=e446]: Disetujui
+                        - generic [ref=e447]:
+                          - generic [ref=e448]:
+                            - generic [ref=e449]: "3."
+                            - generic [ref=e450]: UPTD TAMAN HUTAN RAYA IRH DJUANDA (Dinas Kehutanan)
+                          - generic [ref=e451]: Disetujui
+                        - generic [ref=e452]:
+                          - generic [ref=e453]:
+                            - generic [ref=e454]: "4."
+                            - generic [ref=e455]: UPTD SERTIFIKASI DAN PERBENIHAN TANAMAN HUTAN (Dinas Kehutanan)
+                          - generic [ref=e456]: Disetujui
+                        - generic [ref=e457]:
+                          - generic [ref=e458]:
+                            - generic [ref=e459]: "5."
+                            - generic [ref=e460]: UPTD RUMAH SAKIT UMUM DAERAH PAMEUNGPEUK GARUT (Dinas Kesehatan)
+                          - generic [ref=e461]: Disetujui
+                    - generic [ref=e462]:
+                      - generic [ref=e463]: Menampilkan 1–5 dari 236
+                      - generic [ref=e464]:
+                        - button "Sebelumnya" [disabled]
+                        - generic [ref=e465]:
+                          - generic [ref=e466]: "1"
+                          - generic [ref=e467]: /
+                          - generic [ref=e468]: "48"
+                        - button "Selanjutnya" [ref=e469] [cursor=pointer]
+            - generic [ref=e471]:
+              - generic [ref=e472]:
+                - heading "Progres Pengesahan Transaksi" [level=2] [ref=e473]
+                - generic [ref=e474]: Metode Akrual SAP
+              - generic [ref=e475]:
+                - generic [ref=e476]:
+                  - heading "Pengesahan Jurnal Belanja" [level=3] [ref=e478]
+                  - generic [ref=e483]:
+                    - generic [ref=e484]:
+                      - generic [ref=e485]: 143.601 Jurnal
+                      - generic [ref=e486]: 92.96%
+                    - paragraph [ref=e489]: "Total Masuk: 154.469 Transaksi SP2D/TBP"
+                - generic [ref=e490]:
+                  - heading "Pengesahan Jurnal Pendapatan" [level=3] [ref=e492]
+                  - generic [ref=e497]:
+                    - generic [ref=e498]:
+                      - generic [ref=e499]: 4.491 Jurnal
+                      - generic [ref=e500]: 97.72%
+                    - paragraph [ref=e503]: "Total Masuk: 4.596 Transaksi STS/TBP"
+                - generic [ref=e504]:
+                  - heading "Pengesahan Jurnal Pembiayaan" [level=3] [ref=e506]
+                  - generic [ref=e511]:
+                    - generic [ref=e512]:
+                      - generic [ref=e513]: 1 Jurnal
+                      - generic [ref=e514]: 33.33%
+                    - paragraph [ref=e517]: "Total Masuk: 3 Transaksi Masuk"
+                - generic [ref=e518]:
+                  - heading "Total Jurnal Terbukukan" [level=3] [ref=e520]
+                  - generic [ref=e526]:
+                    - generic [ref=e527]:
+                      - generic [ref=e528]: 159.763 Jurnal
+                      - generic [ref=e529]: Semua Kategori
+                    - paragraph [ref=e532]: "Diperbarui: 10.28.25"
+            - generic [ref=e533]:
+              - generic [ref=e535]:
+                - generic [ref=e536]:
+                  - heading "Data Global AKLAP — Pendapatan Daerah" [level=3] [ref=e543]
+                  - paragraph [ref=e544]: Komparasi total realisasi SP2D/STS terhadap nilai jurnal yang telah disetujui (Approved)
+                - tablist [ref=e546]:
+                  - tab "Pendapatan" [selected] [ref=e547] [cursor=pointer]
+                  - tab "Belanja" [ref=e548] [cursor=pointer]
+                  - tab "Penerimaan" [ref=e549] [cursor=pointer]
+                  - tab "Pengeluaran" [ref=e550] [cursor=pointer]
+              - generic [ref=e551]:
+                - generic [ref=e552]:
+                  - generic [ref=e558]:
+                    - generic [ref=e559]: Total Realisasi Halaman Ini
+                    - generic [ref=e560]: Rp 413.387.300.684
+                  - generic [ref=e566]:
+                    - generic [ref=e567]: Jurnal Terotorisasi (Approved)
+                    - generic [ref=e568]: Rp 413.351.714.972
+                  - generic [ref=e574]:
+                    - generic [ref=e575]: Rasio Pengesahan
+                    - generic [ref=e576]: 99.99%
+                - table [ref=e582]:
+                  - rowgroup [ref=e583]:
+                    - row [ref=e584]:
+                      - columnheader "No" [ref=e585]
+                      - columnheader "Nama SKPD" [ref=e586]
+                      - columnheader "Total Realisasi (Rp)" [ref=e587]
+                      - columnheader "Jurnal Approved (Rp)" [ref=e588]
+                      - columnheader "Progres" [ref=e589]
+                  - rowgroup [ref=e590]:
+                    - row [ref=e591]:
+                      - cell "1" [ref=e592]
+                      - cell "Dinas Kesehatan" [ref=e593]
+                      - cell "Rp 413.249.378.944" [ref=e594]
+                      - cell "Rp 413.249.378.944" [ref=e595]
+                      - cell "100%" [ref=e596]
+                    - row [ref=e601]:
+                      - cell "2" [ref=e602]
+                      - cell "SMKN 1 KOTA DEPOK" [ref=e603]
+                      - cell "Rp 16.019.246" [ref=e604]
+                      - cell "Rp 16.019.246" [ref=e605]
+                      - cell "100%" [ref=e606]
+                    - row [ref=e611]:
+                      - cell "3" [ref=e612]
+                      - cell "SMKN 3 KUNINGAN" [ref=e613]
+                      - cell "Rp 44.291.485" [ref=e614]
+                      - cell "Rp 30.948.417" [ref=e615]
+                      - cell "69.87%" [ref=e616]
+                    - row [ref=e621]:
+                      - cell "4" [ref=e622]
+                      - cell "SMKN 2 KOTA BANDUNG" [ref=e623]
+                      - cell "Rp 73.111.009" [ref=e624]
+                      - cell "Rp 50.868.365" [ref=e625]
+                      - cell "69.58%" [ref=e626]
+                    - row [ref=e631]:
+                      - cell "5" [ref=e632]
+                      - cell "Dinas Perindustrian dan Perdagangan" [ref=e633]
+                      - cell "Rp 4.500.000" [ref=e634]
+                      - cell "Rp 4.500.000" [ref=e635]
+                      - cell "100%" [ref=e636]
+                - generic [ref=e641]:
+                  - generic [ref=e642]: Menampilkan 1 - 5 dari 99 SKPD
+                  - generic [ref=e643]:
+                    - button "Halaman Sebelumnya" [disabled]
+                    - generic [ref=e644]: 1 / 20
+                    - button "Halaman Selanjutnya" [ref=e645] [cursor=pointer]
+            - generic [ref=e647]:
+              - generic [ref=e649]:
+                - generic [ref=e650]:
+                  - heading "Audit Status Pengesahan Jurnal per SKPD" [level=3] [ref=e656]
+                  - paragraph [ref=e657]: "Status verifikasi dan approval jurnal pada 5 kelompok transaksi: Belum Approve, Disetujui, dan Ditolak"
+                - combobox [ref=e659] [cursor=pointer]:
+                  - generic [ref=e660]: Seluruh SKPD (Konsolidasi Daerah)
+              - generic [ref=e663]:
+                - generic [ref=e664]:
+                  - generic [ref=e665]: Belanja
+                  - generic [ref=e670]:
+                    - generic:
+                      - generic: "154.469"
+                      - generic: Jurnal
+                  - generic [ref=e676]:
+                    - generic [ref=e677]:
+                      - generic [ref=e678]: Disetujui
+                      - generic [ref=e682]: "154.469"
+                    - generic [ref=e683]:
+                      - generic [ref=e684]: Menunggu
+                      - generic [ref=e688]: "0"
+                    - generic [ref=e689]:
+                      - generic [ref=e690]: Ditolak
+                      - generic [ref=e695]: "0"
+                - generic [ref=e696]:
+                  - generic [ref=e697]: Pendapatan
+                  - generic [ref=e702]:
+                    - generic:
+                      - generic: "4.596"
+                      - generic: Jurnal
+                  - generic [ref=e708]:
+                    - generic [ref=e709]:
+                      - generic [ref=e710]: Disetujui
+                      - generic [ref=e714]: "4.596"
+                    - generic [ref=e715]:
+                      - generic [ref=e716]: Menunggu
+                      - generic [ref=e720]: "0"
+                    - generic [ref=e721]:
+                      - generic [ref=e722]: Ditolak
+                      - generic [ref=e727]: "0"
+                - generic [ref=e728]:
+                  - generic [ref=e729]: Pembiayaan
+                  - generic [ref=e734]:
+                    - generic:
+                      - generic: "3"
+                      - generic: Jurnal
+                  - generic [ref=e740]:
+                    - generic [ref=e741]:
+                      - generic [ref=e742]: Disetujui
+                      - generic [ref=e746]: "3"
+                    - generic [ref=e747]:
+                      - generic [ref=e748]: Menunggu
+                      - generic [ref=e752]: "0"
+                    - generic [ref=e753]:
+                      - generic [ref=e754]: Ditolak
+                      - generic [ref=e759]: "0"
+                - generic [ref=e760]:
+                  - generic [ref=e761]: Non Anggaran (TNA)
+                  - generic [ref=e766]:
+                    - generic:
+                      - generic: "576"
+                      - generic: Jurnal
+                  - generic [ref=e772]:
+                    - generic [ref=e773]:
+                      - generic [ref=e774]: Disetujui
+                      - generic [ref=e778]: "576"
+                    - generic [ref=e779]:
+                      - generic [ref=e780]: Menunggu
+                      - generic [ref=e784]: "0"
+                    - generic [ref=e785]:
+                      - generic [ref=e786]: Ditolak
+                      - generic [ref=e791]: "0"
+                - generic [ref=e792]:
+                  - generic [ref=e793]: Jurnal Umum
+                  - generic [ref=e798]:
+                    - generic:
+                      - generic: "119"
+                      - generic: Jurnal
+                  - generic [ref=e804]:
+                    - generic [ref=e805]:
+                      - generic [ref=e806]: Disetujui
+                      - generic [ref=e810]: "119"
+                    - generic [ref=e811]:
+                      - generic [ref=e812]: Menunggu
+                      - generic [ref=e816]: "0"
+                    - generic [ref=e817]:
+                      - generic [ref=e818]: Ditolak
+                      - generic [ref=e823]: "0"
+            - generic [ref=e824]:
+              - generic [ref=e826]:
+                - generic [ref=e827]:
+                  - heading "Monitoring Kepatuhan Input Saldo Awal SKPD" [level=3] [ref=e833]
+                  - paragraph [ref=e834]: Status pemenuhan saldo awal neraca, LRA, LO, LPE, LAK, LPSAL, dan jurnal penutup seluruh unit kerja
+                - generic [ref=e835]:
+                  - generic [ref=e836]:
+                    - generic [ref=e837]: "T.A:"
+                    - combobox [ref=e838]:
+                      - option "2026" [selected]
+                      - option "2025"
+                      - option "2024"
+                      - option "2023"
+                  - generic [ref=e839]:
+                    - generic [ref=e840]: "Baris:"
+                    - combobox [ref=e841]:
+                      - option "5" [selected]
+                      - option "10"
+                      - option "25"
+                  - generic [ref=e842]:
+                    - textbox "Cari SKPD..." [ref=e847]
+                    - button "Cari" [ref=e848] [cursor=pointer]
+              - generic [ref=e849]:
+                - generic [ref=e850]:
+                  - generic [ref=e851]: "Keterangan:"
+                  - generic [ref=e852]:
+                    - generic [ref=e853]: Saldo Awal
+                    - generic [ref=e854]: Terekam
+                  - generic [ref=e855]:
+                    - generic [ref=e856]: Penutup
+                    - generic [ref=e857]: Tutup Buku
+                  - generic [ref=e858]:
+                    - generic [ref=e859]: Otomatis
+                    - generic [ref=e860]: Sistem
+                  - generic [ref=e861]:
+                    - generic [ref=e862]: Kosong
+                    - generic [ref=e863]: Belum Ada
+                - table [ref=e867]:
+                  - rowgroup [ref=e868]:
+                    - row [ref=e869]:
+                      - columnheader "No" [ref=e870]
+                      - columnheader "SKPD" [ref=e871]
+                      - columnheader "Neraca" [ref=e872]
+                      - columnheader "LRA" [ref=e873]
+                      - columnheader "LO" [ref=e874]
+                      - columnheader "LPE" [ref=e875]
+                      - columnheader "LAK" [ref=e876]
+                      - columnheader "LPSAL" [ref=e877]
+                      - columnheader "Prognosis" [ref=e878]
+                  - rowgroup [ref=e879]:
+                    - row [ref=e880]:
+                      - cell "1" [ref=e881]
+                      - cell "CABANG PENDIDIKAN WILAYAH III" [ref=e882]
+                      - cell "Otomatis" [ref=e883]
+                      - cell "Otomatis" [ref=e885]
+                      - cell "Otomatis" [ref=e887]
+                      - cell "Kosong" [ref=e889]
+                      - cell "Kosong" [ref=e891]
+                      - cell "Kosong" [ref=e893]
+                      - cell "Kosong" [ref=e895]
+                    - row [ref=e897]:
+                      - cell "2" [ref=e898]
+                      - cell "UPTD PUSAT PENGELOLAAN PENDAPATAN DAERAH WILAYAH KOTA DEPOK I" [ref=e899]
+                      - cell "Otomatis" [ref=e900]
+                      - cell "Kosong" [ref=e902]
+                      - cell "Kosong" [ref=e904]
+                      - cell "Kosong" [ref=e906]
+                      - cell "Kosong" [ref=e908]
+                      - cell "Kosong" [ref=e910]
+                      - cell "Kosong" [ref=e912]
+                    - row [ref=e914]:
+                      - cell "3" [ref=e915]
+                      - cell "Dinas Ketahanan Pangan dan Peternakan" [ref=e916]
+                      - cell "Otomatis" [ref=e917]
+                      - cell "Otomatis" [ref=e919]
+                      - cell "Otomatis" [ref=e921]
+                      - cell "Kosong" [ref=e923]
+                      - cell "Kosong" [ref=e925]
+                      - cell "Kosong" [ref=e927]
+                      - cell "Kosong" [ref=e929]
+                    - row [ref=e931]:
+                      - cell "4" [ref=e932]
+                      - cell "Badan Pendapatan Daerah" [ref=e933]
+                      - cell "Otomatis" [ref=e934]
+                      - cell "Otomatis" [ref=e936]
+                      - cell "Otomatis" [ref=e938]
+                      - cell "Kosong" [ref=e940]
+                      - cell "Kosong" [ref=e942]
+                      - cell "Kosong" [ref=e944]
+                      - cell "Kosong" [ref=e946]
+                    - row [ref=e948]:
+                      - cell "5" [ref=e949]
+                      - cell "Dinas Sumber Daya Air" [ref=e950]
+                      - cell "Otomatis" [ref=e951]
+                      - cell "Otomatis" [ref=e953]
+                      - cell "Otomatis" [ref=e955]
+                      - cell "Kosong" [ref=e957]
+                      - cell "Kosong" [ref=e959]
+                      - cell "Kosong" [ref=e961]
+                      - cell "Kosong" [ref=e963]
+                - generic [ref=e965]:
+                  - generic [ref=e966]: Menampilkan 1 - 5 dari 238 SKPD
+                  - generic [ref=e967]:
+                    - button "Halaman Sebelumnya" [disabled]
+                    - generic [ref=e968]: 1 / 48
+                    - button "Halaman Selanjutnya" [ref=e969] [cursor=pointer]
+            - generic [ref=e971]:
+              - generic [ref=e973]:
+                - generic [ref=e978]:
+                  - heading "Total Transaksi SKPD" [level=3] [ref=e979]
+                  - paragraph [ref=e980]: Komparasi volume transaksi masuk terhadap jurnal approved per pilar akuntansi • Seluruh SKPD Provinsi Jawa Barat
+                - generic [ref=e981]:
+                  - generic [ref=e982]: Total Transaksi
+                  - generic [ref=e985]: Jurnal Approved
+              - generic [ref=e989]:
+                - generic [ref=e990]:
+                  - generic [ref=e991]:
+                    - generic [ref=e992]: Pendapatan Daerah
+                    - generic [ref=e998]: 97.72%
+                  - generic [ref=e999]:
+                    - generic [ref=e1000]:
+                      - generic [ref=e1001]: Transaksi
+                      - generic [ref=e1005]: "4.596"
+                    - generic [ref=e1006]:
+                      - generic [ref=e1007]: Approved
+                      - generic [ref=e1011]: "4.491"
+                  - generic [ref=e1015]:
+                    - generic [ref=e1016]: "Sisa: 105"
+                    - generic [ref=e1017]: 100% Target
+                - generic [ref=e1018]:
+                  - generic [ref=e1019]:
+                    - generic [ref=e1020]: Belanja Daerah
+                    - generic [ref=e1026]: 92.96%
+                  - generic [ref=e1027]:
+                    - generic [ref=e1028]:
+                      - generic [ref=e1029]: Transaksi
+                      - generic [ref=e1033]: "154.469"
+                    - generic [ref=e1034]:
+                      - generic [ref=e1035]: Approved
+                      - generic [ref=e1039]: "143.601"
+                  - generic [ref=e1043]:
+                    - generic [ref=e1044]: "Sisa: 10.868"
+                    - generic [ref=e1045]: 100% Target
+                - generic [ref=e1046]:
+                  - generic [ref=e1047]:
+                    - generic [ref=e1048]: Pembiayaan Daerah
+                    - generic [ref=e1054]: 33.33%
+                  - generic [ref=e1055]:
+                    - generic [ref=e1056]:
+                      - generic [ref=e1057]: Transaksi
+                      - generic [ref=e1061]: "3"
+                    - generic [ref=e1062]:
+                      - generic [ref=e1063]: Approved
+                      - generic [ref=e1067]: "1"
+                  - generic [ref=e1071]:
+                    - generic [ref=e1072]: "Sisa: 2"
+                    - generic [ref=e1073]: 100% Target
+            - generic [ref=e1074]:
+              - generic [ref=e1076]:
+                - generic [ref=e1078]:
+                  - generic [ref=e1079]:
+                    - heading "Distribusi Volume Jurnal per Kategori" [level=3] [ref=e1080]
+                    - paragraph [ref=e1081]: Rincian transaksi jurnal keuangan dan anggaran tahun berjalan
+                  - generic [ref=e1082]: T.A. 2026
+                - generic [ref=e1083]:
+                  - generic [ref=e1085]:
+                    - generic [ref=e1086]: Jurnal Belanja (SP2D & TBP)
+                    - generic [ref=e1088]: 154.469 entri
+                  - generic [ref=e1092]:
+                    - generic [ref=e1093]: Jurnal Pendapatan (STS, TBP & SKP)
+                    - generic [ref=e1095]: 4.596 entri
+                  - generic [ref=e1099]:
+                    - generic [ref=e1100]: Transaksi Non Anggaran (TNA)
+                    - generic [ref=e1102]: 576 entri
+                  - generic [ref=e1105]:
+                    - generic [ref=e1106]: Jurnal Umum & Penyesuaian
+                    - generic [ref=e1108]: 119 entri
+                - generic [ref=e1110]:
+                  - generic [ref=e1111]: "Status Pengesahan Anggaran:"
+                  - generic [ref=e1112]:
+                    - generic [ref=e1113]: 236 Disetujui
+                    - generic [ref=e1114]: •
+                    - generic [ref=e1115]: 0 Menunggu
+              - generic [ref=e1117]:
+                - generic [ref=e1119]:
+                  - generic [ref=e1120]:
+                    - heading "Penyerapan Belanja SKPD" [level=3] [ref=e1121]
+                    - paragraph [ref=e1122]: Peringkat realisasi tertinggi unit kerja
+                  - generic [ref=e1123]: Top 5
+                - generic [ref=e1125]:
+                  - generic [ref=e1127]:
+                    - generic [ref=e1128]: 1. Badan Kesatuan Bangsa dan Politik
+                    - generic [ref=e1129]: 99.65%
+                  - generic [ref=e1133]:
+                    - generic [ref=e1134]: 2. Badan Kepegawaian Daerah
+                    - generic [ref=e1135]: 92.48%
+                  - generic [ref=e1139]:
+                    - generic [ref=e1140]: 3. Badan Penelitian dan Pengembangan Daerah
+                    - generic [ref=e1141]: 91.54%
+                  - generic [ref=e1145]:
+                    - generic [ref=e1146]: 4. Badan Penanggulangan Bencana Daerah
+                    - generic [ref=e1147]: 91.22%
+                  - generic [ref=e1151]:
+                    - generic [ref=e1152]: 5. Badan Pendapatan Daerah
+                    - generic [ref=e1153]: 85.56%
+                - generic [ref=e1156]:
+                  - generic [ref=e1157]: "Metode: Realisasi Akrual SAP"
+                  - link "Lihat LRA Lengkap" [ref=e1158] [cursor=pointer]:
+                    - /url: /laporan/realisasi-anggaran
+            - generic [ref=e1162]:
+              - heading "Pintasan Modul Akuntansi Utama" [level=2] [ref=e1163]
+              - generic [ref=e1164]:
+                - link [ref=e1165] [cursor=pointer]:
+                  - /url: /jurnal-approve/belanja
+                  - generic [ref=e1167]:
+                    - heading "Jurnal Persetujuan (9 Tab)" [level=3] [ref=e1175]
+                    - paragraph [ref=e1176]: Otorisasi dan verifikasi transaksi jurnal belanja, pendapatan, pembiayaan, dan penutup.
+                - link [ref=e1177] [cursor=pointer]:
+                  - /url: /kertas-kerja-konsolidasi
+                  - generic [ref=e1179]:
+                    - heading "Kertas Kerja Konsolidasi" [level=3] [ref=e1187]
+                    - paragraph [ref=e1188]: Rekonsiliasi antarentitas dan eliminasi transaksi silang Pemprov Jabar.
+                - link [ref=e1189] [cursor=pointer]:
+                  - /url: /lock-jurnal
+                  - generic [ref=e1191]:
+                    - heading "Kunci Jurnal & Laporan" [level=3] [ref=e1199]
+                    - paragraph [ref=e1200]: Penguncian periode akuntansi bulanan dan pembatasan entri transaksi SKPD.
+    - region "Notifications alt+T":
+      - list
+  - generic [ref=e59]:
+    - button "Toggle Nuxt DevTools" [ref=e60] [cursor=pointer]
+    - generic "Page load time" [ref=e64]:
+      - generic [ref=e65]: "137"
+      - generic [ref=e66]: ms
+    - button "Toggle Component Inspector" [ref=e68] [cursor=pointer]

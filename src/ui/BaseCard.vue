@@ -13,9 +13,9 @@ defineProps({
 
 <template>
   <div
-    class="border-2 border-ink bg-paper rounded-sm transition-all duration-150"
+    class="border border-[var(--ui-border)] bg-paper rounded-xl transition-shadow duration-150"
     :class="[
-      elevated ? 'shadow-hard hover:shadow-hard-lg hover:-translate-x-0.5 hover:-translate-y-0.5' : '',
+      elevated ? 'shadow-hard' : '',
       padding
     ]"
   >

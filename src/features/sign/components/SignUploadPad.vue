@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref } from 'vue';
 import { t } from '../../../app/providers/i18n.js';
 import { removeWhiteBackground } from '../logic/removeWhiteBackground.js';
@@ -8,6 +9,7 @@ const emit = defineEmits(['use-signature']);
 const fileInputRef = ref(null);
 const removeBg = ref(true);
 const previewUrl = ref(null);
+const originalUrl = ref(null);
 
 function triggerFileInput() {
   fileInputRef.value?.click();
@@ -19,15 +21,17 @@ function onFileSelected(e) {
 
   const reader = new FileReader();
   reader.onload = (ev) => {
-    const rawData = ev.target.result;
-    processImage(rawData);
+    originalUrl.value = ev.target.result;
+    processImage(originalUrl.value);
   };
   reader.readAsDataURL(file);
+  e.target.value = '';
 }
 
 function processImage(dataUrl) {
   const img = new Image();
   img.onload = () => {
+    if (dataUrl !== originalUrl.value) return;
     if (removeBg.value) {
       previewUrl.value = removeWhiteBackground(img);
     } else {
@@ -38,8 +42,8 @@ function processImage(dataUrl) {
 }
 
 function onRemoveBgToggle() {
-  if (previewUrl.value) {
-    processImage(previewUrl.value);
+  if (originalUrl.value) {
+    processImage(originalUrl.value);
   }
 }
 
@@ -82,9 +86,10 @@ function apply() {
 
     <div
       v-if="previewUrl"
-      class="border-3 border-ink bg-paper shadow-hard-sm p-2 flex items-center justify-center min-h-[100px] max-h-[160px] overflow-hidden"
+      class="border-3 border-ink shadow-hard-sm p-2 flex items-center justify-center min-h-[100px]"
+      style="background-color: #fff; background-image: conic-gradient(#ddd 25%, transparent 0 50%, #ddd 0 75%, transparent 0); background-size: 16px 16px"
     >
-      <img :src="previewUrl" :alt="t('tools.sign.previewAlt')" class="max-h-24 max-w-full object-contain" />
+      <ZoomPreview class="w-full"><img :src="previewUrl" :alt="t('tools.sign.previewAlt')" class="max-h-24 max-w-full object-contain" /></ZoomPreview>
     </div>
 
     <button

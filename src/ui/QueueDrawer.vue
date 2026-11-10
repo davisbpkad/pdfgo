@@ -14,8 +14,8 @@ async function downloadBatchZip() {
   }
 
   try {
-    const zipBlob = await createZipArchive(items.map(i => ({ name: i.name, data: i.result })));
-    downloadFile(zipBlob, `PDFToolkit_Batch_${Date.now()}.zip`, 'application/zip');
+    const zipBlob = await createZipArchive(items.map(i => ({ name: i.resultName || i.name, data: i.result })));
+    downloadFile(zipBlob, 'hasil-antrean.zip', 'application/zip');
     showToast(t('queue.zipDownloaded'), 'success');
   } catch (err) {
     showToast(err.message || t('queue.zipFailed'), 'error');
@@ -25,7 +25,7 @@ async function downloadBatchZip() {
 function downloadSingle(id) {
   const item = queue.getItems().find(i => i.id === id);
   if (item && item.result) {
-    downloadFile(item.result, `PDFGO_${item.name}`);
+    downloadFile(item.result, item.resultName || item.name);
   }
 }
 

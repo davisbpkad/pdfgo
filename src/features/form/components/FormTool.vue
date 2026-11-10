@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { t } from '../../../app/providers/i18n.js';
 import { ref, shallowRef, onMounted, watch } from 'vue';
 import { loadPdfJsDocument, unwrapPdfProxy } from '../../../core/pdf.js';
@@ -218,9 +219,11 @@ async function handleSave() {
             </div>
           </div>
 
-          <div class="flex justify-center p-3 border-2 border-ink bg-paper-dark overflow-auto max-h-[520px]">
+          <ZoomPreview>
+          <div class="flex justify-center p-3 border-2 border-ink bg-paper-dark">
             <canvas ref="canvasRef" class="border-2 border-ink bg-white shadow-hard max-w-full h-auto" />
           </div>
+          </ZoomPreview>
         </div>
       </div>
     </div>

@@ -32,6 +32,24 @@ async function extractText(bytes) {
 }
 
 test.describe('edit pdf', () => {
+  test('preview shows original text once and masks old text while editing', async ({ page }) => {
+    await openTool(page);
+    await loadPdf(page, textPdf);
+    const editor = page.locator('main textarea').first();
+    await expect(editor).toHaveCSS('color', 'rgba(0, 0, 0, 0)');
+    await editor.focus();
+    await expect(editor).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(editor).toHaveCSS('color', 'rgb(0, 0, 0)');
+    await editor.fill('Tulisan baru terlihat jelas');
+    await editor.blur();
+    await expect(editor).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(editor).toHaveCSS('color', 'rgb(0, 0, 0)');
+    await expect(editor).toHaveAccessibleName('Tulisan baru terlihat jelas');
+    expect(await editor.evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
+    await page.screenshot({ path: 'test-results/edit-preview-readable.png' });
+    await page.getByRole('button', { name: /Batalkan Perubahan Tulisan/ }).click();
+    await expect(editor).toHaveCSS('color', 'rgba(0, 0, 0, 0)');
+  });
   test('positive: the tool offers text editing only', async ({ page }) => {
     await openTool(page);
     await loadPdf(page, textPdf);

@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref } from 'vue';
 import { t } from '../../../app/providers/i18n.js';
 import BaseButton from '../../../ui/BaseButton.vue';
@@ -37,6 +38,7 @@ function submitUnlock() {
     <!-- Thumbnail & Info -->
     <div class="flex items-center gap-3 min-w-0 flex-1">
       <!-- Thumbnail -->
+      <ZoomPreview class="w-36 shrink-0">
       <div class="w-12 h-16 shrink-0 border-2 border-ink rounded-sm bg-neutral-100 dark:bg-neutral-800 shadow-[1.5px_1.5px_0_0_#000000] flex items-center justify-center overflow-hidden">
         <img v-if="item.thumbnail" :src="item.thumbnail" alt="Thumb" class="w-full h-full object-cover" />
         <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -45,6 +47,7 @@ function submitUnlock() {
         </svg>
       </div>
 
+      </ZoomPreview>
       <!-- File Details -->
       <div class="min-w-0 flex-1 space-y-1">
         <div class="font-bold text-sm text-ink truncate" :title="item.name">

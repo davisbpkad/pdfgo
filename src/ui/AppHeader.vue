@@ -2,16 +2,17 @@
 import { theme, toggleTheme } from '../app/providers/theme.js';
 import { currentLang, toggleLang, t } from '../app/providers/i18n.js';
 import { queueState, toggleQueueDrawer } from '../app/providers/queue.js';
-import BaseBadge from './BaseBadge.vue';
+import { activeToolId } from '../app/router.js';
+import { moduleMap } from '../features/registry.js';
 import logoUrl from '../assets/favicon.png';
 
 defineEmits(['toggle-sidebar']);
 </script>
 
 <template>
-  <header class="border-b-2 border-ink bg-paper sticky top-0 z-40 px-4 py-2.5 md:py-3 flex items-center justify-between select-none">
+  <header class="pdfgo-header border-b border-[var(--ui-border)] bg-paper sticky top-0 z-40 px-4 min-h-16 flex items-center justify-between select-none gap-3">
     <!-- Brand / Logo -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 lg:gap-0 self-stretch">
       <!-- Mobile sidebar toggle -->
       <button
         class="lg:hidden w-9 h-9 border-2 border-ink bg-paper flex items-center justify-center rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000] cursor-pointer transition-all duration-150"
@@ -25,23 +26,21 @@ defineEmits(['toggle-sidebar']);
         </svg>
       </button>
 
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2.5 lg:w-[239px] shrink-0">
         <!-- Logo framed in Brutalist accent box -->
-        <div class="w-9 h-9 md:w-10 md:h-10 border-2 border-ink bg-accent rounded-sm flex items-center justify-center shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 transition-all duration-150 shrink-0">
+        <div class="w-9 h-9 bg-accent rounded-lg flex items-center justify-center shrink-0">
           <img
             :src="logoUrl"
             alt="PDF To Go Logo"
             class="h-6 md:h-7 w-6 md:w-7 object-contain select-none shrink-0"
           />
         </div>
-        <span class="font-display font-extrabold text-xl md:text-2xl tracking-tight text-ink uppercase">
+        <span class="font-display font-semibold text-sm tracking-tight text-ink">
           PDF To Go
         </span>
-        <!-- Brutalism accent badge -->
-        <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 border border-ink bg-accent text-ink text-xs font-bold uppercase rounded-sm shadow-[1.5px_1.5px_0_0_#000000]">
-          <span class="w-2 h-2 rounded-full bg-accent-2 border border-ink animate-pulse"></span>
-          100% Offline
-        </span>
+      </div>
+      <div class="hidden lg:flex items-center self-stretch border-l border-[var(--ui-border)] pl-6">
+        <p class="text-sm font-semibold">{{ t(moduleMap.get(activeToolId)?.titleKey || 'app.sidebarMenu') }}</p>
       </div>
     </div>
 
@@ -108,3 +107,20 @@ defineEmits(['toggle-sidebar']);
     </div>
   </header>
 </template>
+
+<style scoped>
+.pdfgo-header button {
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  box-shadow: none;
+  transform: none;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.pdfgo-header button:hover { background: var(--color-accent); }
+@media (max-width: 420px) {
+  .pdfgo-header { padding-inline: 10px; gap: 6px; }
+  .pdfgo-header > div { gap: 6px; }
+}
+</style>

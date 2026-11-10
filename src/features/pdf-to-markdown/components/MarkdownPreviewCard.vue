@@ -4,6 +4,7 @@ import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 
 const props = defineProps({
   result: {
@@ -44,13 +45,13 @@ async function copyMarkdown() {
     </div>
 
     <!-- Preview snippet / text -->
-    <div class="relative">
+    <ZoomPreview>
       <textarea
         readonly
         :value="result.markdown"
         class="w-full h-64 p-3 font-mono text-xs text-ink bg-paper-dark/40 border-2 border-ink rounded-xs focus:outline-none resize-y selection:bg-accent"
       />
-    </div>
+    </ZoomPreview>
 
     <div class="flex items-center justify-between pt-2 border-t-2 border-ink gap-2 flex-wrap">
       <BaseButton variant="secondary" class="text-xs font-bold" @click="$emit('reset')">

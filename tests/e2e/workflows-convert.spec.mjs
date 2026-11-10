@@ -11,7 +11,7 @@ test.describe('conversion workflows', () => {
     await upload(page, [imagePng], 'image/png');
 
     const download = await clickAndDownload(page, /Buat Dokumen PDF/i);
-    expect(download.suggestedFilename()).toMatch(/^PDFToolkit_Images_\d+\.pdf$/);
+    expect(download.suggestedFilename()).toBe('gambar-ke-pdf.pdf');
     expect((await pdfInfo(await downloadBytes(download))).pages).toBe(1);
   });
 

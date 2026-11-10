@@ -15,7 +15,7 @@ const ROUTES = [
 test.describe('app shell', () => {
   test('positive: the sidebar lists exactly the 25 registered tools', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('aside nav button')).toHaveCount(25);
+    await expect(page.locator('aside nav button[data-tool-id]')).toHaveCount(25);
   });
 
   test('positive: every sidebar entry opens a tool that renders a title', async ({ page }) => {

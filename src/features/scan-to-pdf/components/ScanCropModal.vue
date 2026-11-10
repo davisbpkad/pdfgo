@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref } from 'vue';
 import { t } from '../../../app/providers/i18n.js';
 import BaseButton from '../../../ui/BaseButton.vue';
@@ -32,6 +33,7 @@ function handleApply() {
       </div>
 
       <!-- Crop preview -->
+      <ZoomPreview>
       <div class="relative w-full h-48 bg-paper-dark border-2 border-ink flex items-center justify-center overflow-hidden">
         <img :src="page.url" class="max-h-full max-w-full object-contain pointer-events-none" />
         <div
@@ -45,6 +47,7 @@ function handleApply() {
         />
       </div>
 
+      </ZoomPreview>
       <!-- 4 margin sliders -->
       <div class="grid grid-cols-2 gap-3 text-xs font-bold text-ink">
         <div>

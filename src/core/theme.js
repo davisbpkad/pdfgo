@@ -4,7 +4,7 @@
  */
 
 const STORAGE_KEY = 'pdfgo_theme';
-let currentTheme = 'auto'; // 'auto' | 'light' | 'dark'
+let currentTheme = 'light'; // 'auto' | 'light' | 'dark'
 const listeners = new Set();
 
 try {

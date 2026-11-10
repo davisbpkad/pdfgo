@@ -1,5 +1,5 @@
 /**
- * Remove near-white pixels from an image to make it transparent
+ * Remove light, low-saturation paper pixels while preserving dark/colored ink.
  * @param {HTMLImageElement} img
  * @returns {string} transparent PNG data URL
  */
@@ -17,8 +17,12 @@ export function removeWhiteBackground(img) {
     const r = data[i];
     const g = data[i + 1];
     const b = data[i + 2];
-    if (r > 230 && g > 230 && b > 230) {
-      data[i + 3] = 0;
+    const lightest = Math.max(r, g, b);
+    const darkest = Math.min(r, g, b);
+    // ponytail: light paper only; dark or strongly colored backgrounds need segmentation.
+    if (lightest - darkest <= 45) {
+      const opacity = Math.max(0, Math.min(1, (190 - darkest) / 30));
+      data[i + 3] = Math.round(data[i + 3] * opacity);
     }
   }
 

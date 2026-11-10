@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { t } from '../../../app/providers/i18n.js';
 
 defineProps({
@@ -50,6 +51,7 @@ function onDrop(e, idx) {
     </div>
 
     <!-- Thumbnail Container -->
+    <ZoomPreview class="w-full">
     <div class="w-full h-40 flex items-center justify-center overflow-hidden bg-paper-dark border-2 border-ink/20">
       <img
         v-if="page.thumbUrl"
@@ -61,6 +63,7 @@ function onDrop(e, idx) {
       <span v-else class="text-xs font-bold text-ink/40">{{ t('common.loadingThumb') }}</span>
     </div>
 
+    </ZoomPreview>
     <!-- Actions Footer -->
     <div class="w-full flex items-center justify-between mt-2 pt-2 border-t-2 border-ink/10 gap-1">
       <button

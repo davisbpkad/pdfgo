@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { t } from '../../../app/providers/i18n.js';
 import BaseCard from '../../../ui/BaseCard.vue';
 
@@ -28,6 +29,7 @@ const filterOptions = [
     </div>
 
     <!-- Thumbnail with preview rotation & filter class -->
+    <ZoomPreview>
     <div class="w-full h-36 bg-paper-dark/50 border-2 border-ink flex items-center justify-center overflow-hidden rounded-xs relative">
       <img
         :src="page.url"
@@ -41,6 +43,7 @@ const filterOptions = [
       />
     </div>
 
+    </ZoomPreview>
     <!-- Filter dropdown -->
     <select
       :value="page.filter"

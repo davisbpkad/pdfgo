@@ -1,0 +1,4 @@
+[   13586ms] [ERROR] Connecting to 'http://localhost:3105/.well-known/appspecific/com.chrome.devtools.json' violates the following Content Security Policy directive: "connect-src blob: data:". The request has been blocked.
+ @ :1
+[   13587ms] [ERROR] Connecting to 'http://localhost:3105/.well-known/appspecific/com.chrome.devtools.json' violates the following Content Security Policy directive: "connect-src blob: data:". The request has been blocked.
+ @ :1

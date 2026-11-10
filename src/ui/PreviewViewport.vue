@@ -8,7 +8,7 @@ const props = defineProps({
   pageWidthPt: { type: Number, default: 595.28 },
   pageHeightPt: { type: Number, default: 841.89 },
   isRendering: { type: Boolean, default: false },
-  initialZoom: { type: Number, default: null }
+  initialZoom: { type: Number, default: null },
 });
 
 const emit = defineEmits(['update:zoom', 'update:effective-scale']);
@@ -46,7 +46,8 @@ onMounted(() => {
     });
     resizeObserver.observe(viewportContainerRef.value);
   }
-  applyFitWidth();
+  if (props.initialZoom !== null) setZoomPreset(props.initialZoom);
+  else applyFitWidth();
 });
 
 onUnmounted(() => {
@@ -103,6 +104,7 @@ function onWheel(e) {
 }
 
 function onKeyDown(e) {
+  if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
   if (e.key === '+' || e.key === '=') {
     e.preventDefault();
     zoomIn();
@@ -267,7 +269,7 @@ function onTouchEnd() {
     <div
       ref="viewportContainerRef"
       tabindex="0"
-      class="border-3 border-ink bg-paper-dark p-4 overflow-auto min-h-[480px] h-[60vh] lg:h-[650px] flex items-start justify-center focus:outline-none cursor-grab active:cursor-grabbing touch-pan-x touch-pan-y"
+      class="border-3 border-ink bg-paper-dark p-4 overflow-auto min-h-[480px] h-[60vh] lg:h-[650px] flex items-start focus:outline-none cursor-grab active:cursor-grabbing touch-pan-x touch-pan-y"
       @wheel="onWheel"
       @keydown="onKeyDown"
       @pointerdown="onPointerDown"
@@ -277,7 +279,7 @@ function onTouchEnd() {
       @touchmove="onTouchMove"
       @touchend="onTouchEnd"
     >
-      <div class="inline-block transition-transform duration-75">
+      <div class="inline-block shrink-0 mx-auto">
         <slot
           :zoom="zoom"
           :effective-scale="effectiveScale"

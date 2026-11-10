@@ -11,7 +11,7 @@ test.describe('layout workflows', () => {
     await upload(page, [twoPagePdf, textPdf]);
 
     const download = await clickAndDownload(page, /Gabung 2 file/i);
-    expect(download.suggestedFilename()).toMatch(/^PDFToolkit_Merged_\d+\.pdf$/);
+    expect(download.suggestedFilename()).toBe('gabung-pdf.pdf');
 
     const info = await pdfInfo(await downloadBytes(download));
     expect(info.pages).toBe(3);

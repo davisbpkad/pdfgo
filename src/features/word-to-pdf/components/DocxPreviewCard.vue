@@ -3,6 +3,7 @@ import { t } from '../../../app/providers/i18n.js';
 import { printHtmlViaIframe } from '../../html-to-pdf/logic/printHtmlDocument.js';
 import BaseButton from '../../../ui/BaseButton.vue';
 import BaseCard from '../../../ui/BaseCard.vue';
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 
 const props = defineProps({
   html: { type: String, required: true }
@@ -11,7 +12,7 @@ const props = defineProps({
 defineEmits(['reset']);
 
 function handlePrint() {
-  printHtmlViaIframe(props.html);
+  printHtmlViaIframe(props.html, 'word-ke-pdf');
 }
 </script>
 
@@ -29,10 +30,12 @@ function handlePrint() {
         <span class="text-xs font-bold uppercase text-ink">{{ t('tools.wordToPdf.previewTitle') }}</span>
         <span class="text-[10px] text-ink/70 font-mono">HTML Sandbox</span>
       </div>
+      <ZoomPreview>
       <div
-        class="p-6 max-h-[420px] overflow-y-auto bg-white text-black font-serif text-sm leading-relaxed prose prose-sm max-w-none"
+        class="p-6 bg-white text-black font-serif text-sm leading-relaxed prose prose-sm max-w-none"
         v-html="html"
       />
+      </ZoomPreview>
     </BaseCard>
 
     <!-- Honest disclaimer card -->

@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref, onMounted } from 'vue';
 import { loadPdfJsDocument, generateThumbnail } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
@@ -121,10 +122,12 @@ async function handleProcess() {
       <!-- File Summary Card -->
       <BaseCard class="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4 min-w-0">
+          <ZoomPreview class="w-36 shrink-0">
           <div class="w-14 h-18 bg-paper-dark border-2 border-ink flex items-center justify-center shrink-0 overflow-hidden shadow-hard-sm">
             <img v-if="activeThumbnail" :src="activeThumbnail" alt="Thumbnail" class="w-full h-full object-cover" />
             <span v-else class="text-xs font-black">PDF</span>
           </div>
+          </ZoomPreview>
           <div class="min-w-0">
             <h3 class="font-bold text-base text-ink truncate">{{ activeFile.name }}</h3>
             <p class="text-xs text-ink/70 font-medium">{{ totalPages }} {{ t('common.pages') }} • {{ (activeFile.size / 1024 / 1024).toFixed(2) }} MB</p>

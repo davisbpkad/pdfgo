@@ -21,10 +21,10 @@ defineProps({
 defineEmits(['click']);
 
 const variantClasses = {
-  primary: 'bg-accent hover:bg-accent-strong text-black border-2 border-ink shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000]',
-  secondary: 'bg-paper hover:bg-neutral-100 dark:hover:bg-neutral-700 text-ink border-2 border-ink shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000]',
-  danger: 'bg-danger hover:opacity-90 text-black border-2 border-ink shadow-hard-sm hover:shadow-hard hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000000]',
-  ghost: 'bg-transparent hover:bg-neutral-200/50 dark:hover:bg-neutral-700/50 text-ink border-2 border-transparent hover:border-ink hover:shadow-hard-sm hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none'
+  primary: 'bg-[var(--ui-primary)] hover:brightness-110 text-white border border-transparent shadow-hard-sm',
+  secondary: 'bg-paper hover:bg-accent text-ink border border-[var(--ui-border)]',
+  danger: 'bg-danger hover:opacity-90 text-black border border-transparent',
+  ghost: 'bg-transparent hover:bg-accent text-ink border border-transparent'
 };
 </script>
 
@@ -32,7 +32,7 @@ const variantClasses = {
   <button
     :type="type"
     :disabled="disabled || loading"
-    class="inline-flex items-center justify-center gap-2 px-4 py-2 font-bold uppercase tracking-wider text-xs md:text-sm rounded-sm transition-all duration-150 cubic-bezier(0.4, 0, 0.2, 1) cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-[2px_2px_0_0_#000000]"
+    class="inline-flex items-center justify-center gap-2 px-4 py-2 font-semibold text-xs md:text-sm rounded-lg transition-colors duration-150 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed"
     :class="variantClasses[variant] || variantClasses.primary"
     @click="$emit('click', $event)"
   >

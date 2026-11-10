@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { mergePdfFiles } from '../logic/mergePdfFiles.js';
 import { loadPdfJsDocument, generateThumbnail } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
@@ -21,7 +21,7 @@ async function handleIncomingFiles(files) {
   if (newPdfFiles.length === 0) return;
 
   for (const file of newPdfFiles) {
-    const item = {
+    const item = reactive({
       id: 'merge_' + Math.random().toString(36).substring(2, 9),
       file,
       name: file.name,
@@ -31,7 +31,7 @@ async function handleIncomingFiles(files) {
       isEncrypted: false,
       password: '',
       error: null
-    };
+    });
 
     fileList.value.push(item);
 
@@ -137,7 +137,7 @@ async function handleMerge() {
     }
 
     isProcessing.value = false;
-    downloadFile(blob, `PDFToolkit_Merged_${Date.now()}.pdf`);
+    downloadFile(blob, 'gabung-pdf.pdf');
     showToast(t('tools.merge.mergedToast'), 'success');
   } catch (err) {
     isProcessing.value = false;
@@ -231,7 +231,7 @@ async function handleMerge() {
       <div class="flex gap-2">
         <BaseButton
           variant="primary"
-          @click="downloadFile(mergedResult.blob, `PDFToolkit_Merged_${Date.now()}.pdf`)"
+          @click="downloadFile(mergedResult.blob, 'gabung-pdf.pdf')"
         >
           {{ t('tools.merge.downloadAgain') }}
         </BaseButton>

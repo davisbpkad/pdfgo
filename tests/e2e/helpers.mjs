@@ -30,11 +30,17 @@ export async function openTool(page, route) {
   await expect(page.locator('main h1')).toHaveCount(1);
 }
 
-/** Upload files through the tool's own file input (matched by accept). */
+/** Open the visible picker before supplying files, so broken upload buttons fail. */
 export async function upload(page, files, accept = '.pdf') {
   const input = page.locator(`main input[type=file][accept*="${accept}"]`).first();
   await expect(input, `no file input accepting ${accept}`).toHaveCount(1);
-  await input.setInputFiles(files);
+  const zone = page.locator('main [role="button"]').filter({ has: page.locator(`input[type=file][accept*="${accept}"]`) });
+  const trigger = await zone.count() ? zone : page.locator('main button').filter({ hasText: /Pilih Berkas Gambar|Impor \.html|Select Image Files|Import \.html/i }).first();
+  const pickerPromise = page.waitForEvent('filechooser', { timeout: 5000 });
+  await trigger.click();
+  const picker = await pickerPromise;
+  expect(await picker.element().getAttribute('accept')).toContain(accept);
+  await picker.setFiles(files);
 }
 
 /** A button inside the tool area (not the sidebar or the header). */

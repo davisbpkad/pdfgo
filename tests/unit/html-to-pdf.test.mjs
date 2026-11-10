@@ -112,6 +112,11 @@ test('html-to-pdf: calculateCanvasPagination calculates A4 slices accurately', (
   assert.equal(slices[0].totalPages, 2);
 });
 
+test('html-to-pdf: print title names the feature and escapes markup', () => {
+  assert.ok(buildPrintableHtml('<p>test</p>').includes('<title>html-ke-pdf</title>'));
+  assert.ok(buildPrintableHtml('<p>test</p>', '<word>&').includes('<title>&lt;word&gt;&amp;</title>'));
+});
+
 test('html-to-pdf: buildPrintableHtml produces complete printable document', () => {
   const fragment = '<h2>My Report</h2><p>Report details</p>';
   const doc = buildPrintableHtml(fragment);

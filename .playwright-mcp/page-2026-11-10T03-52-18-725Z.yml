@@ -1,0 +1,91 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img "PDF To Go Logo" [ref=e8]
+        - generic [ref=e9]: PDF To Go
+      - paragraph [ref=e11]: Gabung PDF
+    - generic [ref=e12]:
+      - button "Antrean Dokumen" [ref=e13] [cursor=pointer]
+      - button "ID" [ref=e18] [cursor=pointer]
+      - button "Toggle theme" [ref=e23] [cursor=pointer]
+  - generic [ref=e26]:
+    - complementary "PDF tools" [ref=e28]:
+      - navigation [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: Tata Letak Dokumen
+          - generic [ref=e34]:
+            - button "Gabung PDF" [ref=e35] [cursor=pointer]
+            - button "Pisah PDF" [ref=e41] [cursor=pointer]
+            - button "Atur Halaman" [ref=e50] [cursor=pointer]
+            - button "Nomor Halaman" [ref=e58] [cursor=pointer]
+            - button "Watermark" [ref=e63] [cursor=pointer]
+            - button "Edit Tulisan PDF" [ref=e72] [cursor=pointer]
+        - generic [ref=e77]:
+          - generic [ref=e78]: Optimasi & Teks
+          - generic [ref=e81]:
+            - button "Kompres PDF" [ref=e82] [cursor=pointer]
+            - button "Pengenalan Teks (OCR)" [ref=e87] [cursor=pointer]
+            - button "Ekstrak Teks" [ref=e95] [cursor=pointer]
+            - button "Isi Formulir" [ref=e101] [cursor=pointer]
+        - generic [ref=e107]:
+          - generic [ref=e108]: Konversi Media
+          - generic [ref=e111]:
+            - button "Gambar ke PDF" [ref=e112] [cursor=pointer]
+            - button "PDF ke Gambar" [ref=e120] [cursor=pointer]
+            - button "PDF ke Markdown" [ref=e127] [cursor=pointer]
+            - button "Pindai jadi PDF" [ref=e133] [cursor=pointer]
+            - button "HTML ke PDF" [ref=e139] [cursor=pointer]
+            - button "PDF ke Word" [ref=e145] [cursor=pointer]
+            - button "PDF ke PowerPoint" [ref=e151] [cursor=pointer]
+            - button "Excel ke PDF" [ref=e157] [cursor=pointer]
+            - button "Word ke PDF" [ref=e162] [cursor=pointer]
+            - button "PowerPoint ke PDF" [ref=e168] [cursor=pointer]
+            - button "PDF ke Excel" [ref=e174] [cursor=pointer]
+        - generic [ref=e180]:
+          - generic [ref=e181]: Keamanan Dokumen
+          - generic [ref=e184]:
+            - button "Tanda Tangan Digital" [ref=e185] [cursor=pointer]
+            - button "Sensor Dokumen" [ref=e191] [cursor=pointer]
+            - button "Buka Kunci PDF" [ref=e197] [cursor=pointer]
+            - button "Kunci dengan Password" [ref=e203] [cursor=pointer]
+      - generic [ref=e210]:
+        - generic [ref=e211]: Zero-Network
+        - paragraph [ref=e214]: 100% Lokal di peramban Anda. Bebas pelacak & tanpa server.
+    - main [ref=e215]:
+      - generic [ref=e216]:
+        - generic [ref=e217]:
+          - heading "Gabung PDF" [level=1] [ref=e218]
+          - paragraph [ref=e219]: Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.
+        - button "Tarik & lepas file di sini" [active] [ref=e220] [cursor=pointer]:
+          - generic [ref=e221]:
+            - generic [ref=e226]: Tarik & lepas file di sini
+            - generic [ref=e227]: atau klik untuk memilih file dari komputer Anda
+        - generic [ref=e240]:
+          - generic [ref=e241]:
+            - generic [ref=e242]: Urutan Dokumen (1 File)
+            - button "Kosongkan" [ref=e243] [cursor=pointer]
+          - generic [ref=e245]:
+            - generic [ref=e251]:
+              - generic "text.pdf" [ref=e252]
+              - generic [ref=e253]:
+                - generic [ref=e254]: 0.00 MB
+                - generic [ref=e255]: •
+                - generic [ref=e256]: ... hal
+            - generic [ref=e257]:
+              - button "▲" [disabled] [ref=e258]
+              - button "▼" [disabled] [ref=e259]
+              - button "×" [ref=e260] [cursor=pointer]
+          - generic [ref=e261]:
+            - button "Gabung 1 File PDF" [disabled] [ref=e262]
+            - generic [ref=e263]: Pilih atau tarik beberapa file PDF ke area dropzone di atas untuk mulai menggabungkan.
+  - generic [ref=e229]:
+    - generic [ref=e230]:
+      - generic [ref=e231]:
+        - generic [ref=e232]: Antrean Dokumen
+        - generic [ref=e233]: "0"
+      - button "Tutup antrean" [ref=e234] [cursor=pointer]: ×
+    - generic [ref=e235]: Belum ada file dalam antrean
+    - generic [ref=e237]:
+      - button "Kosongkan" [disabled] [ref=e238]
+      - button "Unduh Semua (ZIP)" [disabled] [ref=e239]

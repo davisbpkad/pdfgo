@@ -44,7 +44,7 @@ function closeSidebar() {
 </script>
 
 <template>
-  <div class="h-screen h-[100dvh] max-h-screen overflow-hidden bg-paper-dark text-ink flex flex-col font-ui antialiased selection:bg-accent selection:text-black">
+  <div class="pdfgo-app h-screen h-[100dvh] max-h-screen overflow-hidden bg-paper-dark text-ink flex flex-col font-ui antialiased selection:bg-accent selection:text-ink">
     <!-- Header (fixed at top) -->
     <AppHeader class="shrink-0" @toggle-sidebar="toggleSidebar" />
 
@@ -54,7 +54,7 @@ function closeSidebar() {
       <AppSidebar :is-open="isSidebarOpen" @close="closeSidebar" />
 
       <!-- Tool Workspace Outlet (Independent scroll with overscroll-contain) -->
-      <main class="flex-1 overflow-y-auto overscroll-contain p-4 md:p-8 max-w-5xl mx-auto w-full">
+      <main class="pdfgo-workspace flex-1 overflow-y-auto overscroll-contain p-4 md:p-6 lg:p-8 w-full min-w-0">
         <!-- Native Vue 3 Tools (All 13 Tools Native) -->
         <MergeTool v-if="activeToolId === 'merge'" />
         <SplitTool v-else-if="activeToolId === 'split'" />

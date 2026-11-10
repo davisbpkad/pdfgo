@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { loadPdfJsDocument } from '../../../core/pdf.js';
 import { downloadFile } from '../../../core/download.js';
@@ -287,12 +288,13 @@ function openOcr() {
       <BaseCard class="p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0">
           <!-- Thumbnail preview for image or icon for PDF -->
+          <ZoomPreview v-if="isImage && imagePreviewUrl" class="w-36 shrink-0">
           <div
-            v-if="isImage && imagePreviewUrl"
             class="w-12 h-12 shrink-0 border-2 border-ink bg-paper-dark rounded-xs overflow-hidden shadow-hard-sm"
           >
             <img :src="imagePreviewUrl" alt="Thumbnail" class="w-full h-full object-cover" />
           </div>
+          </ZoomPreview>
           <div
             v-else
             class="w-12 h-12 shrink-0 border-2 border-ink bg-accent text-black font-display font-black text-xs flex items-center justify-center rounded-xs shadow-hard-sm"

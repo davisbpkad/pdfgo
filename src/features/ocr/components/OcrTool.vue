@@ -176,7 +176,7 @@ async function handleStartOcr() {
     lastOcrResults.value = textReport;
     lastSearchablePdfBytes = searchablePdfBytes;
     // Hand the result back to the queue so its download buttons become usable.
-    publishQueueResult(activeFile.value, searchablePdfBytes);
+    publishQueueResult(activeFile.value, searchablePdfBytes, 'application/pdf', `${activeFile.value.name.replace(/\.pdf$/i, '')}_searchable.pdf`);
     showToast(t('tools.ocr.completed'), 'success');
   } catch (err) {
     if (!cancelRef.value.value) {

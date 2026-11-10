@@ -5,13 +5,14 @@ import { sanitizeHtml } from './sanitizeHtml.js';
  * @param {string} rawHtml
  * @returns {string}
  */
-export function buildPrintableHtml(rawHtml) {
+export function buildPrintableHtml(rawHtml, title = 'html-ke-pdf') {
   const cleanBody = sanitizeHtml(rawHtml);
+  const safeTitle = title.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   return `<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="utf-8">
-  <title>Dokumen PDF</title>
+  <title>${safeTitle}</title>
   <style>
     @page { size: A4; margin: 15mm; }
     *, *::before, *::after { box-sizing: border-box; }
@@ -51,10 +52,10 @@ ${cleanBody}
  * Render HTML in a hidden iframe and trigger native browser print dialog
  * @param {string} htmlContent
  */
-export function printHtmlViaIframe(htmlContent) {
+export function printHtmlViaIframe(htmlContent, title = 'html-ke-pdf') {
   if (typeof document === 'undefined') return;
 
-  const printableHtml = buildPrintableHtml(htmlContent);
+  const printableHtml = buildPrintableHtml(htmlContent, title);
   const iframe = document.createElement('iframe');
   // No 'allow-scripts': any markup that survives sanitizing still cannot execute.
   // 'allow-same-origin' is required so the parent can call contentWindow.print().

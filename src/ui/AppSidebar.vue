@@ -1,8 +1,8 @@
 <script setup>
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 import { activeToolId, navigateTo } from '../app/router.js';
 import { t } from '../app/providers/i18n.js';
-import { allModules, moduleMap } from '../features/registry.js';
+import { moduleMap } from '../features/registry.js';
 
 defineProps({
   isOpen: {
@@ -15,38 +15,36 @@ const emit = defineEmits(['close']);
 
 const menuSections = [
   {
+    id: 'layout',
     titleKey: 'tools.section.layout',
     defaultTitle: 'Tata Letak Dokumen',
-    toolIds: ['merge', 'split', 'organize', 'page-numbers', 'watermark']
+    toolIds: ['merge', 'split', 'organize', 'page-numbers', 'watermark', 'edit-pdf']
   },
   {
+    id: 'optimize',
     titleKey: 'tools.section.optimize',
     defaultTitle: 'Optimasi & Teks',
     toolIds: ['compress', 'ocr', 'extract-text', 'form']
   },
   {
+    id: 'conversion',
     titleKey: 'tools.section.conversion',
     defaultTitle: 'Konversi Media',
-    toolIds: ['image-to-pdf', 'pdf-to-image']
+    toolIds: ['image-to-pdf', 'scan-to-pdf', 'html-to-pdf', 'word-to-pdf', 'excel-to-pdf', 'powerpoint-to-pdf',
+      'pdf-to-image', 'pdf-to-word', 'pdf-to-excel', 'pdf-to-powerpoint', 'pdf-to-markdown']
   },
   {
+    id: 'security',
     titleKey: 'tools.section.security',
     defaultTitle: 'Keamanan Dokumen',
-    toolIds: ['sign', 'redact']
+    toolIds: ['sign', 'redact', 'unlock', 'protect']
   }
 ];
-menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('unlock');
-menuSections.find(s => s.titleKey === 'tools.section.security')?.toolIds.push('protect');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-markdown');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('scan-to-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('html-to-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-word');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-powerpoint');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('excel-to-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('word-to-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.layout')?.toolIds.push('edit-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('powerpoint-to-pdf');
-menuSections.find(s => s.titleKey === 'tools.section.conversion')?.toolIds.push('pdf-to-excel');
+const expanded = ref(Object.fromEntries(menuSections.map(section => [section.id, false])));
+watch(activeToolId, id => {
+  const section = menuSections.find(section => section.toolIds.includes(id));
+  if (section) expanded.value[section.id] = true;
+});
 
 function selectTool(id) {
   navigateTo(id);
@@ -65,7 +63,8 @@ function selectTool(id) {
 
     <!-- Sidebar Container (Bounded to full height, flex-col, overflow-hidden) -->
     <aside
-      class="fixed inset-y-0 left-0 z-50 w-72 bg-paper border-r-2 border-ink flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 h-full max-h-full select-none shadow-hard lg:shadow-none overflow-hidden"
+      class="pdfgo-sidebar fixed inset-y-0 left-0 z-50 w-64 bg-paper border-r border-[var(--ui-border)] flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 h-full max-h-full select-none overflow-hidden"
+      aria-label="PDF tools"
       :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Mobile Close Header -->
@@ -87,45 +86,57 @@ function selectTool(id) {
       <nav class="flex-1 overflow-y-auto overscroll-contain p-3 space-y-4">
         <div v-for="section in menuSections" :key="section.defaultTitle" class="space-y-1">
           <!-- Section category title -->
-          <div class="text-[10px] font-extrabold uppercase tracking-widest text-ink/50 px-2.5 pt-1 pb-0.5 flex items-center gap-1.5">
-            <span>{{ t(section.titleKey) || section.defaultTitle }}</span>
-            <div class="flex-1 border-t border-ink/20"></div>
-          </div>
+          <button
+            type="button"
+            class="w-full text-left text-xs font-semibold px-3 py-2.5 rounded-lg border flex items-center gap-2 transition-colors"
+            :class="section.toolIds.includes(activeToolId) ? 'border-blue-600 bg-accent text-ink' : 'border-transparent text-[var(--ui-muted)] hover:bg-accent'"
+            :aria-expanded="expanded[section.id]"
+            :aria-controls="`sidebar-${section.id}`"
+            @click="expanded[section.id] = !expanded[section.id]"
+          >
+            <span class="flex-1">{{ t(section.titleKey) || section.defaultTitle }}</span>
+            <svg class="w-4 h-4 transition-transform" :class="expanded[section.id] ? '' : '-rotate-90'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
 
           <!-- Menu items in this category -->
-          <div class="space-y-1">
+          <div class="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out motion-reduce:transition-none"
+            :class="expanded[section.id] ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+            :inert="!expanded[section.id]" :aria-hidden="!expanded[section.id]">
+          <div :id="`sidebar-${section.id}`" class="min-h-0 overflow-hidden">
+          <div class="space-y-1 ml-4 pl-2 border-l border-[var(--ui-border)]">
             <template v-for="toolId in section.toolIds" :key="toolId">
               <button
                 v-if="moduleMap.get(toolId)"
-                class="w-full px-2.5 py-2 text-left font-semibold text-xs md:text-sm rounded-sm border-2 transition-all duration-150 flex items-center gap-2.5 cursor-pointer group"
+                :data-tool-id="toolId"
+                class="w-full px-3 py-2 text-left font-medium text-xs rounded-md transition-colors duration-150 flex items-center gap-2.5 cursor-pointer group"
+                :aria-current="activeToolId === toolId ? 'page' : undefined"
                 :class="activeToolId === toolId
-                  ? 'bg-accent text-black border-ink shadow-hard translate-x-1 font-bold'
-                  : 'border-transparent text-ink/80 hover:border-ink hover:bg-neutral-100 dark:hover:bg-neutral-700/60 hover:text-ink hover:shadow-hard-sm hover:-translate-y-0.5 hover:translate-x-0.5'"
+                  ? 'bg-[var(--ui-primary)] text-white'
+                  : 'text-[var(--ui-muted)] hover:bg-accent hover:text-ink'"
                 @click="selectTool(toolId)"
               >
                 <!-- Menu Icon in Brutalist Accent Box -->
                 <span
-                  class="w-7 h-7 md:w-8 md:h-8 rounded-sm border flex items-center justify-center shrink-0 transition-all duration-150"
-                  :class="activeToolId === toolId
-                    ? 'bg-ink text-accent border-ink shadow-[1px_1px_0_0_#000000]'
-                    : 'bg-paper-dark dark:bg-neutral-700 border-ink/30 text-ink/70 group-hover:bg-white group-hover:text-black group-hover:border-ink group-hover:shadow-[1.5px_1.5px_0_0_#000000] group-hover:-translate-y-0.5'"
+                  class="w-4 h-4 flex items-center justify-center shrink-0"
                   v-html="moduleMap.get(toolId).icon"
                 />
                 <span class="truncate flex-1 tracking-tight">{{ t(moduleMap.get(toolId).titleKey) }}</span>
                 <!-- Active pill bar -->
                 <span
                   v-if="activeToolId === toolId"
-                  class="w-1.5 h-3.5 bg-ink rounded-xs shrink-0"
+                  class="w-1 h-1 bg-white rounded-full shrink-0"
                 />
               </button>
             </template>
+          </div>
+          </div>
           </div>
         </div>
       </nav>
 
       <!-- Sidebar Footer Card (Brutalism Pro/Security Card) -->
       <div class="p-3 border-t-2 border-ink bg-paper">
-        <div class="border-2 border-ink bg-paper-dark dark:bg-neutral-700/50 rounded-sm p-3 shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 transition-all duration-150">
+        <div class="rounded-lg p-2">
           <div class="flex items-center gap-2 mb-1">
             <span class="w-2.5 h-2.5 rounded-full bg-accent-2 border border-ink animate-pulse"></span>
             <span class="text-[11px] font-extrabold uppercase tracking-wider text-ink">Zero-Network</span>

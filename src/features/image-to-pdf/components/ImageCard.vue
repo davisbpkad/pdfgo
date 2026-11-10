@@ -1,4 +1,5 @@
 <script setup>
+import ZoomPreview from '../../../ui/ZoomPreview.vue';
 import { t } from '../../../app/providers/i18n.js';
 defineProps({
   image: {
@@ -32,6 +33,7 @@ function onDrop(e, idx) {
     @dragover.prevent
     @drop="onDrop($event, index)"
   >
+    <ZoomPreview>
     <div class="w-full h-32 bg-paper-dark border-2 border-ink/20 flex items-center justify-center overflow-hidden">
       <img
         :src="image.thumbUrl"
@@ -40,6 +42,7 @@ function onDrop(e, idx) {
       />
     </div>
 
+    </ZoomPreview>
     <div class="mt-2 space-y-1">
       <div class="text-xs font-bold text-ink truncate" :title="image.name">
         {{ image.name }}

@@ -20,6 +20,7 @@ test.describe('security workflows', () => {
     await page.mouse.up();
 
     await mainButton(page, /Gunakan tanda tangan ini/i).click();
+    await page.getByRole('button', { name: 'Perbesar zoom', exact: true }).click();
     const download = await clickAndDownload(page, /Simpan Dokumen Bertanda Tangan/i);
     expect(download.suggestedFilename()).toBe('pages2_signed.pdf');
 
@@ -47,6 +48,7 @@ test.describe('security workflows', () => {
     await page.mouse.move(box.x + 220, box.y + 110, { steps: 10 });
     await page.mouse.up();
 
+    await page.getByRole('button', { name: 'Perbesar zoom', exact: true }).click();
     const download = await clickAndDownload(page, /Terapkan sensor/i);
     expect(download.suggestedFilename()).toBe('text_redacted.pdf');
     expect((await pdfInfo(await downloadBytes(download))).pages).toBe(1);

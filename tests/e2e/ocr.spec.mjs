@@ -63,7 +63,7 @@ test.describe('ocr workflow', () => {
       page.waitForEvent('download', { timeout: 25000 }),
       zip.click()
     ]);
-    expect(download.suggestedFilename()).toMatch(/Batch_\d+\.zip$/);
-    expect(zipEntries(await downloadBytes(download))).toEqual(['scan.pdf']);
+    expect(download.suggestedFilename()).toBe('hasil-antrean.zip');
+    expect(zipEntries(await downloadBytes(download))).toEqual(['scan_searchable.pdf']);
   });
 });
