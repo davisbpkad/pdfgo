@@ -1,0 +1,4 @@
+[  337714ms] [WARNING] Gagal merender halaman edit: Error: Cannot use the same canvas during multiple render() operations. Use different canvas or ensure previous operations were cancelled or completed.
+    at a0.initializeGraphics (https://pdftogo.netlify.app/:146:122079)
+    at https://pdftogo.netlify.app/:146:102548 @ https://pdftogo.netlify.app/:505
+[  340591ms] [WARNING] Warning: Indexing all PDF objects @ blob:https://pdftogo.netlify.app/d7ecca5b-b5dc-4bcd-97d3-eaeffce6129c:24

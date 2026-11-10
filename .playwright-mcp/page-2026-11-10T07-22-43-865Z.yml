@@ -1,0 +1,100 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - banner [ref=f1e4]:
+      - generic [ref=f1e6]:
+        - img "PDF To Go Logo" [ref=f1e8]
+        - generic [ref=f1e9]: PDF To Go
+      - generic [ref=f1e11]:
+        - button "Antrean Dokumen" [ref=f1e12] [cursor=pointer]
+        - button "ID" [ref=f1e17] [cursor=pointer]
+        - button "Toggle theme" [ref=f1e22] [cursor=pointer]
+    - generic [ref=f1e25]:
+      - complementary "PDF tools" [ref=f1e27]:
+        - navigation [ref=f1e28]:
+          - generic [ref=f1e29]:
+            - button "Tata Letak Dokumen" [ref=f1e30]
+            - generic [ref=f1e34]:
+              - button [ref=f1e35] [cursor=pointer]:
+                - generic [ref=f1e39]: Gabung PDF
+              - button [ref=f1e41] [cursor=pointer]:
+                - generic [ref=f1e49]: Pisah PDF
+              - button [ref=f1e50] [cursor=pointer]:
+                - generic [ref=f1e57]: Atur Halaman
+              - button [ref=f1e58] [cursor=pointer]:
+                - generic [ref=f1e62]: Nomor Halaman
+              - button [ref=f1e63] [cursor=pointer]:
+                - generic [ref=f1e71]: Watermark
+              - button [ref=f1e72] [cursor=pointer]:
+                - generic [ref=f1e76]: Edit Tulisan PDF
+          - generic [ref=f1e77]:
+            - button "Optimasi & Teks" [ref=f1e78]
+            - generic [ref=f1e82]:
+              - button [ref=f1e83] [cursor=pointer]:
+                - generic [ref=f1e87]: Kompres PDF
+              - button [ref=f1e88] [cursor=pointer]:
+                - generic [ref=f1e95]: Pengenalan Teks (OCR)
+              - button [ref=f1e96] [cursor=pointer]:
+                - generic [ref=f1e101]: Ekstrak Teks
+              - button [ref=f1e102] [cursor=pointer]:
+                - generic [ref=f1e107]: Isi Formulir
+          - generic [ref=f1e108]:
+            - button "Konversi Media" [ref=f1e109]
+            - generic [ref=f1e113]:
+              - button [ref=f1e114] [cursor=pointer]:
+                - generic [ref=f1e121]: Gambar ke PDF
+              - button [ref=f1e122] [cursor=pointer]:
+                - generic [ref=f1e127]: Pindai jadi PDF
+              - button [ref=f1e128] [cursor=pointer]:
+                - generic [ref=f1e133]: HTML ke PDF
+              - button [ref=f1e134] [cursor=pointer]:
+                - generic [ref=f1e139]: Word ke PDF
+              - button [ref=f1e140] [cursor=pointer]:
+                - generic [ref=f1e144]: Excel ke PDF
+              - button [ref=f1e145] [cursor=pointer]:
+                - generic [ref=f1e150]: PowerPoint ke PDF
+              - button [ref=f1e151] [cursor=pointer]:
+                - generic [ref=f1e157]: PDF ke Gambar
+              - button [ref=f1e158] [cursor=pointer]:
+                - generic [ref=f1e163]: PDF ke Word
+              - button [ref=f1e164] [cursor=pointer]:
+                - generic [ref=f1e169]: PDF ke Excel
+              - button [ref=f1e170] [cursor=pointer]:
+                - generic [ref=f1e175]: PDF ke PowerPoint
+              - button [ref=f1e176] [cursor=pointer]:
+                - generic [ref=f1e181]: PDF ke Markdown
+          - generic [ref=f1e182]:
+            - button "Keamanan Dokumen" [ref=f1e183]
+            - generic [ref=f1e187]:
+              - button [ref=f1e188] [cursor=pointer]:
+                - generic [ref=f1e193]: Tanda Tangan Digital
+              - button [ref=f1e194] [cursor=pointer]:
+                - generic [ref=f1e199]: Sensor Dokumen
+              - button [ref=f1e200] [cursor=pointer]:
+                - generic [ref=f1e205]: Buka Kunci PDF
+              - button [ref=f1e206] [cursor=pointer]:
+                - generic [ref=f1e211]: Kunci dengan Password
+        - generic [ref=f1e213]:
+          - generic [ref=f1e214]: Zero-Network
+          - paragraph [ref=f1e217]: 100% Lokal di peramban Anda. Bebas pelacak & tanpa server.
+      - main [ref=f1e218]:
+        - generic [ref=f1e219]:
+          - generic [ref=f1e220]:
+            - heading "Gabung PDF" [level=1] [ref=f1e221]
+            - paragraph [ref=f1e222]: Gabungkan beberapa file PDF menjadi satu dokumen utuh dengan urutan yang fleksibel.
+          - button "Tarik & lepas file di sini" [ref=f1e223] [cursor=pointer]:
+            - generic [ref=f1e224]:
+              - generic [ref=f1e229]: Tarik & lepas file di sini
+              - generic [ref=f1e230]: atau klik untuk memilih file dari komputer Anda
+    - generic [ref=f1e232]:
+      - generic [ref=f1e233]:
+        - generic [ref=f1e234]:
+          - generic [ref=f1e235]: Antrean Dokumen
+          - generic [ref=f1e236]: "0"
+        - button "Tutup antrean" [ref=f1e237] [cursor=pointer]: ×
+      - generic [ref=f1e238]: Belum ada file dalam antrean
+      - generic [ref=f1e240]:
+        - button "Kosongkan" [disabled] [ref=f1e241]
+        - button "Unduh Semua (ZIP)" [disabled] [ref=f1e242]
+  - iframe [ref=f1e243]:
+    - button "Powered by Netlify — build your own site" [ref=f2e3] [cursor=pointer]:
+      - generic [ref=f2e13]: Powered by Netlify

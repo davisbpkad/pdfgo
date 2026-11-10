@@ -139,11 +139,8 @@ function selectTool(id) {
         <div class="rounded-lg p-2">
           <div class="flex items-center gap-2 mb-1">
             <span class="w-2.5 h-2.5 rounded-full bg-accent-2 border border-ink animate-pulse"></span>
-            <span class="text-[11px] font-extrabold uppercase tracking-wider text-ink">Zero-Network</span>
+            <span class="text-[11px] font-semibold text-ink">{{ t('app.sidebarNote') }}</span>
           </div>
-          <p class="text-[10px] text-ink/70 leading-snug">
-            {{ t('app.sidebarNote') }}
-          </p>
         </div>
       </div>
     </aside>

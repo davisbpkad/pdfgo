@@ -1,60 +1,34 @@
-/**
- * tests/unit/cspSync.test.mjs - Guards that every CSP source stays in sync and allows WebAssembly.
- */
-
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { CONTENT_SECURITY_POLICY, allowsWebAssembly, rejectsEval } from '../../scripts/csp.mjs';
 
-const ROOT = path.resolve(import.meta.dirname, '../..');
-
-test('csp: shared policy allows WebAssembly (required by OCR)', () => {
-  assert.equal(allowsWebAssembly(CONTENT_SECURITY_POLICY), true);
-  // CVE-2024-4367 mitigasi: glyph interpreter non-eval dipakai (isEvalSupported:false),
-  // jadi stand-alone 'unsafe-eval' harus hilang; hanya 'wasm-unsafe-eval' yang boleh.
-  assert.equal(rejectsEval(CONTENT_SECURITY_POLICY), true);
-  assert.match(CONTENT_SECURITY_POLICY, /worker-src blob:/);
+test('csp: denies inline and network scripts while keeping WASM workers', () => {
+  const script = CONTENT_SECURITY_POLICY.match(/script-src ([^;]+)/)[1];
+  assert.doesNotMatch(script, /'unsafe-inline'|'self'|data:/);
+  assert.match(CONTENT_SECURITY_POLICY, /base-uri 'none'/);
+  assert.match(CONTENT_SECURITY_POLICY, /form-action 'none'/);
+  assert.equal(allowsWebAssembly(), true);
+  assert.equal(rejectsEval(), true);
 });
 
-test('csp: build.mjs and serve.mjs use the shared policy', () => {
-  const build = fs.readFileSync(path.join(ROOT, 'build.mjs'), 'utf8');
-  const serve = fs.readFileSync(path.join(ROOT, 'scripts/serve.mjs'), 'utf8');
+test('csp: Netlify uses build-generated hashes, not a static permissive policy', () => {
+  const toml = fs.readFileSync('netlify.toml', 'utf8');
+  assert.doesNotMatch(toml, /Content-Security-Policy\s*=/);
+});
 
-  for (const [name, source] of [['build.mjs', build], ['serve.mjs', serve]]) {
-    assert.match(source, /from '(\.\/csp\.mjs|\.\.\/scripts\/csp\.mjs|\.\/scripts\/csp\.mjs)'/, `${name} must import scripts/csp.mjs`);
-    assert.match(source, /CONTENT_SECURITY_POLICY/, `${name} must use the shared CSP constant`);
-    assert.doesNotMatch(source, /script-src 'self' 'unsafe-inline' blob:/, `${name} still hardcodes an old CSP`);
+test('csp: every built variant authorizes its exact inline scripts', () => {
+  const headers = fs.readFileSync('dist/_headers', 'utf8');
+  assert.match(headers, /frame-ancestors 'none'/);
+  for (const file of ['index.html', 'PDF To Go.html', 'PDF To Go Lite.html']) {
+    const html = fs.readFileSync(`dist/${file}`, 'utf8');
+    const policy = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
+    assert.doesNotMatch(policy.match(/script-src ([^;]+)/)[1], /'unsafe-inline'|'self'|data:/);
+    for (const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
+      const hash = createHash('sha256').update(match[1]).digest('base64');
+      assert.ok(policy.includes(`'sha256-${hash}'`), `${file}: script hash mismatch`);
+      assert.ok(headers.includes(`'sha256-${hash}'`), `${file}: header hash missing`);
+    }
   }
 });
-
-test('csp: netlify.toml header matches the shared policy', () => {
-  const toml = fs.readFileSync(path.join(ROOT, 'netlify.toml'), 'utf8');
-  const match = toml.match(/Content-Security-Policy\s*=\s*"([^"]+)"/);
-
-  assert.ok(match, 'netlify.toml must declare a Content-Security-Policy header');
-  assert.equal(match[1], CONTENT_SECURITY_POLICY);
-  assert.equal(allowsWebAssembly(match[1]), true);
-});
-
-test('csp: built HTML carries the shared policy when dist exists', (t) => {
-  const target = path.join(ROOT, 'dist', 'PDF To Go.html');
-  if (!fs.existsSync(target)) return t.skip('dist belum dibuild');
-
-  const html = fs.readFileSync(target, 'utf8');
-  const meta = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/);
-
-  assert.ok(meta, 'built HTML must contain a CSP meta tag');
-  assert.equal(meta[1], CONTENT_SECURITY_POLICY);
-});
-
-test('csp: dist/_headers matches the shared policy when dist exists', (t) => {
-  const target = path.join(ROOT, 'dist', '_headers');
-  if (!fs.existsSync(target)) return t.skip('dist belum dibuild');
-
-  const content = fs.readFileSync(target, 'utf8');
-  assert.ok(content.includes(CONTENT_SECURITY_POLICY), 'dist/_headers must include shared CSP');
-  assert.equal(allowsWebAssembly(CONTENT_SECURITY_POLICY), true);
-});
-

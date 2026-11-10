@@ -8,7 +8,8 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import net from 'net';
-import { CONTENT_SECURITY_POLICY } from './csp.mjs';
+import { createHash } from 'node:crypto';
+import { buildContentSecurityPolicy } from './csp.mjs';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -76,7 +77,10 @@ async function startServer() {
         'X-Content-Type-Options': 'nosniff'
       };
       if (ext === '.html') {
-        headers['Content-Security-Policy'] = CONTENT_SECURITY_POLICY;
+        const html = fs.readFileSync(filePath, 'utf8');
+        const hashes = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+          .map(match => createHash('sha256').update(match[1]).digest('base64'));
+        headers['Content-Security-Policy'] = buildContentSecurityPolicy(hashes, true);
       }
       res.writeHead(200, headers);
       fs.createReadStream(filePath).pipe(res);

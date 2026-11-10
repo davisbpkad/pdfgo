@@ -10,6 +10,9 @@ export async function convertPptxToPdf(pptxBuffer, options = {}) {
   if (!pptxBuffer || pptxBuffer.byteLength === 0) {
     throw new Error(t('tools.powerpointToPdf.invalidPptx'));
   }
+  if (pptxBuffer.byteLength > 50 * 1024 * 1024) {
+    throw new Error('Arsip PPTX melebihi batas aman (50 MB terkompresi).');
+  }
 
   const safeBytes = new Uint8Array(
     pptxBuffer instanceof Uint8Array
@@ -17,7 +20,19 @@ export async function convertPptxToPdf(pptxBuffer, options = {}) {
       : pptxBuffer.slice(0)
   );
 
-  const unzipped = fflate.unzipSync(safeBytes);
+  let entries = 0;
+  let expandedBytes = 0;
+  // ponytail: synchronous extraction still uses the main thread; move to a cancellable worker for larger files.
+  const unzipped = fflate.unzipSync(safeBytes, {
+    filter(entry) {
+      entries++;
+      expandedBytes += entry.originalSize;
+      if (entries > 2000 || entry.originalSize > 32 * 1024 * 1024 || expandedBytes > 100 * 1024 * 1024) {
+        throw new Error('Arsip PPTX melebihi batas aman (2000 entri, 32 MB per entri, 100 MB total).');
+      }
+      return true;
+    }
+  });
   const textDecoder = new TextDecoder('utf-8');
 
   const presXml = unzipped['ppt/presentation.xml'] ? textDecoder.decode(unzipped['ppt/presentation.xml']) : '';
@@ -33,6 +48,9 @@ export async function convertPptxToPdf(pptxBuffer, options = {}) {
 
   if (slideKeys.length === 0) {
     throw new Error(t('tools.powerpointToPdf.noSlides'));
+  }
+  if (slideKeys.length > 500) {
+    throw new Error('Presentasi melebihi batas aman (500 slide).');
   }
 
   const pdfDoc = await PDFDocument.create();

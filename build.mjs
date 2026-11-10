@@ -9,7 +9,8 @@ import path from 'path';
 import { build as viteBuild } from 'vite';
 import * as esbuild from 'esbuild';
 import * as fflate from 'fflate';
-import { CONTENT_SECURITY_POLICY, allowsWebAssembly } from './scripts/csp.mjs';
+import { createHash } from 'node:crypto';
+import { CONTENT_SECURITY_POLICY, allowsWebAssembly, buildContentSecurityPolicy } from './scripts/csp.mjs';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -26,6 +27,7 @@ if (!['full', 'lite', 'all'].includes(targetVariant)) {
 }
 
 const DIST_DIR = path.resolve('dist');
+const scriptHashes = new Set();
 if (!fs.existsSync(DIST_DIR)) {
   fs.mkdirSync(DIST_DIR, { recursive: true });
 }
@@ -281,12 +283,22 @@ async function buildVariant(variantType) {
   const buildStamp = new Date().toISOString();
 
   // Single File HTML Assembly
+  const inlineScript = `
+window.__PDFGO_BUILD__ = "${buildStamp}";
+${workerData.injectionCode}
+${tesseractWorkerData.injectionCode}
+${ocrModelsData.injectionCode}
+${minifiedJs}
+  `;
+  const hash = createHash('sha256').update(inlineScript).digest('base64');
+  scriptHashes.add(hash);
+  const policy = buildContentSecurityPolicy([hash]);
   const html = `<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}">
+  <meta http-equiv="Content-Security-Policy" content="${policy}">
   <title>PDF To Go</title>
   ${faviconDataUri ? `<link rel="icon" type="image/png" href="${faviconDataUri}">` : ''}
   <style>
@@ -296,13 +308,7 @@ ${minifiedCss}
 </head>
 <body>
   <div id="app"></div>
-  <script>
-window.__PDFGO_BUILD__ = "${buildStamp}";
-${workerData.injectionCode}
-${tesseractWorkerData.injectionCode}
-${ocrModelsData.injectionCode}
-${minifiedJs}
-  </script>
+  <script>${inlineScript}</script>
 </body>
 </html>`;
 
@@ -364,8 +370,16 @@ async function run() {
   }
 
   // Generate Netlify _headers and _redirects in publish directory (dist/) for direct CDN priority
+  // Include existing variants too when building only full or lite.
+  for (const name of ['index.html', 'PDF To Go.html', 'PDF To Go Lite.html']) {
+    const file = path.join(DIST_DIR, name);
+    if (!fs.existsSync(file)) continue;
+    for (const match of fs.readFileSync(file, 'utf8').matchAll(/<script>([\s\S]*?)<\/script>/g)) {
+      scriptHashes.add(createHash('sha256').update(match[1]).digest('base64'));
+    }
+  }
   const netlifyHeaders = `/*\n` +
-    `  Content-Security-Policy: ${CONTENT_SECURITY_POLICY}\n` +
+    `  Content-Security-Policy: ${buildContentSecurityPolicy([...scriptHashes], true)}\n` +
     `  Strict-Transport-Security: max-age=31536000; includeSubDomains\n` +
     `  X-Frame-Options: DENY\n` +
     `  X-Content-Type-Options: nosniff\n` +

@@ -16,7 +16,7 @@ const translations = {
       tagline: 'Manipulasi PDF 100% Offline & Privat',
       badge: 'Offline Total',
       offlineBanner: '100% Offline • File tidak pernah meninggalkan perangkat Anda',
-      sidebarNote: '100% Lokal di peramban Anda. Bebas pelacak & tanpa server.'
+      sidebarNote: '100% Lokal di Browser anda'
     },
     nav: {
       categoryAll: 'Alat Dokumen',
@@ -764,7 +764,7 @@ const translations = {
       tagline: '100% Offline & Private PDF Manipulation',
       badge: 'Full Offline',
       offlineBanner: '100% Offline • Your files never leave your device',
-      sidebarNote: '100% local in your browser. No trackers, no server.'
+      sidebarNote: '100% Local in your browser'
     },
     nav: {
       categoryAll: 'Document Tools',

@@ -5,13 +5,20 @@
 
 export const CONTENT_SECURITY_POLICY =
   "default-src 'none'; " +
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: data:; " +
+  "script-src 'wasm-unsafe-eval' blob:; " +
   "worker-src blob: data: 'self'; " +
   "child-src blob: 'self'; " +
   "style-src 'unsafe-inline'; " +
   "img-src data: blob:; " +
   "font-src data:; " +
-  "connect-src blob: data:;";
+  "connect-src blob: data:; " +
+  "base-uri 'none'; form-action 'none';";
+
+/** Authorize only the built inline scripts; framing restrictions belong in HTTP headers. */
+export function buildContentSecurityPolicy(hashes = [], httpHeader = false) {
+  return CONTENT_SECURITY_POLICY.replace('script-src ', `script-src ${hashes.map(hash => `'sha256-${hash}'`).join(' ')} `) +
+    (httpHeader ? " frame-ancestors 'none';" : '');
+}
 
 /** True when the policy lets WebAssembly run (needed by OCR). */
 export function allowsWebAssembly(policy = CONTENT_SECURITY_POLICY) {

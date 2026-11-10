@@ -6,6 +6,7 @@
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { PDFDocument } from 'pdf-lib';
 import { initPdfJsWorker } from './workers.js';
+import { renderScale } from './coordinates.js';
 
 // Ensure worker is configured before any PDF.js operation
 initPdfJsWorker();
@@ -84,7 +85,12 @@ export function unwrapPdfProxy(doc) {
 export async function renderPageToCanvas(pdfDoc, pageNum = 1, scale = 1.5) {
   const rawDoc = unwrapPdfProxy(pdfDoc);
   const page = await rawDoc.getPage(pageNum);
-  const viewport = page.getViewport({ scale });
+  const original = page.getViewport({ scale: 1 });
+  if (![original.width, original.height, scale].every(n => Number.isFinite(n) && n > 0)) {
+    throw new Error('Ukuran halaman atau skala PDF tidak valid.');
+  }
+  const bounded = renderScale(scale, 1, original.width, original.height);
+  const viewport = page.getViewport({ scale: bounded.scale });
 
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d', { willReadFrequently: true });
