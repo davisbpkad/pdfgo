@@ -2,8 +2,6 @@
 import { theme, toggleTheme } from '../app/providers/theme.js';
 import { currentLang, toggleLang, t } from '../app/providers/i18n.js';
 import { queueState, toggleQueueDrawer } from '../app/providers/queue.js';
-import { activeToolId } from '../app/router.js';
-import { moduleMap } from '../features/registry.js';
 import logoUrl from '../assets/favicon.png';
 
 defineEmits(['toggle-sidebar']);
@@ -39,9 +37,7 @@ defineEmits(['toggle-sidebar']);
           PDF To Go
         </span>
       </div>
-      <div class="hidden lg:flex items-center self-stretch border-l border-[var(--ui-border)] pl-6">
-        <p class="text-sm font-semibold">{{ t(moduleMap.get(activeToolId)?.titleKey || 'app.sidebarMenu') }}</p>
-      </div>
+      <div class="hidden lg:block self-stretch border-l border-[var(--ui-border)]" />
     </div>
 
     <!-- Actions -->

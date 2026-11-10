@@ -11,7 +11,7 @@ const translations = {
     app: {
       notFoundTitle: 'Alat Tidak Ditemukan',
       notFoundBody: 'Silakan pilih salah satu alat dari menu bilah samping.',
-      sidebarMenu: 'Menu Alat',
+      sidebarMenu: 'Menu',
       name: 'PDF To Go',
       tagline: 'Manipulasi PDF 100% Offline & Privat',
       badge: 'Offline Total',
