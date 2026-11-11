@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import BaseInput from '../../../ui/BaseInput.vue';
 import { t } from '../../../app/providers/i18n.js';
-import { parsePageRange } from '../logic/parsePageRange.js';
+import { parsePageRange, parsePageRangeGroups } from '../logic/parsePageRange.js';
 
 const props = defineProps({
   mode: {
@@ -12,6 +12,10 @@ const props = defineProps({
   rangeString: {
     type: String,
     default: '1-2'
+  },
+  mergeRanges: {
+    type: Boolean,
+    default: false
   },
   nPages: {
     type: [Number, String],
@@ -23,10 +27,14 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:mode', 'update:rangeString', 'update:nPages']);
+const emit = defineEmits(['update:mode', 'update:rangeString', 'update:mergeRanges', 'update:nPages']);
 
 const selectedPages = computed(() => {
   return parsePageRange(props.rangeString, props.totalPages);
+});
+
+const rangeGroups = computed(() => {
+  return parsePageRangeGroups(props.rangeString, props.totalPages);
 });
 
 const totalChunks = computed(() => {
@@ -76,6 +84,18 @@ const totalChunks = computed(() => {
           ({{ selectedPages.join(', ') }})
         </span>
       </div>
+      <label class="flex items-center gap-2 pt-1 text-xs font-bold text-ink cursor-pointer select-none">
+        <input
+          type="checkbox"
+          class="w-4 h-4 accent-ink border-2 border-ink cursor-pointer"
+          :checked="mergeRanges"
+          @change="emit('update:mergeRanges', $event.target.checked)"
+        />
+        <span>{{ t('tools.split.mergeRangesLabel') }}</span>
+      </label>
+      <p v-if="!mergeRanges && rangeGroups.length > 1" class="text-xs font-bold text-ink/80">
+        {{ t('tools.split.separateRangesSummary', { count: rangeGroups.length }) }}
+      </p>
     </div>
 
     <!-- Mode: Every N -->

@@ -2,7 +2,7 @@
  * workflows-layout.spec.mjs - Full workflows of the layout and text tools:
  * load a document, act, download, and check the bytes that came out.
  */
-import { test, expect, openTool, upload, waitLoaded, mainButton, clickAndDownload, downloadBytes, pdfInfo, countImageXObjects, pdfTextFieldValue } from './helpers.mjs';
+import { test, expect, openTool, upload, waitLoaded, mainButton, clickAndDownload, downloadBytes, pdfInfo, zipEntries, countImageXObjects, pdfTextFieldValue } from './helpers.mjs';
 import { textPdf, twoPagePdf, formPdf } from './fixtures.mjs';
 
 test.describe('layout workflows', () => {
@@ -29,6 +29,25 @@ test.describe('layout workflows', () => {
     const download = await clickAndDownload(page, /Pisahkan sekarang/i);
     expect(download.suggestedFilename()).toBe('pages2_hal_1.pdf');
     expect((await pdfInfo(await downloadBytes(download))).pages).toBe(1);
+  });
+
+  test('split: multiple ranges produce a ZIP by default or 1 merged PDF when checked', async ({ page }) => {
+    await openTool(page, 'split');
+    await upload(page, twoPagePdf);
+    await waitLoaded(page, /Pisahkan sekarang/i);
+    await page.locator('main input[type=text]').first().fill('1, 2');
+
+    const zipDownload = await clickAndDownload(page, /Pisahkan sekarang/i);
+    expect(zipDownload.suggestedFilename()).toBe('pages2_split_ZIP.zip');
+    expect(zipEntries(await downloadBytes(zipDownload))).toEqual([
+      'pages2_bagian_001_hal_1.pdf',
+      'pages2_bagian_002_hal_2.pdf'
+    ]);
+
+    await page.locator('main input[type=checkbox]').first().check();
+    const mergedDownload = await clickAndDownload(page, /Pisahkan sekarang/i);
+    expect(mergedDownload.suggestedFilename()).toBe('pages2_hal_1__2.pdf');
+    expect((await pdfInfo(await downloadBytes(mergedDownload))).pages).toBe(2);
   });
 
   test('split: an invalid range is refused instead of producing a file', async ({ page }) => {

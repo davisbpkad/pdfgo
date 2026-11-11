@@ -7,8 +7,8 @@ import { createZipArchive } from '../../../core/zip.js';
 import { t } from '../../../app/providers/i18n.js';
 import { showToast } from '../../../app/providers/toast.js';
 import { queueState } from '../../../app/providers/queue.js';
-import { parsePageRange } from '../logic/parsePageRange.js';
-import { extractPages } from '../logic/extractPages.js';
+import { parsePageRange, parsePageRangeGroups } from '../logic/parsePageRange.js';
+import { extractPages, extractRangeGroups } from '../logic/extractPages.js';
 import { splitEveryN } from '../logic/splitEveryN.js';
 import DropZone from '../../../ui/DropZone.vue';
 import BaseButton from '../../../ui/BaseButton.vue';
@@ -21,6 +21,7 @@ const activeThumbnail = ref('');
 const totalPages = ref(0);
 const splitMode = ref('range');
 const rangeString = ref('1');
+const mergeRanges = ref(false);
 const nPages = ref(1);
 const isProcessing = ref(false);
 const progressValue = ref(0);
@@ -68,17 +69,29 @@ async function handleProcess() {
   try {
     const buffer = await activeFile.value.arrayBuffer();
     if (splitMode.value === 'range') {
+      const groups = parsePageRangeGroups(rangeString.value, totalPages.value);
       const pageNumbers = parsePageRange(rangeString.value, totalPages.value);
-      if (pageNumbers.length === 0) throw new Error(t('tools.split.invalidRange') || t('tools.split.invalidSelection'));
-
-      progressValue.value = 50;
-      const resultBytes = await extractPages(buffer, pageNumbers);
-      progressValue.value = 100;
+      if (groups.length === 0 || pageNumbers.length === 0) {
+        throw new Error(t('tools.split.invalidRange') || t('tools.split.invalidSelection'));
+      }
 
       const safeName = activeFile.value.name.replace(/\.pdf$/i, '');
-      const rangeTag = rangeString.value.replace(/[^0-9a-zA-Z-]/g, '_');
-      downloadFile(resultBytes, `${safeName}_hal_${rangeTag}.pdf`);
-      showToast(t('tools.split.successPdf') || t('tools.split.extractSuccess'), 'success');
+      if (mergeRanges.value || groups.length === 1) {
+        progressValue.value = 50;
+        const resultBytes = await extractPages(buffer, mergeRanges.value ? pageNumbers : groups[0].pages);
+        progressValue.value = 100;
+
+        const rangeTag = (mergeRanges.value ? rangeString.value : groups[0].label).replace(/[^0-9a-zA-Z-]/g, '_');
+        downloadFile(resultBytes, `${safeName}_hal_${rangeTag}.pdf`);
+        showToast(t('tools.split.successPdf') || t('tools.split.extractSuccess'), 'success');
+      } else {
+        const chunks = await extractRangeGroups(buffer, groups, safeName, '', (pct) => {
+          progressValue.value = pct;
+        });
+        const zipBlob = await createZipArchive(chunks);
+        downloadFile(zipBlob, `${safeName}_split_ZIP.zip`, 'application/zip');
+        showToast(t('tools.split.successZip', { count: chunks.length }) || `Berhasil memisahkan ${chunks.length} berkas.`, 'success');
+      }
     } else {
       const n = Math.max(1, parseInt(nPages.value, 10) || 1);
       const chunks = await splitEveryN(buffer, n, '', (pct) => {
@@ -145,6 +158,7 @@ async function handleProcess() {
       <SplitConfig
         v-model:mode="splitMode"
         v-model:range-string="rangeString"
+        v-model:merge-ranges="mergeRanges"
         v-model:n-pages="nPages"
         :total-pages="totalPages"
       />

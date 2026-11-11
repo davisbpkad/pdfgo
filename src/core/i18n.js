@@ -317,6 +317,8 @@ const translations = {
         successPdf: 'Halaman terpilih berhasil diekstrak.',
         rangePlaceholder: 'Contoh: 1-3, 5',
         selectedSummary: 'Terpilih: {selected} dari {total} halaman',
+        mergeRangesLabel: 'Gabungkan semua rentang dalam 1 file PDF',
+        separateRangesSummary: 'Akan menghasilkan {count} file PDF terpisah (dikemas dalam ZIP).',
         chunksSummary: 'Akan menghasilkan sekitar {count} file (dikemas dalam ZIP).',
         emptyPrompt: 'Pilih atau letakkan satu file PDF di area dropzone untuk mulai memisahkan.'
       },
@@ -1065,6 +1067,8 @@ const translations = {
         successPdf: 'Selected pages extracted successfully.',
         rangePlaceholder: 'e.g. 1-3, 5',
         selectedSummary: 'Selected: {selected} of {total} pages',
+        mergeRangesLabel: 'Merge all ranges into 1 PDF file',
+        separateRangesSummary: 'Will produce {count} separate PDF files (packed into a ZIP).',
         chunksSummary: 'This will produce about {count} files (packed into a ZIP).',
         emptyPrompt: 'Select or drop a single PDF file into the dropzone to begin splitting.'
       },

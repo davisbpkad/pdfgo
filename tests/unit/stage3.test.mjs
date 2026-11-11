@@ -8,6 +8,8 @@ import { PDFDocument } from 'pdf-lib';
 import { parsePageRange } from '../../src/features/split/logic/parsePageRange.js';
 import { extractPages } from '../../src/features/split/logic/extractPages.js';
 import { splitEveryN } from '../../src/features/split/logic/splitEveryN.js';
+import { parsePageRangeGroups } from '../../src/features/split/logic/parsePageRange.js';
+import { extractRangeGroups } from '../../src/features/split/logic/extractPages.js';
 import { reorganizePdfPages } from '../../src/features/organize/logic/reorganizePdfPages.js';
 import { buildPdfFromImages } from '../../src/features/image-to-pdf/logic/buildPdfFromImages.js';
 
@@ -22,6 +24,34 @@ test('split: parsePageRange parser logic', () => {
   // Empty or invalid input
   assert.deepEqual(parsePageRange('', 10), []);
   assert.deepEqual(parsePageRange('abc', 10), []);
+});
+
+test('split: parsePageRangeGroups keeps each range segment separate', () => {
+  assert.deepEqual(parsePageRangeGroups('1-3, 5, 8-10', 12), [
+    { label: '1-3', pages: [1, 2, 3] },
+    { label: '5', pages: [5] },
+    { label: '8-10', pages: [8, 9, 10] }
+  ]);
+  assert.deepEqual(parsePageRangeGroups('1-5, 20-30', 4), [
+    { label: '1-4', pages: [1, 2, 3, 4] }
+  ]);
+  assert.deepEqual(parsePageRangeGroups('abc, -', 10), []);
+});
+
+test('split: extractRangeGroups creates one PDF per range group', async () => {
+  const doc = await PDFDocument.create();
+  for (let i = 0; i < 10; i++) doc.addPage([400, 600]);
+  const bytes = await doc.save();
+
+  const groups = parsePageRangeGroups('1-3, 5, 8-10', 10);
+  const files = await extractRangeGroups(bytes, groups, 'dokumen');
+  assert.equal(files.length, 3);
+  assert.equal(files[0].name, 'dokumen_bagian_001_hal_1-3.pdf');
+  assert.equal(files[1].name, 'dokumen_bagian_002_hal_5.pdf');
+  assert.equal(files[2].name, 'dokumen_bagian_003_hal_8-10.pdf');
+  assert.equal((await PDFDocument.load(files[0].data)).getPageCount(), 3);
+  assert.equal((await PDFDocument.load(files[1].data)).getPageCount(), 1);
+  assert.equal((await PDFDocument.load(files[2].data)).getPageCount(), 3);
 });
 
 test('split: extractPages extracts selected page subset', async () => {

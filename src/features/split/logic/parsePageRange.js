@@ -39,3 +39,42 @@ export function parsePageRange(rangeStr, totalPages, { zeroBased = false, emptyM
 
   return Array.from(pagesSet).sort((a, b) => a - b);
 }
+
+/**
+ * Parse a range string into separate groups (e.g. "1-3, 5, 8-10" -> 3 groups).
+ * @param {string} rangeStr
+ * @param {number} totalPages
+ * @returns {Array<{ label: string, pages: number[] }>}
+ */
+export function parsePageRangeGroups(rangeStr, totalPages) {
+  if (!rangeStr || typeof rangeStr !== 'string' || !rangeStr.trim() || totalPages < 1) {
+    return [];
+  }
+
+  const parts = rangeStr.split(/[,;\s]+/).map(s => s.trim()).filter(Boolean);
+  const groups = [];
+
+  for (const part of parts) {
+    if (part.includes('-')) {
+      const [startStr, endStr] = part.split('-');
+      const start = parseInt(startStr, 10);
+      const end = parseInt(endStr, 10);
+      if (!isNaN(start) && !isNaN(end)) {
+        const from = Math.max(1, Math.min(start, end));
+        const to = Math.min(totalPages, Math.max(start, end));
+        if (from <= to) {
+          const pages = [];
+          for (let p = from; p <= to; p++) pages.push(p);
+          groups.push({ label: from === to ? `${from}` : `${from}-${to}`, pages });
+        }
+      }
+    } else {
+      const page = parseInt(part, 10);
+      if (!isNaN(page) && page >= 1 && page <= totalPages) {
+        groups.push({ label: `${page}`, pages: [page] });
+      }
+    }
+  }
+
+  return groups;
+}
