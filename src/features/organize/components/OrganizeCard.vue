@@ -77,11 +77,12 @@ function onDrop(e, idx) {
 
       <button
         type="button"
-        class="p-1.5 border-2 border-ink bg-paper hover:bg-danger hover:text-white text-xs font-bold cursor-pointer transition-colors"
+        class="p-1.5 border-2 border-ink bg-paper hover:bg-danger hover:text-white text-xs font-bold cursor-pointer transition-colors inline-flex items-center justify-center"
         :title="t('tools.organize.deletePage')"
+        aria-label="🗑"
         @click="emit('delete', index)"
       >
-        🗑
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
       </button>
     </div>
   </div>

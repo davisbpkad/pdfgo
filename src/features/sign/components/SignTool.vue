@@ -160,27 +160,30 @@ async function handleSave() {
           <div class="flex border-2 border-ink bg-paper shadow-hard-sm">
             <button
               type="button"
-              class="flex-1 py-2 text-xs font-bold border-r-2 border-ink transition-colors cursor-pointer"
+              class="flex-1 py-2 text-xs font-bold border-r-2 border-ink transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5"
               :class="activeTab === 'draw' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'draw'"
             >
-              ✏️ {{ t('tools.sign.tabDraw') }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              {{ t('tools.sign.tabDraw') }}
             </button>
             <button
               type="button"
-              class="flex-1 py-2 text-xs font-bold border-r-2 border-ink transition-colors cursor-pointer"
+              class="flex-1 py-2 text-xs font-bold border-r-2 border-ink transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5"
               :class="activeTab === 'type' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'type'"
             >
-              ⌨️ {{ t('tools.sign.tabType') }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001"/><path d="M10 8h.001"/><path d="M14 8h.001"/><path d="M18 8h.001"/><path d="M8 12h.001"/><path d="M12 12h.001"/><path d="M16 12h.001"/><path d="M7 16h10"/></svg>
+              {{ t('tools.sign.tabType') }}
             </button>
             <button
               type="button"
-              class="flex-1 py-2 text-xs font-bold transition-colors cursor-pointer"
+              class="flex-1 py-2 text-xs font-bold transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5"
               :class="activeTab === 'upload' ? 'bg-accent text-ink' : 'bg-paper text-ink/70 hover:bg-paper-dark'"
               @click="activeTab = 'upload'"
             >
-              📁 {{ t('tools.sign.tabUpload') }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              {{ t('tools.sign.tabUpload') }}
             </button>
           </div>
 
@@ -206,7 +209,8 @@ async function handleSave() {
               :disabled="!signatureUrl || isSaving"
               @click="handleSave"
             >
-              {{ isSaving ? t('tools.sign.saving') : '💾 ' + t('tools.sign.saveSigned') }}
+              <svg v-if="!isSaving" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              {{ isSaving ? t('tools.sign.saving') : t('tools.sign.saveSigned') }}
             </BaseButton>
           </div>
         </div>
@@ -260,8 +264,9 @@ async function handleSave() {
             @update:placement="val => placement = val"
           />
 
-          <p class="text-xs text-ink/70 text-center font-medium">
-            💡 {{ t('tools.sign.placementHint') }}
+          <p class="text-xs text-ink/70 text-center font-medium inline-flex items-center justify-center gap-1.5 w-full">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>{{ t('tools.sign.placementHint') }}</span>
           </p>
         </div>
       </div>

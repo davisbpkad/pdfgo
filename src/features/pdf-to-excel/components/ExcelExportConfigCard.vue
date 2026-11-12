@@ -60,7 +60,7 @@ const emit = defineEmits(['update:mode', 'update:pageRange', 'convert']);
 
     <!-- Honest Disclaimer Note -->
     <div class="border-2 border-ink bg-yellow-100 p-3 rounded-sm text-xs text-ink flex gap-2 items-start">
-      <span class="font-bold">⚠️</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-0.5" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span>{{ t('pdfToExcel.notice') }}</span>
     </div>
 

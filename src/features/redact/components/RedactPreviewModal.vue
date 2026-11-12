@@ -74,7 +74,7 @@ async function renderHighResPreview() {
       <div class="flex items-center justify-between border-b-2 border-ink pb-3">
         <div>
           <h2 class="font-display font-extrabold text-lg md:text-xl uppercase tracking-tight text-ink flex items-center gap-2">
-            <span>🛡️</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-[var(--ui-primary)]" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span>{{ t('tools.redact.inspectPreview') }}</span>
           </h2>
           <p class="text-xs text-ink/80 font-medium">

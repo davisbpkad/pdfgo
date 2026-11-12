@@ -134,7 +134,10 @@ defineEmits([
         class="w-full py-2.5 text-xs tracking-wider"
         :disabled="availableLangs.length === 0 || isProcessing"
         @click="$emit('start')"
-      >🔍 {{ t('tools.ocr.actionStart') }}</BaseButton>
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        {{ t('tools.ocr.actionStart') }}
+      </BaseButton>
     </div>
   </div>
 </template>

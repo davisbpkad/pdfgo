@@ -44,11 +44,11 @@
 /* Shared visual tokens also cover tool panels built with inline utilities. */
 @layer utilities {
   .pdfgo-app .border-ink { border-color: var(--ui-border); }
-  .pdfgo-app .border-2 { border-width: 1px; }
+  .pdfgo-app .border-2, .pdfgo-app .border-3 { border-width: 1px; }
   .pdfgo-app .border-b-2 { border-bottom-width: 1px; }
   .pdfgo-app .border-r-2 { border-right-width: 1px; }
   .pdfgo-app .border-t-2 { border-top-width: 1px; }
-  .pdfgo-app .rounded-sm { border-radius: 0.5rem; }
+  .pdfgo-app .rounded-sm, .pdfgo-app .rounded-xs { border-radius: 0.5rem; }
   .pdfgo-app .font-black, .pdfgo-app .font-extrabold { font-weight: 600; }
   .pdfgo-app h1.uppercase, .pdfgo-app h2.uppercase,
   .pdfgo-app h3.uppercase { text-transform: none; }

@@ -40,7 +40,8 @@ function handleSubmit() {
     <div class="flex items-center justify-between pt-2 border-t-2 border-ink">
       <span class="text-xs text-ink/70 font-medium">{{ t('tools.pdfToMarkdown.clientSideNotice') }}</span>
       <BaseButton variant="primary" :loading="loading" class="px-6 py-2.5 font-black text-xs" @click="handleSubmit">
-        📝 {{ t('tools.pdfToMarkdown.actionBtn') }}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15V9l2.5 3L12 9v6"/><path d="M16 9v6"/><path d="m14 13 2 2 2-2"/></svg>
+        {{ t('tools.pdfToMarkdown.actionBtn') }}
       </BaseButton>
     </div>
   </BaseCard>

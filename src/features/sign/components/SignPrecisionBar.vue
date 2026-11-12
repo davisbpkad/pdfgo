@@ -99,19 +99,21 @@ function resetOriginalSize() {
       <div class="flex items-center gap-1.5">
         <button
           type="button"
-          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
+          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer inline-flex items-center gap-1 transition-all duration-150"
           :title="t('tools.sign.center')"
           @click="centerPlacement"
         >
-          🎯 {{ t('tools.sign.center') }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          {{ t('tools.sign.center') }}
         </button>
         <button
           type="button"
-          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer transition-all duration-150"
+          class="px-2.5 py-1 text-[11px] font-bold border border-ink bg-white dark:bg-neutral-800 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer inline-flex items-center gap-1 transition-all duration-150"
           :title="t('tools.sign.resetOriginalSize')"
           @click="resetOriginalSize"
         >
-          🔄 {{ t('tools.sign.resetOriginalSize') }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          {{ t('tools.sign.resetOriginalSize') }}
         </button>
       </div>
     </div>

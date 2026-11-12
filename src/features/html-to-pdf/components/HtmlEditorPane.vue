@@ -33,11 +33,13 @@ function loadSample() {
       <span class="text-xs font-bold text-ink uppercase">{{ t('tools.htmlToPdf.editorTitle') }}</span>
       <div class="flex items-center gap-1.5">
         <input ref="fileInput" type="file" accept=".html,.htm" class="hidden" @change="handleFileSelect" />
-        <button type="button" class="px-2.5 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark cursor-pointer" @click="fileInput?.click()">
-          📁 {{ t('tools.htmlToPdf.importBtn') }}
+        <button type="button" class="px-2.5 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark cursor-pointer inline-flex items-center gap-1.5" @click="fileInput?.click()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          {{ t('tools.htmlToPdf.importBtn') }}
         </button>
-        <button type="button" class="px-2.5 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark cursor-pointer" @click="loadSample">
-          💡 {{ t('tools.htmlToPdf.sampleBtn') }}
+        <button type="button" class="px-2.5 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark cursor-pointer inline-flex items-center gap-1.5" @click="loadSample">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          {{ t('tools.htmlToPdf.sampleBtn') }}
         </button>
         <button type="button" class="px-2.5 py-1 text-xs font-bold border-2 border-ink bg-paper hover:bg-paper-dark cursor-pointer" @click="$emit('update:modelValue', '')">
           ✕

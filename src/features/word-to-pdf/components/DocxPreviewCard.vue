@@ -20,7 +20,7 @@ function handlePrint() {
   <div class="space-y-4">
     <!-- Instruction alert -->
     <div class="p-3.5 border-2 border-ink bg-primary/20 text-xs text-ink font-bold rounded-xs leading-relaxed flex items-center gap-2">
-      <span class="text-base shrink-0">💡</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-[var(--ui-primary)]" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
       <span>{{ t('tools.wordToPdf.instructionText') }}</span>
     </div>
 
@@ -39,8 +39,9 @@ function handlePrint() {
     </BaseCard>
 
     <!-- Honest disclaimer card -->
-    <div class="p-3 border-2 border-ink bg-paper-dark/60 text-xs text-ink/80 font-medium rounded-xs leading-relaxed">
-      ℹ️ {{ t('tools.wordToPdf.disclaimer') }}
+    <div class="p-3 border-2 border-ink bg-paper-dark/60 text-xs text-ink/80 font-medium rounded-xs leading-relaxed flex items-start gap-2">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-0.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span>{{ t('tools.wordToPdf.disclaimer') }}</span>
     </div>
 
     <!-- Actions -->
@@ -49,7 +50,8 @@ function handlePrint() {
         {{ t('tools.wordToPdf.resetBtn') }}
       </BaseButton>
       <BaseButton variant="primary" class="text-xs font-black px-6" @click="handlePrint">
-        🖨️ {{ t('tools.wordToPdf.actionBtn') }}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        {{ t('tools.wordToPdf.actionBtn') }}
       </BaseButton>
     </div>
   </div>

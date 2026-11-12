@@ -13,7 +13,9 @@ const emit = defineEmits(['download', 'reset']);
 <template>
   <div class="border-2 border-ink bg-paper p-5 shadow-hard rounded-sm space-y-4">
     <div class="flex items-center gap-3">
-      <span class="text-2xl">📊</span>
+      <div class="w-10 h-10 rounded-lg bg-accent text-[var(--ui-primary)] flex items-center justify-center shrink-0" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></svg>
+      </div>
       <div>
         <h3 class="font-display font-black text-base uppercase text-ink">
           {{ t('pdfToExcel.successTitle') }}

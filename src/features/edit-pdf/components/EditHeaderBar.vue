@@ -24,7 +24,8 @@ defineEmits(['prev-page', 'next-page', 'save', 'change-file']);
       <BaseButton variant="secondary" :disabled="currentPage <= 1" class="text-xs px-2 py-1" @click="$emit('prev-page')">◀</BaseButton>
       <BaseButton variant="secondary" :disabled="currentPage >= totalPages" class="text-xs px-2 py-1" @click="$emit('next-page')">▶</BaseButton>
       <BaseButton variant="primary" :loading="isSaving" class="text-xs font-black px-4 py-1" @click="$emit('save')">
-        💾 {{ t('tools.editPdf.saveBtn') }}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        {{ t('tools.editPdf.saveBtn') }}
       </BaseButton>
     </div>
   </BaseCard>

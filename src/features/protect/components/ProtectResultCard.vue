@@ -16,8 +16,8 @@ defineEmits(['reset', 'download']);
 <template>
   <BaseCard class="p-5 space-y-4 border-2 border-ink bg-paper shadow-hard">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xs bg-accent-1 text-ink flex items-center justify-center font-black text-xl border-2 border-ink">
-        🔒
+      <div class="w-10 h-10 rounded-lg bg-accent text-[var(--ui-primary)] flex items-center justify-center border border-[var(--ui-border)]" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <div>
         <h3 class="font-bold text-sm text-ink uppercase">{{ t('tools.protect.successTitle') }}</h3>
@@ -32,7 +32,8 @@ defineEmits(['reset', 'download']);
         {{ t('tools.protect.resetBtn') }}
       </BaseButton>
       <BaseButton variant="primary" class="text-xs font-black px-6" @click="$emit('download')">
-        💾 {{ t('tools.protect.downloadBtn') }}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        {{ t('tools.protect.downloadBtn') }}
       </BaseButton>
     </div>
   </BaseCard>

@@ -27,17 +27,26 @@ defineEmits(['download-pdf', 'download-txt', 'copy-text']);
           variant="primary"
           class="text-xs py-1.5 px-3"
           @click="$emit('download-pdf')"
-        >💾 {{ t('tools.ocr.downloadSearchablePdf') }}</BaseButton>
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          {{ t('tools.ocr.downloadSearchablePdf') }}
+        </BaseButton>
         <BaseButton
           variant="secondary"
           class="text-xs py-1.5 px-3"
           @click="$emit('download-txt')"
-        >📄 {{ t('tools.ocr.downloadTxt') }}</BaseButton>
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          {{ t('tools.ocr.downloadTxt') }}
+        </BaseButton>
         <BaseButton
           variant="secondary"
           class="text-xs py-1.5 px-3"
           @click="$emit('copy-text')"
-        >📋 {{ t('tools.ocr.copyText') }}</BaseButton>
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          {{ t('tools.ocr.copyText') }}
+        </BaseButton>
       </div>
     </div>
 

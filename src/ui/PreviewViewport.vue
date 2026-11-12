@@ -173,7 +173,7 @@ function onTouchEnd() {
     <!-- Viewport Toolbar (Brutalism Style) -->
     <div class="flex flex-wrap items-center justify-between gap-2 p-2 border-2 border-ink bg-paper rounded-sm shadow-hard-sm text-xs font-bold text-ink">
       <!-- Left: Zoom Preset Buttons -->
-      <div class="flex items-center gap-1.5">
+      <div class="flex flex-wrap items-center gap-1.5">
         <button
           type="button"
           class="px-2.5 py-1 border border-ink bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none transition-all duration-150"

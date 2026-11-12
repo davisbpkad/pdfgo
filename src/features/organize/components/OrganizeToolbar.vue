@@ -80,7 +80,8 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('delete-selected')"
       >
-        🗑 {{ t('tools.organize.deleteSelected') }} ({{ selectedCount }})
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        {{ t('tools.organize.deleteSelected') }} ({{ selectedCount }})
       </BaseButton>
     </div>
 
@@ -91,7 +92,8 @@ const emit = defineEmits([
         class="py-1 px-3 text-xs"
         @click="emit('reset-file')"
       >
-        📁 {{ t('tools.organize.changeFile') }}
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        {{ t('tools.organize.changeFile') }}
       </BaseButton>
 
       <BaseButton

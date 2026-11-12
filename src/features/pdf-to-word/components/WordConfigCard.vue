@@ -27,14 +27,16 @@ function handleSubmit() {
     </div>
 
     <!-- Honest disclaimer card -->
-    <div class="p-3 border-2 border-ink bg-paper-dark/60 text-xs text-ink/80 font-medium rounded-xs leading-relaxed">
-      ℹ️ {{ t('tools.pdfToWord.disclaimer') }}
+    <div class="p-3 border-2 border-ink bg-paper-dark/60 text-xs text-ink/80 font-medium rounded-xs leading-relaxed flex items-start gap-2">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-0.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span>{{ t('tools.pdfToWord.disclaimer') }}</span>
     </div>
 
     <div class="flex items-center justify-between pt-2 border-t-2 border-ink">
       <span class="text-xs text-ink/70 font-medium">Format Microsoft Word (.docx)</span>
       <BaseButton variant="primary" :loading="loading" class="px-6 py-2.5 font-black text-xs" @click="handleSubmit">
-        📝 {{ t('tools.pdfToWord.actionBtn') }}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        {{ t('tools.pdfToWord.actionBtn') }}
       </BaseButton>
     </div>
   </BaseCard>

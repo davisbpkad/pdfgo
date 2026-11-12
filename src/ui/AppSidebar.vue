@@ -68,17 +68,20 @@ function selectTool(id) {
       :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Mobile Close Header -->
-      <div class="shrink-0 p-4 border-b-2 border-ink flex items-center justify-between lg:hidden bg-paper-dark">
+      <div class="shrink-0 px-4 py-3 border-b border-[var(--ui-border)] flex items-center justify-between lg:hidden bg-paper">
         <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-accent border border-ink"></span>
-          <span class="font-display font-extrabold text-base text-ink uppercase tracking-tight">{{ t('app.sidebarMenu') }}</span>
+          <span class="w-2 h-2 rounded-full bg-[var(--ui-primary)]"></span>
+          <span class="font-display font-semibold text-sm text-ink tracking-tight">{{ t('app.sidebarMenu') }}</span>
         </div>
         <button
-          class="w-8 h-8 border-2 border-ink bg-paper rounded-sm flex items-center justify-center font-black text-lg leading-none shadow-hard-sm hover:bg-accent active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
+          class="w-8 h-8 border border-[var(--ui-border)] bg-paper rounded-md flex items-center justify-center text-ink hover:bg-accent cursor-pointer transition-colors"
           @click="$emit('close')"
           :aria-label="t('common.closeMenu')"
         >
-          &times;
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
 
@@ -115,9 +118,13 @@ function selectTool(id) {
                   : 'text-[var(--ui-muted)] hover:bg-accent hover:text-ink'"
                 @click="selectTool(toolId)"
               >
-                <!-- Menu Icon in Brutalist Accent Box -->
+                <!-- Menu Icon -->
                 <span
-                  class="w-4 h-4 flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                  class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 transition-colors [&_svg]:w-3.5 [&_svg]:h-3.5"
+                  :class="activeToolId === toolId
+                    ? 'bg-white/15 text-white'
+                    : 'bg-accent text-[var(--ui-primary)] group-hover:bg-[var(--ui-primary)]/15'"
                   v-html="moduleMap.get(toolId).icon"
                 />
                 <span class="truncate flex-1 tracking-tight">{{ t(moduleMap.get(toolId).titleKey) }}</span>

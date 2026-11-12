@@ -2,6 +2,7 @@
  * app-shell.spec.mjs - The shell: sidebar, hash routing, and the not-found panel.
  */
 import { test, expect } from '@playwright/test';
+import { twoPagePdf } from './fixtures.mjs';
 
 const ROUTES = [
   'merge', 'split', 'organize', 'page-numbers', 'watermark',
@@ -57,5 +58,44 @@ test.describe('app shell', () => {
     await page.goto('/');
     await expect(page.locator('aside nav')).not.toContainText('Siapkan untuk AI');
     await expect(page.locator('aside nav')).toContainText('Pindai jadi PDF');
+  });
+
+  test('positive: mobile viewport (320px and 375px) has no horizontal overflow or overlapping controls', async ({ page }) => {
+    for (const width of [320, 375]) {
+      await page.setViewportSize({ width, height: 640 });
+      for (const id of ROUTES) {
+        await page.goto(`/#${id}`);
+        if (id === 'page-numbers' || id === 'watermark' || id === 'redact') {
+          await page.reload();
+          await page.locator('main input[type=file]').first().setInputFiles(twoPagePdf);
+          await page.waitForTimeout(400);
+        }
+        const metrics = await page.evaluate(() => {
+          const main = document.querySelector('main');
+          const docOverflow = document.documentElement.scrollWidth - window.innerWidth;
+          const mainOverflow = main ? main.scrollWidth - main.clientWidth : 0;
+          const buttons = [...document.querySelectorAll('header button, main button')].filter((el) => {
+            const s = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0 && !el.closest('[data-testid="zoom-preview"]');
+          });
+          const overlaps = [];
+          for (let i = 0; i < buttons.length; i++) {
+            const a = buttons[i].getBoundingClientRect();
+            for (let j = i + 1; j < buttons.length; j++) {
+              if (buttons[i].contains(buttons[j]) || buttons[j].contains(buttons[i])) continue;
+              const b = buttons[j].getBoundingClientRect();
+              const ix = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));
+              const iy = Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+              if (ix > 2 && iy > 2) overlaps.push([buttons[i].innerText.trim(), buttons[j].innerText.trim()]);
+            }
+          }
+          return { docOverflow, mainOverflow, overlaps };
+        });
+        expect(metrics.docOverflow, `docOverflow at ${width}px on #${id}`).toBeLessThanOrEqual(1);
+        expect(metrics.mainOverflow, `mainOverflow at ${width}px on #${id}`).toBeLessThanOrEqual(1);
+        expect(metrics.overlaps, `button overlaps at ${width}px on #${id}`).toEqual([]);
+      }
+    }
   });
 });

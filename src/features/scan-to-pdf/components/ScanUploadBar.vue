@@ -54,10 +54,12 @@ function openPicker() {
 
     <div class="flex items-center justify-center gap-3 flex-wrap pt-2">
       <BaseButton variant="primary" class="px-5 py-3 font-bold text-xs" @click="openCamera">
-        📷 {{ t('tools.scanToPdf.cameraBtn') }}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        {{ t('tools.scanToPdf.cameraBtn') }}
       </BaseButton>
       <BaseButton variant="secondary" class="px-5 py-3 font-bold text-xs" @click="openPicker">
-        📁 {{ t('tools.scanToPdf.fileBtn') }}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        {{ t('tools.scanToPdf.fileBtn') }}
       </BaseButton>
     </div>
   </BaseCard>
