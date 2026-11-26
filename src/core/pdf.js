@@ -15,9 +15,10 @@ initPdfJsWorker();
  * Load a PDF file or buffer with PDF.js
  * @param {ArrayBuffer | Uint8Array} data
  * @param {string} [password]
+ * @param {{ fontExtraProperties?: boolean }} [options]
  * @returns {Promise<pdfjsLib.PDFDocumentProxy>}
  */
-export async function loadPdfJsDocument(data, password = '') {
+export async function loadPdfJsDocument(data, password = '', { fontExtraProperties = false } = {}) {
   initPdfJsWorker();
   const getDocument = pdfjsLib.getDocument || pdfjsLib.default?.getDocument;
 
@@ -40,6 +41,7 @@ export async function loadPdfJsDocument(data, password = '') {
     cMapUrl: undefined,
     cMapPacked: true,
     standardFontDataUrl: undefined,
+    fontExtraProperties,
     // Mitigasi CVE-2024-4367: IKP disisipkan lewat glyph font compiler berbasis
     // eval. false = pakai interpreter glyph non-eval (juga menghapus kebutuhan
     // 'unsafe-eval' di CSP).

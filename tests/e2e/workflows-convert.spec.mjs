@@ -4,6 +4,8 @@
  */
 import { test, expect, openTool, upload, clickButton, clickAndDownload, downloadBytes, pdfInfo, zipEntries, pngSize, xlsxSheetText, docxText, pptxSlideCount } from './helpers.mjs';
 import { textPdf, twoPagePdf, imagePng, docxFile, pptxFile, xlsxFile } from './fixtures.mjs';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { unzipSync, strFromU8 } from 'fflate';
 
 test.describe('conversion workflows', () => {
   test('image to pdf: one image becomes a one-page PDF', async ({ page }) => {
@@ -75,6 +77,57 @@ test.describe('conversion workflows', () => {
     const download = await clickAndDownload(page, /Unduh dokumen word/i);
     expect(download.suggestedFilename()).toBe('text.docx');
     expect(await docxText(await downloadBytes(download))).toContain('Halo dunia dokumen uji');
+  });
+
+  test('pdf to word: offline conversion keeps cover, table geometry and editable text without duplicates', async ({ page }) => {
+    const pdf = await PDFDocument.create();
+    const font = await pdf.embedFont(StandardFonts.HelveticaBold);
+    const cover = pdf.addPage([595, 842]);
+    cover.drawRectangle({ x: 0, y: 0, width: 595, height: 842, color: rgb(0, 0.6, 0.6) });
+    const body = pdf.addPage([595, 842]);
+    body.drawLine({ start: { x: 72, y: 500 }, end: { x: 520, y: 500 }, thickness: 1 });
+    for (const [text, x] of [['Dimensi', 78], ['Sebelum', 182], ['Sesudah', 352]]) {
+      body.drawText(text, { x, y: 478, size: 12, font });
+    }
+    const external = [];
+    await page.route('**/*', async (route) => {
+      const url = route.request().url();
+      if (/^https?:/.test(url) && !url.startsWith('http://127.0.0.1:')) {
+        external.push(url);
+        return route.abort();
+      }
+      return route.continue();
+    });
+    await openTool(page, 'pdf-to-word');
+    await upload(page, { name: 'layout.pdf', mimeType: 'application/pdf', buffer: Buffer.from(await pdf.save()) });
+    await expect(page.locator('main input[type=checkbox]')).toBeChecked();
+    await clickButton(page, /Simpan sebagai word/i);
+    const download = await clickAndDownload(page, /Unduh dokumen word/i);
+    const bytes = await downloadBytes(download);
+    const zip = unzipSync(bytes);
+    const xml = strFromU8(zip['word/document.xml']);
+    expect(xml.match(/<w:sectPr>/g)).toHaveLength(2);
+    expect(xml.match(/<w:framePr /g)).toHaveLength(3);
+    expect(Object.keys(zip).filter((name) => /word\/media\/.*\.png$/.test(name))).toHaveLength(2);
+    expect(xml.match(/>Dimensi</g)).toHaveLength(1);
+    expect(xml).toContain('w:x="1560"');
+    expect(xml).toContain('behindDoc="1"');
+    expect(await docxText(bytes)).toContain('Sesudah');
+    expect(external).toEqual([]);
+    // The graphics-only background must not contain a second raster copy of editable text.
+    const images = Object.keys(zip).filter((name) => /word\/media\/.*\.png$/.test(name));
+    const pixels = await page.evaluate(async (base64) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${base64}`;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
+      const data = context.getImageData(110, 530, 650, 25).data;
+      return [...data].filter((value, index) => index % 4 !== 3 && value < 240).length;
+    }, Buffer.from(zip[images[1]]).toString('base64'));
+    expect(pixels).toBe(0);
   });
 
   test('pdf to powerpoint: the .pptx holds one slide per page', async ({ page }) => {

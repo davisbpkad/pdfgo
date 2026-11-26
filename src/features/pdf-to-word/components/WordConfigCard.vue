@@ -9,7 +9,7 @@ defineProps({
 });
 
 const emit = defineEmits(['submit']);
-const includeImages = ref(false);
+const includeImages = ref(true);
 
 function handleSubmit() {
   emit('submit', { includeImages: includeImages.value });
